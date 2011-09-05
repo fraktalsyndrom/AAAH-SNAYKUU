@@ -1,0 +1,16 @@
+Generella tankar:
+
+- ORMBATALJER, 1v1 (alt. stöd för fler om så skulle krävas; 4p FFA?)
+- En vinner. Frukter dyker upp pseudoslumpmässigt. Deltagare
+  elimineras vid kollision med väggar/andra ormar. Vinstvillkor är således:
+	DÖDA ALLA.
+	ÄT ALLT.
+  (Vidare specificering nödvändig så småningom)
+- Ormar består utav en ruta huvud och x rutor kropp.
+- Ormar växer på något sätt med tiden. Antingen genom att äta frukt, med 
+  jämna mellanrum, eller genom HELA SKITEN.
+- Simpelt interface "Brain" e.dyl. för att implementera i egna klasser.
+- Någon maxgräns för betänketid hos deltagare. Om för lång tid går,
+  antingen forcera drag (rakt fram?) eller AVLIVA ORM. Det 
+  förstnämnda förmodligen rimligast. Det sistnämnda roligast. TÖRMINATE.
+- Möjlighet för deltagare att kunna tweaka sin ormhjärna mellan ronder.
