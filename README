@@ -14,3 +14,12 @@ Generella tankar:
   antingen forcera drag (rakt fram?) eller AVLIVA ORM. Det 
   förstnämnda förmodligen rimligast. Det sistnämnda roligast. TÖRMINATE.
 - Möjlighet för deltagare att kunna tweaka sin ormhjärna mellan ronder.
+
+- Asynkron turbasering (1 turn per frame)
+- Variabla inställningar för växt- och fruktfrekvens
+- Startplaceringar? Helt random?
+- Lagtävling
+- Möjlighet att ge folk färdiga hjälpmetoder, t ex
+	shortestPath(Coord c)
+	willCollide(Direction d)
+- DÖD ÅT TENGIL.
