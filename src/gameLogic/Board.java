@@ -23,4 +23,9 @@ public class Board
 	{
 		return board[x][y];
 	}
+	
+	public Square getSquare(Position p)
+	{
+		return board[p.getX()][p.getY()];
+	}
 }
