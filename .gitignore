@@ -1,0 +1,5 @@
+# Compiled code
+*.class
+
+# Don't even know what this is
+*.zargo~
