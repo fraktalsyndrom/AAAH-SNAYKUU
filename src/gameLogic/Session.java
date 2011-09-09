@@ -48,7 +48,7 @@ public class Session
 	/**
 	 * Move all the snakes simultaneously.
 	 */
-	void tick() 
+	public void tick()
 	{
 		for (Snake snake : snakes.values())
 		{
