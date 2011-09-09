@@ -1,12 +1,12 @@
 public class Board 
 {
-	private Square[][] board;
+	private GameObject[][] board;
 	
 	public Board(int width, int height)
 	{
 		if (width < 1 || height < 1)
 			throw new IllegalArgumentException("Board size must be greater than 0");
-		board = new Square[width][height];
+		board = new GameObject[width][height];
 	}
 	
 	public int getWidth()
@@ -19,12 +19,12 @@ public class Board
 		return board[0].length;
 	}
 	
-	public Square getSquare(int x, int y)
+	public GameObject getGameObject(int x, int y)
 	{
 		return board[x][y];
 	}
 	
-	public Square getSquare(Position p)
+	public GameObject getGameObject(Position p)
 	{
 		return board[p.getX()][p.getY()];
 	}
