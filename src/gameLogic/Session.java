@@ -33,6 +33,11 @@ public class Session
 		snakes.remove(id);
 	}
 	
+	public Board getBoard()
+	{
+		return board;
+	}
+	
 	/**
 	 * Move all the snakes simultaneously.
 	 */
