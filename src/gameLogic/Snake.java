@@ -2,24 +2,25 @@ import java.util.*;
 
 public class Snake
 {
-	private LinkedList<Position> segments = new LinkedList<Position>();
+	private LinkedList<SnakeSegment> segments = new LinkedList<SnakeSegment>();
+	private Session session;
 	private Brain brain;
 	private Direction direction;
 	private boolean grow = false;
 	
-	public Snake(Brain brain)
+	public Snake(Session session, Brain brain)
 	{
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
 	}
 	
 	
-	public Position getHeadPosition()
+	public SnakeSegment getHead()
 	{
 		return segments.get(0);
 	}
 	
-	public Position getTailPosition()
+	public SnakeSegment getTail()
 	{
 		return segments.getLast();
 	}
@@ -27,12 +28,12 @@ public class Snake
 	/**
 	 * Move the snake one unit in the current direction
 	 */
-	void move()
+	void move(Direction direction)
 	{
-		Position head = getHeadPosition();
+		SnakeSegment head = getHead();
 		
-		head = direction.calculateNextPosition(head);
-		segments.set(0, head);
+		Position newHeadPosition = direction.calculateNextPosition(head.getPosition());
+		segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
 		
 		if (grow)
 		{
@@ -40,19 +41,8 @@ public class Snake
 			return;
 		}
 		
-		Position tailPosition = getTailPosition();
-		Position tailbourPosition = segments.get(segments.size() - 2);
-		
-		Direction tailDirection = Direction.getDirectionFromPositionToPosition(tailPosition, tailbourPosition);
-		tailPosition = tailDirection.calculateNextPosition(tailPosition);
-		
-		if (tailPosition.equals(tailbourPosition))
-			segments.removeLast();
-		else
-		{
-			segments.set(segments.size() - 1, tailPosition);
-		}
-		
+		SnakeSegment tail = getTail();
+		segments.removeLast();		
 	}
 	
 	void growOneUnitOfLengthNextTimeThisSnakeMoves()
@@ -60,19 +50,5 @@ public class Snake
 		grow = true;
 	}
 	
-	
-	/**
-	 * Changes direction without moving the snake
-	 * @param[in] direction New direction of the snake
-	 */
-	void changeDirection(Direction direction)
-	{
-		if (direction.equals(this.direction))
-			return;
-		
-		segments.add(0, new Position(getHeadPosition()));
-		
-		this.direction = direction;
-	}
 	
 }
