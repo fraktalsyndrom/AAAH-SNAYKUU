@@ -1,25 +1,25 @@
 Generella tankar:
 
-- ORMBATALJER, 1v1 (alt. stöd för fler om så skulle krävas; 4p FFA?)
-- En vinner. Frukter dyker upp pseudoslumpmässigt. Deltagare
-  elimineras vid kollision med väggar/andra ormar. Vinstvillkor är således:
-	DÖDA ALLA.
-	ÄT ALLT.
-  (Vidare specificering nödvändig så småningom)
-- Ormar består utav en ruta huvud och x rutor kropp.
-- Ormar växer på något sätt med tiden. Antingen genom att äta frukt, med 
-  jämna mellanrum, eller genom HELA SKITEN.
-- Simpelt interface "Brain" e.dyl. för att implementera i egna klasser.
-- Någon maxgräns för betänketid hos deltagare. Om för lång tid går,
+- ORMBATALJER, 1v1 (alt. stÃ¶d fÃ¶r fler om sÃ¥ skulle krÃ¤vas; 4p FFA?)
+- En vinner. Frukter dyker upp pseudoslumpmÃ¤ssigt. Deltagare
+  elimineras vid kollision med vÃ¤ggar/andra ormar. Vinstvillkor Ã¤r sÃ¥ledes:
+	DÃ–DA ALLA.
+	Ã„T ALLT.
+  (Vidare specificering nÃ¶dvÃ¤ndig sÃ¥ smÃ¥ningom)
+- Ormar bestÃ¥r utav en ruta huvud och x rutor kropp.
+- Ormar vÃ¤xer pÃ¥ nÃ¥got sÃ¤tt med tiden. Antingen genom att Ã¤ta frukt, med 
+  jÃ¤mna mellanrum, eller genom HELA SKITEN.
+- Simpelt interface "Brain" e.dyl. fÃ¶r att implementera i egna klasser.
+- NÃ¥gon maxgrÃ¤ns fÃ¶r betÃ¤nketid hos deltagare. Om fÃ¶r lÃ¥ng tid gÃ¥r,
   antingen forcera drag (rakt fram?) eller AVLIVA ORM. Det 
-  förstnämnda förmodligen rimligast. Det sistnämnda roligast. TÖRMINATE.
-- Möjlighet för deltagare att kunna tweaka sin ormhjärna mellan ronder.
+  fÃ¶rstnÃ¤mnda fÃ¶rmodligen rimligast. Det sistnÃ¤mnda roligast. TÃ–RMINATE.
+- MÃ¶jlighet fÃ¶r deltagare att kunna tweaka sin ormhjÃ¤rna mellan ronder.
 
 - Asynkron turbasering (1 turn per frame)
-- Variabla inställningar för växt- och fruktfrekvens
+- Variabla instÃ¤llningar fÃ¶r vÃ¤xt- och fruktfrekvens
 - Startplaceringar? Helt random?
-- Lagtävling
-- Möjlighet att ge folk färdiga hjälpmetoder, t ex
+- LagtÃ¤vling
+- MÃ¶jlighet att ge folk fÃ¤rdiga hjÃ¤lpmetoder, t ex
 	shortestPath(Coord c)
 	willCollide(Direction d)
-- DÖD ÅT TENGIL.
+- DÃ–D Ã…T TENGIL.
