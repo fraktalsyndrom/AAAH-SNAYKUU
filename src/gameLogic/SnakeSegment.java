@@ -1,3 +1,6 @@
+package gameLogic;
+
+
 public class SnakeSegment extends GameObject
 {
 	private SnakeSegment next;

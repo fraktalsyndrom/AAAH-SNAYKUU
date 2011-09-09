@@ -1,3 +1,5 @@
+package gameLogic;
+
 public class Wall extends GameObject 
 {
 	public Wall(Board board, Position position) 

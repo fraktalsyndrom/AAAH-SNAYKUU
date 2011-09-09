@@ -1,3 +1,5 @@
+package gameLogic;
+
 public class Fruit extends GameObject
 {
 	private int value;
