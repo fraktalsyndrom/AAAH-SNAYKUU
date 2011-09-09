@@ -1,3 +1,6 @@
+package gameLogic;
+
+
 public abstract class GameObject
 {
 	private Position position;

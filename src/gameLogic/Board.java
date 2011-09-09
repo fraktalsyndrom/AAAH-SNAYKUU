@@ -1,3 +1,5 @@
+package gameLogic;
+
 public class Board 
 {
 	private GameObject[][] board;
