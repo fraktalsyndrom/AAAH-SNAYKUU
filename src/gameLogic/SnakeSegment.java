@@ -13,4 +13,9 @@ public class SnakeSegment extends GameObject
 	{
 		return next;
 	}
+	
+	public boolean isLethal()
+	{
+		return true;
+	}
 }

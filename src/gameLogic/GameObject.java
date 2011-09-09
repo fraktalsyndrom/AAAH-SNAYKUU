@@ -13,4 +13,6 @@ public abstract class GameObject
 	{
 		return position;
 	}
+	
+	public abstract boolean isLethal();
 }
