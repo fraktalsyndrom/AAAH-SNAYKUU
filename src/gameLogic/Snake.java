@@ -28,17 +28,21 @@ public class Snake
 		return segments.getLast();
 	}
 	
+	public LinkedList<SnakeSegment> getSegments()
+	{
+		return segments;
+	}
+	
 	/**
-	 * Move the snake one unit in the current direction
+	 * NOTE: Currently not used. Functionality has instead been moved to moveSnake() in Session. 
 	 */
 	void move(GameState currentGameState)
 	{
 		direction = brain.getNextMove(currentGameState);
 		SnakeSegment head = getHead();
 		
-		//Perhaps move this functionality, or fix it to not need session information.
-		//Position newHeadPosition = direction.calculateNextPosition(head.getPosition());
-		//segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
+		Position newHeadPosition = direction.calculateNextPosition(head.getPosition());
+		segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
 		
 		if (grow)
 		{
@@ -46,8 +50,18 @@ public class Snake
 			return;
 		}
 		
-		//SnakeSegment tail = getTail();
-		//segments.removeLast();		
+		SnakeSegment tail = getTail();
+		segments.removeLast();
+	}
+	
+	void getNextMove(GameState currentGameState)
+	{
+		return brain.getNextMove(currentGameState);
+	}
+	
+	void updatePosition(LinkedList<SnakeSegment> newSegments)
+	{
+		segments = newSegments;
 	}
 	
 	void growOneUnitOfLengthNextTimeThisSnakeMoves()

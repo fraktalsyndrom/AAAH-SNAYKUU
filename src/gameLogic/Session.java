@@ -73,11 +73,13 @@ public class Session
 		
 		for (Snake snake : snakes.values())
 		{
-			if (growAllSnakes)
-			{
-				snake.growOneUnitOfLengthNextTimeThisSnakeMoves();
-			}
-			snake.move(currentGameState);
+			//~ if (growAllSnakes)
+			//~ {
+				//~ snake.growOneUnitOfLengthNextTimeThisSnakeMoves();
+			//~ }
+			//~ snake.move();
+			Direction direction = snake.getNextMove();
+			moveSnake(snake, direction, growAllSnakes);
 		}
 		
 		/**
@@ -114,5 +116,20 @@ public class Session
 		
 		turn++;
 		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+	}
+	
+	private void moveSnake(Snake snake, Direction dir, boolean grow)
+	{
+		List<SnakeSegment> segments = snake.getSegments();
+		SnakeSegment currentHead = segments.getFirst();
+		Position currentHeadPosition = currentHead.getPosition();
+		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		SnakeSegment newHeadSegment = new SnakeSegment(board, newHeadPosition, currentHead);
+		segments.addFirst(newHeadSegment);
+		if (!grow) 
+		{
+			segments.removeLast();
+		}
+		snake.updatePosition(segments);
 	}
 }
