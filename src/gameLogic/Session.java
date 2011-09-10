@@ -56,6 +56,11 @@ public class Session
 		return board;
 	}
 	
+	public Set<Snake> getSnakes()
+	{
+		return new HashSet<Snake>(snakes.values());
+	}
+	
 	/**
 	 * Move all the snakes simultaneously.
 	 */
