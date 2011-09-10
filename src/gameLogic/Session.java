@@ -14,7 +14,7 @@ public class Session
 	
 	private int turnsUntilGrowth;
 	private int turn = 0;
-	private int counter = 0;
+	private int numberOfSnakes = 0;
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
 	{
@@ -29,13 +29,14 @@ public class Session
 	
 	public void addSnake(Snake newSnake)
 	{
-		snakes.put(++counter, newSnake);
+		snakes.put(++numberOfSnakes, newSnake);
 		score.put(newSnake, 0);
 	}
 	
 	private void removeSnake(int id)
 	{
 		snakes.remove(id);
+		numberOfSnakes--;
 	}
 	
 	private void removeSnake(Snake snake)
@@ -56,11 +57,6 @@ public class Session
 		return board;
 	}
 	
-	public Set<Snake> getSnakes()
-	{
-		return new HashSet<Snake>(snakes.values());
-	}
-	
 	/**
 	 * Move all the snakes simultaneously.
 	 */
@@ -76,19 +72,47 @@ public class Session
 			turnsUntilGrowth = growthFrequency;
 		}
 		
+		/**
+		 * Move each snake.
+		 */
+		int arrpos = 0;
+		BrainDecision[] decisionThreads = new BrainDecision[numberOfSnakes];
+		HashMap<Snake, Direction> moves = new HashMap<Snake, Direction>();
+		//~ Using a HashMap here since I'm unsure of the sorting order of snakes.values() below.
+		
 		for (Snake snake : snakes.values())
 		{
-			//~ if (growAllSnakes)
-			//~ {
-				//~ snake.growOneUnitOfLengthNextTimeThisSnakeMoves();
-			//~ }
-			//~ snake.move();
-			Direction direction = snake.getNextMove(currentGameState);
-			moveSnake(snake, direction, growAllSnakes);
+			BrainDecision bd = new BrainDecision(snake, currentGameState);
+			decisionThreads[arrpos++] = bd;
+		}
+		for (int i = 0; i < decisionThreads.length; i++)
+			decisionThreads[i].start();
+		//~ TODO: Chill out while the snakes make their decisions.
+		for (int i = 0; i < decisionThreads.length; i++)
+		{
+			BrainDecision decision = decisionThreads[i];
+			Snake currentSnake = decision.getSnake();
+			Direction nextMove;
+			if (!decision.isAlive())
+			{
+				nextMove = decision.getNextMove();
+			}
+			else
+			{
+				//~ This snake has taken too long to decide, and will automatically move forward.
+				nextMove = new Direction(Direction.FORWARD);
+				Snake slowSnake = decision.getSnake();
+				slowSnake.tooSlowFault();
+			}
+			moves.put(currentSnake, nextMove);
+		}
+		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
+		{
+			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
 		}
 		
 		/**
-		 * Check for collision.
+		 * Check for collision. Kill snake if collision is lethal. Add points if the snake eats a fruit.
 		 */
 		ArrayList<Snake> dead = new ArrayList<Snake>();
 		for (Snake snake : snakes.values()) 
