@@ -29,6 +29,8 @@ public class Session
 	
 	public void addSnake(Snake newSnake)
 	{
+		if (newSnake == null)
+			throw new IllegalArgumentException("Trying to add a null Snake.");
 		snakes.put(++numberOfSnakes, newSnake);
 		score.put(newSnake, 0);
 	}
@@ -72,9 +74,59 @@ public class Session
 			turnsUntilGrowth = growthFrequency;
 		}
 		
+		HashMap<Snake, Direction> moves = getDecisionsFromSnakes();		
+		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
+		{
+			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
+		}
+		
 		/**
-		 * Move each snake.
+		 * Check for collision. Kill snake if collision is lethal. Add points if the snake eats a fruit.
 		 */
+		ArrayList<Snake> dead = new ArrayList<Snake>();
+		for (Snake snake : snakes.values()) 
+		{
+			Position head = snake.getHead().getPosition();
+			GameObject object = board.getGameObject(head);
+			if (object != null) 
+			{
+				if (object.isLethal()) 
+				{
+					dead.add(snake);
+					System.out.println("TERMINATE SNAKE.");
+				}
+				else if (object instanceof Fruit)
+				{
+					Fruit fruit = (Fruit)object;
+					score.put(snake, score.get(snake) + fruit.getValue());
+				}
+			}
+		}
+		
+		/**
+		 * Remove all dead snakes
+		 * TODO: Keep dead snakes on the board, and simply forbid them from moving and/or winning.
+		 */
+		Iterator<Snake> deadSnakeIter = dead.iterator();
+		while (deadSnakeIter.hasNext())
+		{
+			removeSnake(deadSnakeIter.next());
+		}
+		
+		turn++;
+		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+	}
+	
+	/**
+	 * Returns a HashMap, with each position containing a Snake object and
+	 * the Direction towards which the given snake wishes to move next turn. 
+	 * Spawns a single thread for each participating snake, then waits until
+	 * their allotted time is up. If a snake hasn't responed yet, it's direction
+	 * is defaulted to Direction.FORWARD.
+	 * @return 	The HashMap containing snakes and their next moves.
+	 */
+	private HashMap<Snake, Direction> getDecisionsFromSnakes()
+	{
 		int arrpos = 0;
 		BrainDecision[] decisionThreads = new BrainDecision[numberOfSnakes];
 		HashMap<Snake, Direction> moves = new HashMap<Snake, Direction>();
@@ -110,45 +162,8 @@ public class Session
 			}
 			moves.put(currentSnake, nextMove);
 		}
-		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
-		{
-			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
-		}
 		
-		/**
-		 * Check for collision. Kill snake if collision is lethal. Add points if the snake eats a fruit.
-		 */
-		ArrayList<Snake> dead = new ArrayList<Snake>();
-		for (Snake snake : snakes.values()) 
-		{
-			Position head = snake.getHead().getPosition();
-			GameObject object = board.getGameObject(head);
-			if (object != null) 
-			{
-				if (object.isLethal()) 
-				{
-					dead.add(snake);
-					System.out.println("TERMINATE SNAKE.");
-				}
-				else if (object instanceof Fruit)
-				{
-					Fruit fruit = (Fruit)object;
-					score.put(snake, score.get(snake) + fruit.getValue());
-				}
-			}
-		}
-		
-		/*
-		 * Remove all dead snakes.
-		 */
-		Iterator<Snake> deadSnakeIter = dead.iterator();
-		while (deadSnakeIter.hasNext())
-		{
-			removeSnake(deadSnakeIter.next());
-		}
-		
-		turn++;
-		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+		return moves;
 	}
 	
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
