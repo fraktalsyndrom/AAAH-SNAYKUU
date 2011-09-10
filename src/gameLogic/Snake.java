@@ -69,6 +69,16 @@ public class Snake
 		grow = true;
 	}
 	
+	Brain getBrain()
+	{
+		return brain;
+	}
+	
+	void tooSlowFault()
+	{
+		brain.tooSlowFault();
+	}
+	
 	public String toString()
 	{
 		return name;
