@@ -8,11 +8,15 @@ public class GameState
 {
 	private Board board;
 	private Map<Integer, Snake> snakes;
+	private int turn;
+	private int turnsUntilGrowth;
 	
-	public GameState(Board currentBoard, Map<Integer, Snake> listOfSnakes) 
+	public GameState(Board currentBoard, Map<Integer, Snake> listOfSnakes, int turn, int turnsUntilGrowth) 
 	{
 		board = currentBoard;
 		snakes = listOfSnakes;
+		this.turn = turn;
+		this.turnsUntilGrowth = turnsUntilGrowth;
 	}
 	
 	public Snake getSnake(int id)
@@ -37,6 +41,16 @@ public class GameState
 	public boolean willCollide(Direction dir)
 	{
 		return false;
+	}
+	
+	public int getTurn()
+	{
+		return turn;
+	}
+	
+	public int getTurnsUntilGrowth()
+	{
+		return turnsUntilGrowth;
 	}
 }
 
