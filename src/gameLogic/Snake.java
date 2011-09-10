@@ -34,7 +34,7 @@ public class Snake
 	}
 	
 	/**
-	 * NOTE: Currently not used. Functionality has instead been moved to moveSnake() in Session. 
+	 * NOTE: Currently not used nor working. Functionality has instead been moved to moveSnake() in Session. 
 	 */
 	void move(GameState currentGameState)
 	{
@@ -42,7 +42,7 @@ public class Snake
 		SnakeSegment head = getHead();
 		
 		Position newHeadPosition = direction.calculateNextPosition(head.getPosition());
-		segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
+		//~ segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
 		
 		if (grow)
 		{
@@ -54,7 +54,7 @@ public class Snake
 		segments.removeLast();
 	}
 	
-	void getNextMove(GameState currentGameState)
+	Direction getNextMove(GameState currentGameState)
 	{
 		return brain.getNextMove(currentGameState);
 	}
