@@ -1,8 +1,6 @@
 package gameLogic;
 
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.HashMap;
+import java.util.*;
 
 public class Session
 {
@@ -35,9 +33,22 @@ public class Session
 		score.put(newSnake, 0);
 	}
 	
-	public void removeSnake(int id)
+	private void removeSnake(int id)
 	{
 		snakes.remove(id);
+	}
+	
+	private void removeSnake(Snake snake)
+	{
+		for (Map.Entry<Integer, Snake> snakeEntry : snakes.entrySet())
+		{
+			if (snakeEntry.getValue().equals(snake))
+			{
+				snakes.remove(snake);
+				return;
+			}
+		}
+		throw new IllegalArgumentException("No such snake exists.");
 	}
 	
 	public Board getBoard()
@@ -50,18 +61,29 @@ public class Session
 	 */
 	public void tick()
 	{
+		/**
+		 * Check for growth.
+		 */
+		boolean growAllSnakes = false;
+		if (--turnsUntilGrowth < 1)
+		{
+			growAllSnakes = true;
+			turnsUntilGrowth = growthFrequency;
+		}
+		
 		for (Snake snake : snakes.values())
 		{
-			if (--turnsUntilGrowth < 1)
+			if (growAllSnakes)
 			{
 				snake.growOneUnitOfLengthNextTimeThisSnakeMoves();
-				turnsUntilGrowth = growthFrequency;
 			}
 			snake.move(currentGameState);
 		}
+		
 		/**
 		 * Check for collision.
 		 */
+		ArrayList<Snake> dead = new ArrayList<Snake>();
 		for (Snake snake : snakes.values()) 
 		{
 			Position head = snake.getHead().getPosition();
@@ -70,6 +92,7 @@ public class Session
 			{
 				if (object.isLethal()) 
 				{
+					dead.add(snake);
 					System.out.println("TERMINATE SNAKE.");
 				}
 				else if (object instanceof Fruit)
@@ -79,7 +102,17 @@ public class Session
 				}
 			}
 		}
+		
+		/*
+		 * Remove all dead snakes.
+		 */
+		Iterator<Snake> deadSnakeIter = dead.iterator();
+		while (deadSnakeIter.hasNext())
+		{
+			removeSnake(deadSnakeIter.next());
+		}
+		
 		turn++;
-		currentGameState = new GameState(board, snakes);
+		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
 	}
 }
