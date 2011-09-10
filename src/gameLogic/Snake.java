@@ -59,4 +59,13 @@ public class Snake
 	{
 		return name;
 	}
+	
+	public boolean equals(Object other)
+	{
+		if (other instanceof Snake) {
+			Snake otherSnake = (Snake)other;
+			return (name.equals(otherSnake.name));
+		}
+		return false;
+	}
 }
