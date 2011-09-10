@@ -87,7 +87,11 @@ public class Session
 		}
 		for (int i = 0; i < decisionThreads.length; i++)
 			decisionThreads[i].start();
-		//~ TODO: Chill out while the snakes make their decisions.
+		
+		//Chill out while the snakes are thinking.
+		try { Thread.sleep(thinkingTime); }
+		catch (InterruptedException e) { System.out.println(e); }
+		
 		for (int i = 0; i < decisionThreads.length; i++)
 		{
 			BrainDecision decision = decisionThreads[i];
