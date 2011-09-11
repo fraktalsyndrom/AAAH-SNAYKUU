@@ -2,6 +2,8 @@ package userInterface;
 
 import javax.swing.*;
 import gameLogic.*;
+import java.io.*;
+import java.net.*;
 
 public class MainWindow extends JFrame
 {
@@ -22,8 +24,12 @@ public class MainWindow extends JFrame
 		setVisible(true);
 		setResizable(false);
 		
+		Brain brain = loadBrain("Mad");
+
 		
-		Brain brain = new bot.MadBrainuu();
+		if (brain == null)
+			JOptionPane.showMessageDialog(this, "BRAINFUCK SHIT");
+		
 		Snake snake = new Snake("Stefan", brain, new Position(10, 10));
 		
 		session.addSnake(snake);
@@ -54,6 +60,94 @@ public class MainWindow extends JFrame
 				
 			}
 		}
+	}
+	
+	private Brain loadBrain(String name)
+	{
+		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
+	
+		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
+		
+		Class<?> brainClass;
+		try
+		{
+			brainClass = classLoader.loadBotClass(name);
+		}
+		catch (ClassNotFoundException e)
+		{
+			JOptionPane.showMessageDialog(this, "Couldn't find class " + name + ": " + e);
+			return null;
+		}
+		
+		Object object;
+		try
+		{
+			object = brainClass.newInstance();
+		}
+		catch (InstantiationException e)
+		{
+			JOptionPane.showMessageDialog(this, "Couldn't instantiate class " + name + ": " + e);
+			return null;
+		}
+		catch (IllegalAccessException e)
+		{
+			JOptionPane.showMessageDialog(this, "Couldn't access class " + name + ": " + e);
+			return null;
+		}
+		
+		Brain brain = (Brain)object;
+		
+		return brain;
+	}
+	
+	
+	
+	private class BotClassLoader extends ClassLoader
+	{
+		public BotClassLoader(ClassLoader parent)
+		{
+			super(parent);
+		}
+		
+		private byte[] readBufferFromStream(InputStream input) throws IOException
+		{
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+				
+			int data = input.read();
+			while (data != -1)
+			{
+				buffer.write(data);
+				data = input.read();
+			}
+			input.close();
+			
+			return buffer.toByteArray();
+		}
+
+		public Class loadBotClass(String name) throws ClassNotFoundException
+		{
+			try
+			{				
+				URL url = new URL("file:./bot/" + name + ".class");
+				URLConnection urlConnection = url.openConnection();
+				InputStream input = urlConnection.getInputStream();
+				
+				byte[] classData = readBufferFromStream(input);
+				
+				return defineClass("bot."+name, classData, 0, classData.length);
+			}
+			catch (MalformedURLException e)
+			{
+				JOptionPane.showMessageDialog(MainWindow.this, e);
+			}
+			catch (IOException e)
+			{
+				JOptionPane.showMessageDialog(MainWindow.this, e);
+			}
+
+			return null;
+		}
+
 	}
 	
 }
