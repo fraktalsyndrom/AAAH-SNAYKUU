@@ -1,5 +1,6 @@
 # Compiled code
 *.class
+*.jar
 
 # Don't even know what this is
 *.zargo~
