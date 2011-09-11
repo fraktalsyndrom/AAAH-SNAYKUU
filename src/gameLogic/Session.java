@@ -18,7 +18,7 @@ public class Session
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
 	{
-		board = new Board(boardWidth, boardHeight);
+		board = createStandardBoard(boardWidth, boardHeight);
 		snakes = new HashMap<Integer, Snake>();
 		score = new HashMap<Snake, Integer>();
 		
@@ -184,5 +184,31 @@ public class Session
 			segments.removeLast();
 		}
 		snake.updatePosition(segments);
+	}
+	
+	/**
+	 * Generates a standard snakem, sized width x height, with lethal walls around the edges.
+	 * @param width		Desired board height.
+	 * @param height	Desired board width.
+	 * @return			The newly generated board.
+	 */
+	private Board createStandardBoard(int width, int height)
+	{
+		board = new Board(width, height);
+		for (int x = 0; x < width; x++)
+		{
+			Position bottomRowPos = new Position(x, 0);
+			Position topRowPos = new Position(x, height-1);
+			board.addGameObject(new Wall(bottomRowPos), bottomRowPos);
+			board.addGameObject(new Wall(topRowPos), topRowPos);
+		}
+		for (int y = 0; y < height; y++)
+		{
+			Position leftmostColumnPos = new Position(0, y);
+			Position rightmostColumnPos = new Position(width-1, y);
+			board.addGameObject(new Wall(leftmostColumnPos), leftmostColumnPos);
+			board.addGameObject(new Wall(rightmostColumnPos), rightmostColumnPos);
+		}
+		return board;
 	}
 }
