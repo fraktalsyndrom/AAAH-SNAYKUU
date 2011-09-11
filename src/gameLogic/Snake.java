@@ -11,11 +11,12 @@ public class Snake
 	private Direction direction;
 	private boolean grow = false;
 	
-	public Snake(String name, Brain brain)
+	public Snake(String name, Brain brain, Position position)
 	{
 		this.name = name;
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
+		this.segments.add(new SnakeSegment(position, null));
 	}
 	
 	public SnakeSegment getHead()
