@@ -2,7 +2,7 @@ package bot;
 
 import gameLogic.*;
 
-public class MadBrainuu implements Brain
+public class Mad implements Brain
 {
 	private GameState gameState;
 	
