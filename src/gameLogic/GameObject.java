@@ -4,11 +4,9 @@ package gameLogic;
 public abstract class GameObject
 {
 	private Position position;
-	private Board board;
 	
-	public GameObject(Board board, Position position)
+	public GameObject(Position position)
 	{
-		this.board = board;
 		this.position = position;
 	}
 	
