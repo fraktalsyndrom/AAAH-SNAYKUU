@@ -3,6 +3,6 @@ class Main
 {
 	public static void main(String[] args)
 	{
-		new userInterface.MainWindow();
+		new userInterface.SettingsWindow();
 	}
 }
