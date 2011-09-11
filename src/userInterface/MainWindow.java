@@ -22,6 +22,13 @@ public class MainWindow extends JFrame
 		setVisible(true);
 		setResizable(false);
 		
+		
+		Brain brain = new bot.MadBrainuu();
+		Snake snake = new Snake("Stefan", brain, new Position(10, 10));
+		
+		session.addSnake(snake);
+		
+		
 		gameLoop = new GameLoop();
 		gameLoop.start();
 	}
@@ -38,7 +45,7 @@ public class MainWindow extends JFrame
 				
 				try
 				{
-					Thread.currentThread().sleep(200);
+					Thread.currentThread().sleep(500);
 				}
 				catch (InterruptedException e)
 				{
