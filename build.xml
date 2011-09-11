@@ -6,7 +6,7 @@
     <target name="clobber" depends="clean" description="remove all artifact files">
         <delete file="snaykuu.jar"/>
     </target>
-    <target name="compile" description="compile the Java source code to class files">
+    <target name="compile" depends="clobber" description="compile the Java source code to class files">
         <mkdir dir="classes"/>
         <javac srcdir="src" destdir="classes"/>
     </target>
@@ -17,5 +17,8 @@
                 <attribute name="Main-Class" value="Main"/>
             </manifest>
         </jar>
+    </target>
+    <target name="bot" description="compile every custom bots">
+		<javac srcdir="bot" classpath="src" />
     </target>
 </project>
