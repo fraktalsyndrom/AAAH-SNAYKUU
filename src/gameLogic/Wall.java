@@ -2,9 +2,9 @@ package gameLogic;
 
 public class Wall extends GameObject 
 {
-	public Wall(Board board, Position position) 
+	public Wall(Position position) 
 	{
-		super(board, position);
+		super(position);
 	}
 	
 	public boolean isLethal()

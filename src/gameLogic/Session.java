@@ -177,7 +177,7 @@ public class Session
 		SnakeSegment currentHead = segments.get(0);
 		Position currentHeadPosition = currentHead.getPosition();
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		SnakeSegment newHeadSegment = new SnakeSegment(board, newHeadPosition, currentHead);
+		SnakeSegment newHeadSegment = new SnakeSegment(newHeadPosition, currentHead);
 		segments.addFirst(newHeadSegment);
 		if (!grow) 
 		{

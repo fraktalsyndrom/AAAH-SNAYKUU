@@ -4,15 +4,15 @@ public class Fruit extends GameObject
 {
 	private int value;
 	
-	public Fruit(Board board, Position position)
+	public Fruit(Position position)
 	{
-		super(board, position);
+		super(position);
 		value = 1;
 	}
 	
-	public Fruit(Board board, Position position, int value)
+	public Fruit(Position position, int value)
 	{
-		super(board, position);
+		super(position);
 		this.value = value;
 	}
 	
