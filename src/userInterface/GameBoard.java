@@ -33,7 +33,7 @@ class GameBoard extends JComponent
 		int width = pixelsPerUnit * board.getWidth();
 		int height = pixelsPerUnit * board.getWidth();
 		
-		g.setColor(Color.BLUE);
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.WHITE);
 		
@@ -45,6 +45,21 @@ class GameBoard extends JComponent
 		for (int y = 1; y < board.getHeight(); ++y)
 		{
 			g.drawLine(0, y * pixelsPerUnit, width, y * pixelsPerUnit);
+		}
+		
+		Color[] colorList = { Color.GREEN, Color.RED, Color.BLUE };
+		
+		int colorIndex = 0;
+		for (Snake snake : session.getSnakes())
+		{
+			g.setColor(colorList[colorIndex++]);
+			
+			for (SnakeSegment segment : snake.getSegments())
+			{
+				int x = pixelsPerUnit * segment.getPosition().getX();
+				int y = pixelsPerUnit * segment.getPosition().getY();
+				g.fillRect(x, y, pixelsPerUnit, pixelsPerUnit);
+			}
 		}
 	}
 }
