@@ -21,6 +21,26 @@ public class Board
 		return board[0].length;
 	}
 	
+	void addGameObject(GameObject obj, int x, int y)
+	{
+		board[x][y] = obj;
+	}
+	
+	void addGameObject(GameObject obj, Position p)
+	{
+		board[p.getX()][p.getY()] = obj;
+	}
+
+	void removeGameObject(int x, int y)
+	{
+		board[x][y] = null;
+	}
+	
+	void removeGameObject(Position p)
+	{
+		board[p.getX()][p.getY()] = null;
+	}
+
 	public GameObject getGameObject(int x, int y)
 	{
 		return board[x][y];
