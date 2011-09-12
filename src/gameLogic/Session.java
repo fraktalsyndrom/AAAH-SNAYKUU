@@ -7,6 +7,10 @@ public class Session
 	private Board board;
 	private HashMap<Integer, Snake> snakes;
 	private HashMap<Snake, Integer> score;
+	private HashMap<Snake, Position> heads;
+	private HashMap<Snake, Position> tails;
+	
+	private HashMap<String, GameObjectType> objects;
 	private GameState currentGameState;
 	
 	private long thinkingTime;
@@ -21,6 +25,8 @@ public class Session
 		board = createStandardBoard(boardWidth, boardHeight);
 		snakes = new HashMap<Integer, Snake>();
 		score = new HashMap<Snake, Integer>();
+		objects = new HashMap<String, GameObjectType>();
+		initGameObjects();
 		
 		this.growthFrequency = growthFrequency;
 		this.thinkingTime = thinkingTime;
@@ -65,13 +71,12 @@ public class Session
 	}
 	
 	/**
-	 * Move all the snakes simultaneously.
+	 * Move all the snakes simultaneously. In addition to movement, it also checks for collision,
+	 * kills colliding snakes, adds point when fruit is eaten, and updates the gamestate.
 	 */
 	public void tick()
 	{
-		/**
-		 * Check for growth.
-		 */
+		//~ Check for growth.
 		boolean growAllSnakes = false;
 		if (--turnsUntilGrowth < 1)
 		{
@@ -85,33 +90,26 @@ public class Session
 			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
 		}
 		
-		/**
-		 * Check for collision. Kill snake if collision is lethal. Add points if the snake eats a fruit.
-		 */
+		//~ Check for collision
 		ArrayList<Snake> dead = new ArrayList<Snake>();
 		for (Snake snake : snakes.values()) 
 		{
-			Position head = snake.getHead().getPosition();
+			Position head = heads.get(snake);
 			GameObject object = board.getGameObject(head);
+			GameObjectType objectType = object.getType();
 			if (object != null) 
 			{
-				if (object.isLethal()) 
+				if (objectType.isLethal())
+				//~ NOTE: This seems fucked up. Won't snakes move, and then collide with their own heads?
 				{
 					dead.add(snake);
 					System.out.println("TERMINATE SNAKE.");
 				}
-				else if (object instanceof Fruit)
-				{
-					Fruit fruit = (Fruit)object;
-					score.put(snake, score.get(snake) + fruit.getValue());
-				}
+				score.put(snake, score.get(snake) + objectType.getValue());
 			}
 		}
 		
-		/**
-		 * Remove all dead snakes
-		 * TODO: Keep dead snakes on the board, and simply forbid them from moving and/or winning.
-		 */
+		//~ Remove all dead snakes.
 		Iterator<Snake> deadSnakeIter = dead.iterator();
 		while (deadSnakeIter.hasNext())
 		{
@@ -132,20 +130,23 @@ public class Session
 	 */
 	private HashMap<Snake, Direction> getDecisionsFromSnakes()
 	{
-		int arrpos = 0;
 		BrainDecision[] decisionThreads = new BrainDecision[numberOfSnakes];
+		int arrpos = 0;
 		HashMap<Snake, Direction> moves = new HashMap<Snake, Direction>();
 		//~ Using a HashMap here since I'm unsure of the sorting order of snakes.values() below.
 		
+		//~ Prepare some decision threads.
 		for (Snake snake : snakes.values())
 		{
 			BrainDecision bd = new BrainDecision(snake, currentGameState);
 			decisionThreads[arrpos++] = bd;
 		}
+		
+		//~ Start all the decision threads.
 		for (int i = 0; i < decisionThreads.length; i++)
 			decisionThreads[i].start();
 		
-		//Chill out while the snakes are thinking.
+		//~ Chill out while the snakes are thinking.
 		try { Thread.sleep(thinkingTime); }
 		catch (InterruptedException e) { System.out.println(e); }
 		
@@ -159,8 +160,8 @@ public class Session
 				nextMove = decision.getNextMove();
 			}
 			else
+			//~ This snake has taken too long to decide, and will automatically move forward.
 			{
-				//~ This snake has taken too long to decide, and will automatically move forward.
 				nextMove = new Direction(Direction.FORWARD);
 				Snake slowSnake = decision.getSnake();
 				slowSnake.tooSlowFault();
@@ -173,21 +174,22 @@ public class Session
 	
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		LinkedList<SnakeSegment> segments = snake.getSegments();
-		SnakeSegment currentHead = segments.get(0);
-		Position currentHeadPosition = currentHead.getPosition();
+		Position currentHeadPosition = heads.get(snake);
+		Position currentTailPosition = tails.get(snake);
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		SnakeSegment newHeadSegment = new SnakeSegment(newHeadPosition, currentHead);
-		segments.addFirst(newHeadSegment);
-		if (!grow) 
+		heads.put(snake, newHeadPosition);
+		board.addGameObject(objects.get("SnakeSegment"), newHeadPosition);
+		if (!grow)
 		{
-			segments.removeLast();
+			//~ NOTE: How do we keep track of the snakes' positions?
+			//~ Perhaps a HashMap<Snake, LinkedList<Position>> is better?
+			//~ tails.put(snake, ERROR);
+			board.removeGameObject(currentTailPosition);
 		}
-		snake.updatePosition(segments);
 	}
 	
 	/**
-	 * Generates a standard snakem, sized width x height, with lethal walls around the edges.
+	 * Generates a standard snake board, sized width x height, with lethal walls around the edges.
 	 * @param width		Desired board height.
 	 * @param height	Desired board width.
 	 * @return			The newly generated board.
@@ -195,20 +197,28 @@ public class Session
 	private Board createStandardBoard(int width, int height)
 	{
 		board = new Board(width, height);
+		GameObjectType wall = objects.get("Wall");
 		for (int x = 0; x < width; x++)
 		{
 			Position bottomRowPos = new Position(x, 0);
 			Position topRowPos = new Position(x, height-1);
-			board.addGameObject(new Wall(bottomRowPos), bottomRowPos);
-			board.addGameObject(new Wall(topRowPos), topRowPos);
+			board.addGameObject(wall, bottomRowPos);
+			board.addGameObject(wall, topRowPos);
 		}
 		for (int y = 0; y < height; y++)
 		{
 			Position leftmostColumnPos = new Position(0, y);
 			Position rightmostColumnPos = new Position(width-1, y);
-			board.addGameObject(new Wall(leftmostColumnPos), leftmostColumnPos);
-			board.addGameObject(new Wall(rightmostColumnPos), rightmostColumnPos);
+			board.addGameObject(wall, leftmostColumnPos);
+			board.addGameObject(wall, rightmostColumnPos);
 		}
 		return board;
+	}
+	
+	private void initGameObjects()
+	{
+		objects.put("Wall", new GameObjectType("Wall", true));
+		objects.put("SnakeSegment", new GameObjectType("SnakeSegment", true));
+		objects.put("Fruit", new GameObjectType("Fruit", false, 1));
 	}
 }
