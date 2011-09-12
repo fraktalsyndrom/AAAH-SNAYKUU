@@ -20,6 +20,11 @@ public class GameObjectType
 		value = 0;
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+	
 	public int getValue()
 	{
 		return value;
