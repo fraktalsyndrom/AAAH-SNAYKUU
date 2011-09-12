@@ -95,17 +95,18 @@ public class Session
 		for (Snake snake : snakes.values()) 
 		{
 			Position head = heads.get(snake);
-			GameObject object = board.getGameObject(head);
-			GameObjectType objectType = object.getType();
-			if (object != null) 
+			Square square = board.getSquare(head);
+			if (square.isLethal())
 			{
-				if (objectType.isLethal())
 				//~ NOTE: This seems fucked up. Won't snakes move, and then collide with their own heads?
-				{
-					dead.add(snake);
-					System.out.println("TERMINATE SNAKE.");
-				}
-				score.put(snake, score.get(snake) + objectType.getValue());
+				dead.add(snake);
+				System.out.println("TERMINATE SNAKE.");
+			}
+			if (square.hasFruit()) {
+				int fruitValue = square.eatFruit();
+				int oldScore = score.get(snake);
+				int newScore = oldScore + fruitValue;
+				score.put(snake, newScore);
 			}
 		}
 		
@@ -184,7 +185,7 @@ public class Session
 			//~ NOTE: How do we keep track of the snakes' positions?
 			//~ Perhaps a HashMap<Snake, LinkedList<Position>> is better?
 			//~ tails.put(snake, ERROR);
-			board.removeGameObject(currentTailPosition);
+			//~ board.removeGameObject(currentTailPosition);
 		}
 	}
 	
