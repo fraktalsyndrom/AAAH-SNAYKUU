@@ -7,8 +7,6 @@ public class Session
 	private Board board;
 	private HashMap<Integer, Snake> snakes;
 	private HashMap<Snake, Integer> score;
-	private HashMap<Snake, Position> heads;
-	private HashMap<Snake, Position> tails;
 	
 	private HashMap<String, GameObjectType> objects;
 	private GameState currentGameState;
@@ -76,49 +74,25 @@ public class Session
 	 */
 	public void tick()
 	{
-		//~ Check for growth.
-		boolean growAllSnakes = false;
+		boolean growth = checkForGrowth();
+		HashMap<Snake, Direction> moves = getDecisionsFromSnakes();	
+		moveAllSnakes(moves, growth);
+		
+		ArrayList<Snake> deadSnakes = checkForCollision();
+		removeDeadSnakes(deadSnakes);
+		
+		updateGameState();
+	}
+	
+	private boolean checkForGrowth()
+	{
+		boolean grow = false;
 		if (--turnsUntilGrowth < 1)
 		{
-			growAllSnakes = true;
+			grow = true;
 			turnsUntilGrowth = growthFrequency;
 		}
-		
-		HashMap<Snake, Direction> moves = getDecisionsFromSnakes();		
-		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
-		{
-			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
-		}
-		
-		//~ Check for collision
-		ArrayList<Snake> dead = new ArrayList<Snake>();
-		for (Snake snake : snakes.values()) 
-		{
-			Position head = heads.get(snake);
-			Square square = board.getSquare(head);
-			if (square.isLethal())
-			{
-				//~ NOTE: This seems fucked up. Won't snakes move, and then collide with their own heads?
-				dead.add(snake);
-				System.out.println("TERMINATE SNAKE.");
-			}
-			if (square.hasFruit()) {
-				int fruitValue = square.eatFruit();
-				int oldScore = score.get(snake);
-				int newScore = oldScore + fruitValue;
-				score.put(snake, newScore);
-			}
-		}
-		
-		//~ Remove all dead snakes.
-		Iterator<Snake> deadSnakeIter = dead.iterator();
-		while (deadSnakeIter.hasNext())
-		{
-			removeSnake(deadSnakeIter.next());
-		}
-		
-		turn++;
-		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+		return grow;
 	}
 	
 	/**
@@ -169,24 +143,68 @@ public class Session
 			}
 			moves.put(currentSnake, nextMove);
 		}
-		
 		return moves;
 	}
+
 	
+	private void moveAllSnakes(HashMap<Snake, Direction> moves, boolean growSnakes)
+	{
+		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
+		{
+			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growSnakes);
+		}
+	}
+	
+	private ArrayList<Snake> checkForCollision()
+	{
+		ArrayList<Snake> deadSnakes = new ArrayList<Snake>();
+		for (Snake snake : snakes.values()) 
+		{
+			Position head = snake.getHead();
+			Square square = board.getSquare(head);
+			if (square.isLethal())
+			{
+				//~ NOTE: This seems fucked up. Won't snakes move, and then collide with their own heads?
+				deadSnakes.add(snake);
+				System.out.println("TERMINATE SNAKE.");
+			}
+			if (square.hasFruit()) {
+				int fruitValue = square.eatFruit();
+				int oldScore = score.get(snake);
+				int newScore = oldScore + fruitValue;
+				score.put(snake, newScore);
+			}
+		}
+		return deadSnakes;
+	}
+	
+	private void removeDeadSnakes(ArrayList<Snake> dead)
+	{
+		Iterator<Snake> deadSnakeIter = dead.iterator();
+		while (deadSnakeIter.hasNext())
+		{
+			removeSnake(deadSnakeIter.next());
+		}
+	}
+		
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		Position currentHeadPosition = heads.get(snake);
-		Position currentTailPosition = tails.get(snake);
+		Position currentHeadPosition = snake.getHead();
+		Position currentTailPosition = snake.getTail();
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		heads.put(snake, newHeadPosition);
 		board.addGameObject(objects.get("SnakeSegment"), newHeadPosition);
+		snake.moveHead(newHeadPosition);
 		if (!grow)
 		{
-			//~ NOTE: How do we keep track of the snakes' positions?
-			//~ Perhaps a HashMap<Snake, LinkedList<Position>> is better?
-			//~ tails.put(snake, ERROR);
-			//~ board.removeGameObject(currentTailPosition);
+			//~ NOTE board.removeGameObject(how do we get the right segment GameObject?)
+			snake.removeTail();
 		}
+	}
+	
+	private void updateGameState()
+	{
+		turn++;
+		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
 	}
 	
 	/**
