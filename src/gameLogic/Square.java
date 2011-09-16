@@ -36,7 +36,10 @@ public class Square
 	
 	public boolean hasSnake()
 	{
-		return hasObjectType("SnakeSegment");
+		for (GameObject object : objects)
+			if (object instanceof Snake)
+				return true;
+		return false;
 	}
 	
 	public boolean hasWall()
@@ -75,6 +78,15 @@ public class Square
 	void removeGameObject(GameObject object)
 	{
 		objects.remove(object);
+	}
+	
+	ArrayList<Snake> getSnakes()
+	{
+		ArrayList<Snake> snakes = new ArrayList<Snake>();
+		for (GameObject object : objects)
+			if (object instanceof Snake)
+				snakes.add((Snake)object);
+		return snakes;
 	}
 	
 	void removeFruit()
