@@ -36,6 +36,11 @@ public class Board
 		board[p.getX()][p.getY()].addGameObject(new GameObject(obj));
 	}
 	
+	void addGameObject(GameObject obj, Position p)
+	{
+		board[p.getX()][p.getY()].addGameObject(obj);
+	}
+	
 	void clearSquare(Position p)
 	{
 		board[p.getX()][p.getY()].clear();

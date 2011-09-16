@@ -164,9 +164,11 @@ public class Session
 			Square square = board.getSquare(head);
 			if (square.isLethal())
 			{
-				//~ NOTE: This seems fucked up. Won't snakes move, and then collide with their own heads?
-				deadSnakes.add(snake);
-				System.out.println("TERMINATE SNAKE.");
+				if (square.hasWall() || square.hasSnake() && (square.getSnakes().contains(snake)))
+				{
+					deadSnakes.add(snake);
+					System.out.println("TERMINATE SNAKE.");
+				}
 			}
 			if (square.hasFruit()) {
 				int fruitValue = square.eatFruit();
@@ -192,11 +194,11 @@ public class Session
 		Position currentHeadPosition = snake.getHead();
 		Position currentTailPosition = snake.getTail();
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		board.addGameObject(objects.get("SnakeSegment"), newHeadPosition);
+		board.addGameObject(snake, newHeadPosition);
 		snake.moveHead(newHeadPosition);
 		if (!grow)
 		{
-			//~ NOTE board.removeGameObject(how do we get the right segment GameObject?)
+			board.removeGameObject(snake, currentTailPosition);
 			snake.removeTail();
 		}
 	}
@@ -237,7 +239,6 @@ public class Session
 	private void initGameObjects()
 	{
 		objects.put("Wall", new GameObjectType("Wall", true));
-		objects.put("SnakeSegment", new GameObjectType("SnakeSegment", true));
 		objects.put("Fruit", new GameObjectType("Fruit", false, 1));
 	}
 }
