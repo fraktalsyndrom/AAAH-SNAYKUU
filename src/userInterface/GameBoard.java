@@ -47,18 +47,18 @@ class GameBoard extends JComponent
 			g.drawLine(0, y * pixelsPerUnit, width, y * pixelsPerUnit);
 		}
 		
-		Color[] colorList = { Color.GREEN, Color.RED, Color.BLUE };
+		g.setColor(Color.GREEN);
 		
-		int colorIndex = 0;
-		for (Snake snake : session.getSnakes())
+		for (int x = 0; x < board.getWidth(); ++x)
 		{
-			g.setColor(colorList[colorIndex++]);
-			
-			for (SnakeSegment segment : snake.getSegments())
+			for (int y = 0; y < board.getHeight(); ++y)
 			{
-				int x = pixelsPerUnit * segment.getPosition().getX();
-				int y = pixelsPerUnit * segment.getPosition().getY();
-				g.fillRect(x, y, pixelsPerUnit, pixelsPerUnit);
+				if (board.hasGameObject(x, y))
+				{
+					int xPosition = x * pixelsPerUnit;
+					int yPosition = y * pixelsPerUnit;
+					g.fillRect(x, y, pixelsPerUnit, pixelsPerUnit);
+				}
 			}
 		}
 	}

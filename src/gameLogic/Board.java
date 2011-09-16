@@ -23,7 +23,12 @@ public class Board
 	
 	public boolean hasGameObject(Position p)
 	{
-		return (!board[p.getX()][p.getY()].isEmpty());
+		return hasGameObject(p.getX(), p.getY());
+	}
+	
+	public boolean hasGameObject(int x, int y)
+	{
+		return (!board[x][y].isEmpty());
 	}
 	
 	public Square getSquare(Position p)

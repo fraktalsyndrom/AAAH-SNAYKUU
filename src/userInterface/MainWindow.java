@@ -30,7 +30,9 @@ public class MainWindow extends JFrame
 		if (brain == null)
 			JOptionPane.showMessageDialog(this, "BRAINFUCK SHIT");
 		
-		Snake snake = new Snake("Stefan", brain, new Position(10, 10));
+		GameObjectType got = new GameObjectType("Snake", true);
+		
+		Snake snake = new Snake(got, "Stefan", brain, new Position(10, 10));
 		
 		session.addSnake(snake);
 		
