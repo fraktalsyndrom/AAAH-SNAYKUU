@@ -9,6 +9,9 @@ public class Board
 		if (width < 1 || height < 1)
 			throw new IllegalArgumentException("Board size must be greater than 0");
 		board = new Square[width][height];
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				board[x][y] = new Square();
 	}
 	
 	public int getWidth()
