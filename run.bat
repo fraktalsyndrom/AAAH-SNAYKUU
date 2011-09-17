@@ -1,1 +1,1 @@
-snaykuu.jar
+java -jar snaykuu.jar
