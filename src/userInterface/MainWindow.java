@@ -4,6 +4,7 @@ import javax.swing.*;
 import gameLogic.*;
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class MainWindow extends JFrame
 {
@@ -31,8 +32,10 @@ public class MainWindow extends JFrame
 			JOptionPane.showMessageDialog(this, "BRAINFUCK SHIT");
 		
 		GameObjectType got = new GameObjectType("Snake", true);
-		
-		Snake snake = new Snake(got, "Stefan", brain, new Position(10, 10));
+		LinkedList<Position> snakePosition = new LinkedList<Position>();
+		snakePosition.addFirst(new Position(10, 9));
+		snakePosition.addFirst(new Position(10, 10));
+		Snake snake = new Snake(got, "Stefan", brain, snakePosition);
 		
 		session.addSnake(snake);
 		
