@@ -5,10 +5,9 @@ import java.util.*;
 public class Session
 {
 	private Board board;
-	private HashMap<Integer, Snake> snakes;
-	private HashMap<Snake, Integer> score;
+	private Set<Snake> snakes = new HashSet<Snake>();
 	
-	private HashMap<String, GameObjectType> objects;
+	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 	private GameState currentGameState;
 	
 	private long thinkingTime;
@@ -20,9 +19,6 @@ public class Session
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
 	{
-		snakes = new HashMap<Integer, Snake>();
-		score = new HashMap<Snake, Integer>();
-		objects = new HashMap<String, GameObjectType>();
 		initGameObjects();
 		board = createStandardBoard(boardWidth, boardHeight);
 		
@@ -35,27 +31,17 @@ public class Session
 	{
 		if (newSnake == null)
 			throw new IllegalArgumentException("Trying to add a null Snake.");
-		snakes.put(++numberOfSnakes, newSnake);
-		score.put(newSnake, 0);
+		
+		snakes.add(newSnake);
 	}
 	
-	private void removeSnake(int id)
-	{
-		snakes.remove(id);
-		numberOfSnakes--;
-	}
 	
 	private void removeSnake(Snake snake)
 	{
-		for (Map.Entry<Integer, Snake> snakeEntry : snakes.entrySet())
-		{
-			if (snakeEntry.getValue().equals(snake))
-			{
-				snakes.remove(snake);
-				return;
-			}
-		}
-		throw new IllegalArgumentException("No such snake exists.");
+		if (!snakes.contains(snake))
+			throw new IllegalArgumentException("No such snake exists.");
+		
+		snakes.remove(snake);
 	}
 	
 	public Board getBoard()
@@ -65,7 +51,7 @@ public class Session
 	
 	public Set<Snake> getSnakes()
 	{
-		return new HashSet<Snake>(snakes.values());
+		return new HashSet<Snake>(snakes);
 	}
 	
 	/**
@@ -75,7 +61,7 @@ public class Session
 	public void tick()
 	{
 		boolean growth = checkForGrowth();
-		HashMap<Snake, Direction> moves = getDecisionsFromSnakes();	
+		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
 		
 		ArrayList<Snake> deadSnakes = checkForCollision();
@@ -103,51 +89,38 @@ public class Session
 	 * is defaulted to Direction.FORWARD.
 	 * @return 	The HashMap containing snakes and their next moves.
 	 */
-	private HashMap<Snake, Direction> getDecisionsFromSnakes()
+	private Map<Snake, Direction> getDecisionsFromSnakes()
 	{
-		BrainDecision[] decisionThreads = new BrainDecision[numberOfSnakes];
-		int arrpos = 0;
-		HashMap<Snake, Direction> moves = new HashMap<Snake, Direction>();
+		Map<Snake, BrainDecision> decisionThreads = new HashMap<Snake, BrainDecision>();
+		Map<Snake, Direction> moves = new HashMap<Snake, Direction>();
 		//~ Using a HashMap here since I'm unsure of the sorting order of snakes.values() below.
 		
 		//~ Prepare some decision threads.
-		for (Snake snake : snakes.values())
+		for (Snake snake : snakes)
 		{
-			BrainDecision bd = new BrainDecision(snake, currentGameState);
-			decisionThreads[arrpos++] = bd;
+			BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
+			decisionThreads.put(snake, bd);
 		}
 		
 		//~ Start all the decision threads.
-		for (int i = 0; i < decisionThreads.length; i++)
-			decisionThreads[i].start();
+		for (BrainDecision brainDecision : decisionThreads.values())
+			brainDecision.start();
 		
 		//~ Chill out while the snakes are thinking.
 		try { Thread.sleep(thinkingTime); }
 		catch (InterruptedException e) { System.out.println(e); }
 		
-		for (int i = 0; i < decisionThreads.length; i++)
+		for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
 		{
-			BrainDecision decision = decisionThreads[i];
-			Snake currentSnake = decision.getSnake();
-			Direction nextMove;
-			if (!decision.isAlive())
-			{
-				nextMove = decision.getNextMove();
-			}
-			else
-			//~ This snake has taken too long to decide, and will automatically move forward.
-			{
-				nextMove = new Direction(Direction.FORWARD);
-				Snake slowSnake = decision.getSnake();
-				slowSnake.tooSlowFault();
-			}
-			moves.put(currentSnake, nextMove);
+			BrainDecision decision = decisionThread.getValue();
+			Direction nextMove = decision.demandNextMove();
+			moves.put(decisionThread.getKey(), nextMove);
 		}
 		return moves;
 	}
 
 	
-	private void moveAllSnakes(HashMap<Snake, Direction> moves, boolean growSnakes)
+	private void moveAllSnakes(Map<Snake, Direction> moves, boolean growSnakes)
 	{
 		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
 		{
@@ -158,7 +131,7 @@ public class Session
 	private ArrayList<Snake> checkForCollision()
 	{
 		ArrayList<Snake> deadSnakes = new ArrayList<Snake>();
-		for (Snake snake : snakes.values()) 
+		for (Snake snake : snakes) 
 		{
 			Position head = snake.getHead();
 			Square square = board.getSquare(head);
@@ -170,9 +143,7 @@ public class Session
 			if (square.hasFruit()) 
 			{
 				int fruitValue = square.eatFruit();
-				int oldScore = score.get(snake);
-				int newScore = oldScore + fruitValue;
-				score.put(snake, newScore);
+				snake.addScore(fruitValue);
 			}
 		}
 		return deadSnakes;

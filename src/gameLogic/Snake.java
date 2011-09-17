@@ -9,6 +9,7 @@ public class Snake extends GameObject
 	private Direction direction;
 	private boolean grow = false;
 	private LinkedList<Position> segments;
+	private int score;
 	
 	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
 	{
@@ -16,7 +17,8 @@ public class Snake extends GameObject
 		this.name = name;
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
-		segments =  position;
+		segments = position;
+		score = 0;
 	}
 	
 	public Position getHead()
@@ -39,19 +41,19 @@ public class Snake extends GameObject
 		segments.removeLast();
 	}
 	
-	Direction getNextMove(GameState currentGameState)
-	{
-		return brain.getNextMove(currentGameState);
-	}
-	
 	Brain getBrain()
 	{
 		return brain;
 	}
 	
-	void tooSlowFault()
+	public int getScore()
 	{
-		brain.tooSlowFault();
+		return score;
+	}
+	
+	void addScore(int points)
+	{
+		score += points;
 	}
 	
 	public String toString()

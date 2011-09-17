@@ -1,27 +1,27 @@
 package gameLogic;
 
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
 
 public class GameState
 {
 	private Board board;
-	private Map<Integer, Snake> snakes;
+	private Set<Snake> snakes;
 	private int turn;
 	private int turnsUntilGrowth;
 	
-	public GameState(Board currentBoard, Map<Integer, Snake> listOfSnakes, int turn, int turnsUntilGrowth) 
+	public GameState(Board currentBoard, Set<Snake> snakes, int turn, int turnsUntilGrowth) 
 	{
 		board = currentBoard;
-		snakes = listOfSnakes;
+		this.snakes = snakes;
 		this.turn = turn;
 		this.turnsUntilGrowth = turnsUntilGrowth;
 	}
 	
-	public Snake getSnake(int id)
+	public Set<Snake> getSnakes()
 	{
-		return snakes.get(id);
+		return new HashSet<Snake>(snakes);
 	}
 	
 	public Board getBoard()

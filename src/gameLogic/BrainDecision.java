@@ -1,29 +1,31 @@
 package gameLogic;
 
-public class BrainDecision extends Thread
+class BrainDecision extends Thread
 {
-	private Snake snake;
+	private Brain brain;
 	private GameState currentState;
 	private Direction nextMove;
 	
-	public BrainDecision(Snake snake, GameState currentState) 
+	public BrainDecision(Brain brain, GameState currentState) 
 	{
-		this.snake = snake;
+		this.brain = brain;
 		this.currentState = currentState;
 	}
 	
 	public void run() 
 	{ 
-		nextMove = snake.getNextMove(currentState);
+		nextMove = brain.getNextMove(currentState);
 	}
 	
-	public Direction getNextMove()
+	public Direction demandNextMove()
 	{
+		//~ This snake has taken too long to decide, and will automatically move forward.
+		if (isAlive())
+		{
+			brain.tooSlowFault();
+			return new Direction(Direction.FORWARD);
+		}
+		
 		return nextMove;
-	}
-	
-	public Snake getSnake()
-	{
-		return snake;
 	}
 }
