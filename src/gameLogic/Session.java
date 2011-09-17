@@ -20,11 +20,11 @@ public class Session
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
 	{
-		board = createStandardBoard(boardWidth, boardHeight);
 		snakes = new HashMap<Integer, Snake>();
 		score = new HashMap<Snake, Integer>();
 		objects = new HashMap<String, GameObjectType>();
 		initGameObjects();
+		board = createStandardBoard(boardWidth, boardHeight);
 		
 		this.growthFrequency = growthFrequency;
 		this.thinkingTime = thinkingTime;
