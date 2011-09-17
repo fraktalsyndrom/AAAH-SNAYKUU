@@ -10,13 +10,13 @@ public class Snake extends GameObject
 	private boolean grow = false;
 	private LinkedList<Position> segments;
 	
-	public Snake(GameObjectType type, String name, Brain brain, Position position)
+	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
 	{
 		super(type);
 		this.name = name;
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
-		segments = new LinkedList<Position>();
+		segments =  position;
 	}
 	
 	public Position getHead()
