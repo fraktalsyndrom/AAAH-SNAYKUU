@@ -49,12 +49,20 @@ class GameBoard extends JComponent
 		
 		g.setColor(Color.GREEN);
 		
+
 		for (int x = 0; x < board.getWidth(); ++x)
 		{
 			for (int y = 0; y < board.getHeight(); ++y)
 			{
-				if (board.hasGameObject(x, y))
+				Position pos = new Position(x, y);
+				if (board.hasGameObject(pos))
 				{
+					if (board.hasSnake(pos))
+						g.setColor(Color.GREEN);
+					if (board.hasFruit(pos))
+						g.setColor(Color.RED);
+					if (board.hasWall(pos))
+						g.setColor(Color.WHITE);
 					int xPosition = x * pixelsPerUnit;
 					int yPosition = y * pixelsPerUnit;
 					g.fillRect(xPosition, yPosition, pixelsPerUnit, pixelsPerUnit);
