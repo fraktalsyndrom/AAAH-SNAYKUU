@@ -9,6 +9,7 @@ public class Snake extends GameObject
 	private Direction direction;
 	private boolean grow = false;
 	private LinkedList<Position> segments;
+	private boolean isDead = false;
 	
 	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
 	{
@@ -29,6 +30,11 @@ public class Snake extends GameObject
 		return segments.getLast();
 	}
 	
+	public boolean isDead()
+	{
+		return isDead;
+	}
+	
 	void moveHead(Position pos)
 	{
 		segments.addFirst(pos);
@@ -37,6 +43,11 @@ public class Snake extends GameObject
 	void removeTail()
 	{
 		segments.removeLast();
+	}
+	
+	void kill()
+	{
+		isDead = true;
 	}
 	
 	Direction getNextMove(GameState currentGameState)
