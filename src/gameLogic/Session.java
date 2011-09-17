@@ -12,19 +12,24 @@ public class Session
 	
 	private long thinkingTime;
 	private int growthFrequency;
+	private int fruitFrequency;
 	
 	private int turnsUntilGrowth;
+	private int turnsUntilFruit;
 	private int turn = 0;
 	private int numberOfSnakes = 0;
 	
-	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
+	public Session(int boardWidth, int boardHeight, int growthFrequency, int fruitFrequency, long thinkingTime) 
 	{
 		initGameObjects();
 		board = createStandardBoard(boardWidth, boardHeight);
 		
 		this.growthFrequency = growthFrequency;
+		this.fruitFrequency = fruitFrequency;
 		this.thinkingTime = thinkingTime;
+		
 		turnsUntilGrowth = growthFrequency;
+		turnsUntilFruit = fruitFrequency;
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -64,6 +69,8 @@ public class Session
 		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
 		checkForCollision();
+		if (perhapsSpawnFruit())
+			System.out.println("FRUIT SPAWNED");
 		updateGameState();
 	}
 	
@@ -163,6 +170,29 @@ public class Session
 			board.removeGameObject(snake, currentTailPosition);
 			snake.removeTail();
 		}
+	}
+	
+	private boolean perhapsSpawnFruit()
+	{
+		if (--turnsUntilFruit < 1)
+		{
+			Random random = new Random();
+			boolean spawned = false;
+			while (!spawned)
+			{
+				int x = random.nextInt(board.getWidth() - 1);
+				int y = random.nextInt(board.getHeight() - 1);
+				Position potentialFruitPosition = new Position(x, y);
+				if (!board.hasGameObject(potentialFruitPosition))
+				{
+					board.addGameObject(objects.get("Fruit"), potentialFruitPosition);
+					spawned = true;
+				}
+			}
+			turnsUntilFruit = fruitFrequency;
+			return true;
+		}
+		return false;
 	}
 	
 	private void updateGameState()
