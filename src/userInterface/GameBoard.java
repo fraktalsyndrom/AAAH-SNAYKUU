@@ -57,7 +57,7 @@ class GameBoard extends JComponent
 				{
 					int xPosition = x * pixelsPerUnit;
 					int yPosition = y * pixelsPerUnit;
-					g.fillRect(x, y, pixelsPerUnit, pixelsPerUnit);
+					g.fillRect(xPosition, yPosition, pixelsPerUnit, pixelsPerUnit);
 				}
 			}
 		}
