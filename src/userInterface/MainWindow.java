@@ -14,7 +14,7 @@ public class MainWindow extends JFrame
 	
 	public MainWindow()
 	{
-		session = new Session(20, 15, 1, 33);
+		session = new Session(20, 15, 1, 10, 100);
 		
 		gameBoard = new GameBoard(session, 16);
 				
