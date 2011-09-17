@@ -63,10 +63,7 @@ public class Session
 		boolean growth = checkForGrowth();
 		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
-		
-		ArrayList<Snake> deadSnakes = checkForCollision();
-		removeDeadSnakes(deadSnakes);
-		
+		checkForCollision();
 		updateGameState();
 	}
 	
@@ -98,8 +95,11 @@ public class Session
 		//~ Prepare some decision threads.
 		for (Snake snake : snakes)
 		{
-			BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
-			decisionThreads.put(snake, bd);
+			if (!snake.isDead())
+			{
+				BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
+				decisionThreads.put(snake, bd);
+			}
 		}
 		
 		//~ Start all the decision threads.
@@ -128,33 +128,26 @@ public class Session
 		}
 	}
 	
-	private ArrayList<Snake> checkForCollision()
+	private void checkForCollision()
 	{
 		ArrayList<Snake> deadSnakes = new ArrayList<Snake>();
 		for (Snake snake : snakes) 
 		{
+			if (snake.isDead())
+				continue;
+			
 			Position head = snake.getHead();
 			Square square = board.getSquare(head);
 			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
-				deadSnakes.add(snake);
-				System.out.println("TERMINATE SNAKE.");
+				snake.kill();
+				System.out.println(snake + " HAS BEEN TERMINATED.");
 			}
 			if (square.hasFruit()) 
 			{
 				int fruitValue = square.eatFruit();
 				snake.addScore(fruitValue);
 			}
-		}
-		return deadSnakes;
-	}
-	
-	private void removeDeadSnakes(ArrayList<Snake> dead)
-	{
-		Iterator<Snake> deadSnakeIter = dead.iterator();
-		while (deadSnakeIter.hasNext())
-		{
-			removeSnake(deadSnakeIter.next());
 		}
 	}
 		

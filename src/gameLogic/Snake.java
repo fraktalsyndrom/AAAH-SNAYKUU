@@ -9,7 +9,8 @@ public class Snake extends GameObject
 	private Direction direction;
 	private boolean grow = false;
 	private LinkedList<Position> segments;
-	private int score;
+	private int score = 0;
+	private boolean isDead = false;
 	
 	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
 	{
@@ -18,7 +19,6 @@ public class Snake extends GameObject
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
 		segments = position;
-		score = 0;
 	}
 	
 	public Position getHead()
@@ -31,6 +31,11 @@ public class Snake extends GameObject
 		return segments.getLast();
 	}
 	
+	public boolean isDead()
+	{
+		return isDead;
+	}
+	
 	void moveHead(Position pos)
 	{
 		segments.addFirst(pos);
@@ -39,6 +44,11 @@ public class Snake extends GameObject
 	void removeTail()
 	{
 		segments.removeLast();
+	}
+	
+	void kill()
+	{
+		isDead = true;
 	}
 	
 	Brain getBrain()
@@ -63,7 +73,8 @@ public class Snake extends GameObject
 	
 	public boolean equals(Object other)
 	{
-		if (other instanceof Snake) {
+		if (other instanceof Snake)
+		{
 			Snake otherSnake = (Snake)other;
 			return (name.equals(otherSnake.name));
 		}
