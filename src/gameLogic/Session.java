@@ -162,15 +162,13 @@ public class Session
 		{
 			Position head = snake.getHead();
 			Square square = board.getSquare(head);
-			if (square.isLethal())
+			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
-				if (square.hasWall() || square.hasSnake() && (square.getSnakes().contains(snake)))
-				{
-					deadSnakes.add(snake);
-					System.out.println("TERMINATE SNAKE.");
-				}
+				deadSnakes.add(snake);
+				System.out.println("TERMINATE SNAKE.");
 			}
-			if (square.hasFruit()) {
+			if (square.hasFruit()) 
+			{
 				int fruitValue = square.eatFruit();
 				int oldScore = score.get(snake);
 				int newScore = oldScore + fruitValue;
