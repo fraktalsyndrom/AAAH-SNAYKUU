@@ -34,6 +34,21 @@ public class Board
 		return (!board[x][y].isEmpty());
 	}
 	
+	public boolean hasFruit(Position p)
+	{
+		return (board[p.getX()][p.getY()].hasFruit());
+	}
+	
+	public boolean hasWall(Position p)
+	{
+		return (board[p.getX()][p.getY()].hasWall());
+	}
+	
+	public boolean hasSnake(Position p)
+	{
+		return (board[p.getX()][p.getY()].hasSnake());
+	}
+	
 	public Square getSquare(Position p)
 	{
 		return board[p.getX()][p.getY()];
