@@ -1,73 +1,54 @@
 package gameLogic;
 
-
 import java.util.*;
 
-public class Snake
+public class Snake extends GameObject
 {
 	private String name;
-	private LinkedList<SnakeSegment> segments = new LinkedList<SnakeSegment>();
 	private Brain brain;
 	private Direction direction;
 	private boolean grow = false;
+	private LinkedList<Position> segments;
+	private int score = 0;
+	private boolean isDead = false;
 	
-	public Snake(String name, Brain brain, Position position)
+	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
 	{
+		super(type);
 		this.name = name;
 		this.brain = brain;
 		this.direction = new Direction(Direction.NORTH);
-		this.segments.add(new SnakeSegment(position, null));
+		segments = position;
 	}
 	
-	public SnakeSegment getHead()
+	public Position getHead()
 	{
-		return segments.get(0);
+		return segments.getFirst();
 	}
 	
-	public SnakeSegment getTail()
+	public Position getTail()
 	{
 		return segments.getLast();
 	}
 	
-	public LinkedList<SnakeSegment> getSegments()
+	public boolean isDead()
 	{
-		return segments;
+		return isDead;
 	}
 	
-	/**
-	 * NOTE: Currently not used nor working. Functionality has instead been moved to moveSnake() in Session. 
-	 */
-	void move(GameState currentGameState)
+	void moveHead(Position pos)
 	{
-		direction = brain.getNextMove(currentGameState);
-		SnakeSegment head = getHead();
-		
-		Position newHeadPosition = direction.calculateNextPosition(head.getPosition());
-		//~ segments.addFirst(new SnakeSegment(session.getBoard(), newHeadPosition, head));
-		
-		if (grow)
-		{
-			grow = false;
-			return;
-		}
-		
-		SnakeSegment tail = getTail();
+		segments.addFirst(pos);
+	}	
+	
+	void removeTail()
+	{
 		segments.removeLast();
 	}
 	
-	Direction getNextMove(GameState currentGameState)
+	void kill()
 	{
-		return brain.getNextMove(currentGameState);
-	}
-	
-	void updatePosition(LinkedList<SnakeSegment> newSegments)
-	{
-		segments = newSegments;
-	}
-	
-	void growOneUnitOfLengthNextTimeThisSnakeMoves()
-	{
-		grow = true;
+		isDead = true;
 	}
 	
 	Brain getBrain()
@@ -75,9 +56,14 @@ public class Snake
 		return brain;
 	}
 	
-	void tooSlowFault()
+	public int getScore()
 	{
-		brain.tooSlowFault();
+		return score;
+	}
+	
+	void addScore(int points)
+	{
+		score += points;
 	}
 	
 	public String toString()
@@ -87,7 +73,8 @@ public class Snake
 	
 	public boolean equals(Object other)
 	{
-		if (other instanceof Snake) {
+		if (other instanceof Snake)
+		{
 			Snake otherSnake = (Snake)other;
 			return (name.equals(otherSnake.name));
 		}

@@ -5,8 +5,9 @@ import java.util.*;
 public class Session
 {
 	private Board board;
-	private HashMap<Integer, Snake> snakes;
-	private HashMap<Snake, Integer> score;
+	private Set<Snake> snakes = new HashSet<Snake>();
+	
+	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 	private GameState currentGameState;
 	
 	private long thinkingTime;
@@ -18,9 +19,8 @@ public class Session
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, long thinkingTime) 
 	{
+		initGameObjects();
 		board = createStandardBoard(boardWidth, boardHeight);
-		snakes = new HashMap<Integer, Snake>();
-		score = new HashMap<Snake, Integer>();
 		
 		this.growthFrequency = growthFrequency;
 		this.thinkingTime = thinkingTime;
@@ -31,27 +31,17 @@ public class Session
 	{
 		if (newSnake == null)
 			throw new IllegalArgumentException("Trying to add a null Snake.");
-		snakes.put(++numberOfSnakes, newSnake);
-		score.put(newSnake, 0);
+		
+		snakes.add(newSnake);
 	}
 	
-	private void removeSnake(int id)
-	{
-		snakes.remove(id);
-		numberOfSnakes--;
-	}
 	
 	private void removeSnake(Snake snake)
 	{
-		for (Map.Entry<Integer, Snake> snakeEntry : snakes.entrySet())
-		{
-			if (snakeEntry.getValue().equals(snake))
-			{
-				snakes.remove(snake);
-				return;
-			}
-		}
-		throw new IllegalArgumentException("No such snake exists.");
+		if (!snakes.contains(snake))
+			throw new IllegalArgumentException("No such snake exists.");
+		
+		snakes.remove(snake);
 	}
 	
 	public Board getBoard()
@@ -61,65 +51,31 @@ public class Session
 	
 	public Set<Snake> getSnakes()
 	{
-		return new HashSet<Snake>(snakes.values());
+		return new HashSet<Snake>(snakes);
 	}
 	
 	/**
-	 * Move all the snakes simultaneously.
+	 * Move all the snakes simultaneously. In addition to movement, it also checks for collision,
+	 * kills colliding snakes, adds point when fruit is eaten, and updates the gamestate.
 	 */
 	public void tick()
 	{
-		/**
-		 * Check for growth.
-		 */
-		boolean growAllSnakes = false;
+		boolean growth = checkForGrowth();
+		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
+		moveAllSnakes(moves, growth);
+		checkForCollision();
+		updateGameState();
+	}
+	
+	private boolean checkForGrowth()
+	{
+		boolean grow = false;
 		if (--turnsUntilGrowth < 1)
 		{
-			growAllSnakes = true;
+			grow = true;
 			turnsUntilGrowth = growthFrequency;
 		}
-		
-		HashMap<Snake, Direction> moves = getDecisionsFromSnakes();		
-		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
-		{
-			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growAllSnakes);
-		}
-		
-		/**
-		 * Check for collision. Kill snake if collision is lethal. Add points if the snake eats a fruit.
-		 */
-		ArrayList<Snake> dead = new ArrayList<Snake>();
-		for (Snake snake : snakes.values()) 
-		{
-			Position head = snake.getHead().getPosition();
-			GameObject object = board.getGameObject(head);
-			if (object != null) 
-			{
-				if (object.isLethal()) 
-				{
-					dead.add(snake);
-					System.out.println("TERMINATE SNAKE.");
-				}
-				else if (object instanceof Fruit)
-				{
-					Fruit fruit = (Fruit)object;
-					score.put(snake, score.get(snake) + fruit.getValue());
-				}
-			}
-		}
-		
-		/**
-		 * Remove all dead snakes
-		 * TODO: Keep dead snakes on the board, and simply forbid them from moving and/or winning.
-		 */
-		Iterator<Snake> deadSnakeIter = dead.iterator();
-		while (deadSnakeIter.hasNext())
-		{
-			removeSnake(deadSnakeIter.next());
-		}
-		
-		turn++;
-		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+		return grow;
 	}
 	
 	/**
@@ -130,64 +86,93 @@ public class Session
 	 * is defaulted to Direction.FORWARD.
 	 * @return 	The HashMap containing snakes and their next moves.
 	 */
-	private HashMap<Snake, Direction> getDecisionsFromSnakes()
+	private Map<Snake, Direction> getDecisionsFromSnakes()
 	{
-		int arrpos = 0;
-		BrainDecision[] decisionThreads = new BrainDecision[numberOfSnakes];
-		HashMap<Snake, Direction> moves = new HashMap<Snake, Direction>();
+		Map<Snake, BrainDecision> decisionThreads = new HashMap<Snake, BrainDecision>();
+		Map<Snake, Direction> moves = new HashMap<Snake, Direction>();
 		//~ Using a HashMap here since I'm unsure of the sorting order of snakes.values() below.
 		
-		for (Snake snake : snakes.values())
+		//~ Prepare some decision threads.
+		for (Snake snake : snakes)
 		{
-			BrainDecision bd = new BrainDecision(snake, currentGameState);
-			decisionThreads[arrpos++] = bd;
+			if (!snake.isDead())
+			{
+				BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
+				decisionThreads.put(snake, bd);
+			}
 		}
-		for (int i = 0; i < decisionThreads.length; i++)
-			decisionThreads[i].start();
 		
-		//Chill out while the snakes are thinking.
+		//~ Start all the decision threads.
+		for (BrainDecision brainDecision : decisionThreads.values())
+			brainDecision.start();
+		
+		//~ Chill out while the snakes are thinking.
 		try { Thread.sleep(thinkingTime); }
 		catch (InterruptedException e) { System.out.println(e); }
 		
-		for (int i = 0; i < decisionThreads.length; i++)
+		for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
 		{
-			BrainDecision decision = decisionThreads[i];
-			Snake currentSnake = decision.getSnake();
-			Direction nextMove;
-			if (!decision.isAlive())
-			{
-				nextMove = decision.getNextMove();
-			}
-			else
-			{
-				//~ This snake has taken too long to decide, and will automatically move forward.
-				nextMove = new Direction(Direction.FORWARD);
-				Snake slowSnake = decision.getSnake();
-				slowSnake.tooSlowFault();
-			}
-			moves.put(currentSnake, nextMove);
+			BrainDecision decision = decisionThread.getValue();
+			Direction nextMove = decision.demandNextMove();
+			moves.put(decisionThread.getKey(), nextMove);
 		}
-		
 		return moves;
 	}
+
 	
+	private void moveAllSnakes(Map<Snake, Direction> moves, boolean growSnakes)
+	{
+		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
+		{
+			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growSnakes);
+		}
+	}
+	
+	private void checkForCollision()
+	{
+		ArrayList<Snake> deadSnakes = new ArrayList<Snake>();
+		for (Snake snake : snakes) 
+		{
+			if (snake.isDead())
+				continue;
+			
+			Position head = snake.getHead();
+			Square square = board.getSquare(head);
+			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
+			{
+				snake.kill();
+				System.out.println(snake + " HAS BEEN TERMINATED.");
+			}
+			if (square.hasFruit()) 
+			{
+				int fruitValue = square.eatFruit();
+				snake.addScore(fruitValue);
+			}
+		}
+	}
+		
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		LinkedList<SnakeSegment> segments = snake.getSegments();
-		SnakeSegment currentHead = segments.get(0);
-		Position currentHeadPosition = currentHead.getPosition();
+		Position currentHeadPosition = snake.getHead();
+		Position currentTailPosition = snake.getTail();
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		SnakeSegment newHeadSegment = new SnakeSegment(newHeadPosition, currentHead);
-		segments.addFirst(newHeadSegment);
-		if (!grow) 
+		board.addGameObject(snake, newHeadPosition);
+		snake.moveHead(newHeadPosition);
+		if (!grow)
 		{
-			segments.removeLast();
+			board.removeGameObject(snake, currentTailPosition);
+			snake.removeTail();
 		}
-		snake.updatePosition(segments);
+	}
+	
+	private void updateGameState()
+	{
+		turn++;
+		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
 	}
 	
 	/**
-	 * Generates a standard snakem, sized width x height, with lethal walls around the edges.
+	 * Generates a standard snake board, sized width x height, with lethal walls around the edges.
 	 * @param width		Desired board height.
 	 * @param height	Desired board width.
 	 * @return			The newly generated board.
@@ -195,20 +180,27 @@ public class Session
 	private Board createStandardBoard(int width, int height)
 	{
 		board = new Board(width, height);
+		GameObjectType wall = objects.get("Wall");
 		for (int x = 0; x < width; x++)
 		{
 			Position bottomRowPos = new Position(x, 0);
 			Position topRowPos = new Position(x, height-1);
-			board.addGameObject(new Wall(bottomRowPos), bottomRowPos);
-			board.addGameObject(new Wall(topRowPos), topRowPos);
+			board.addGameObject(wall, bottomRowPos);
+			board.addGameObject(wall, topRowPos);
 		}
 		for (int y = 0; y < height; y++)
 		{
 			Position leftmostColumnPos = new Position(0, y);
 			Position rightmostColumnPos = new Position(width-1, y);
-			board.addGameObject(new Wall(leftmostColumnPos), leftmostColumnPos);
-			board.addGameObject(new Wall(rightmostColumnPos), rightmostColumnPos);
+			board.addGameObject(wall, leftmostColumnPos);
+			board.addGameObject(wall, rightmostColumnPos);
 		}
 		return board;
+	}
+	
+	private void initGameObjects()
+	{
+		objects.put("Wall", new GameObjectType("Wall", true));
+		objects.put("Fruit", new GameObjectType("Fruit", false, 1));
 	}
 }

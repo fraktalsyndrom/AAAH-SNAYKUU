@@ -2,13 +2,16 @@ package gameLogic;
 
 public class Board 
 {
-	private GameObject[][] board;
+	private Square[][] board;
 	
 	public Board(int width, int height)
 	{
 		if (width < 1 || height < 1)
 			throw new IllegalArgumentException("Board size must be greater than 0");
-		board = new GameObject[width][height];
+		board = new Square[width][height];
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				board[x][y] = new Square();
 	}
 	
 	public int getWidth()
@@ -21,33 +24,43 @@ public class Board
 		return board[0].length;
 	}
 	
-	void addGameObject(GameObject obj, int x, int y)
+	public boolean hasGameObject(Position p)
 	{
-		board[x][y] = obj;
+		return hasGameObject(p.getX(), p.getY());
+	}
+	
+	public boolean hasGameObject(int x, int y)
+	{
+		return (!board[x][y].isEmpty());
+	}
+	
+	public Square getSquare(Position p)
+	{
+		return board[p.getX()][p.getY()];
+	}
+	
+	void addGameObject(GameObjectType obj, Position p)
+	{
+		board[p.getX()][p.getY()].addGameObject(new GameObject(obj));
 	}
 	
 	void addGameObject(GameObject obj, Position p)
 	{
-		board[p.getX()][p.getY()] = obj;
-	}
-
-	void removeGameObject(int x, int y)
-	{
-		board[x][y] = null;
+		board[p.getX()][p.getY()].addGameObject(obj);
 	}
 	
-	void removeGameObject(Position p)
+	void clearSquare(Position p)
 	{
-		board[p.getX()][p.getY()] = null;
-	}
-
-	public GameObject getGameObject(int x, int y)
-	{
-		return board[x][y];
+		board[p.getX()][p.getY()].clear();
 	}
 	
-	public GameObject getGameObject(Position p)
+	void removeGameObject(GameObject obj, Position p)
 	{
-		return board[p.getX()][p.getY()];
+		board[p.getX()][p.getY()].removeGameObject(obj);
+	}
+	
+	void removeFruit(Position p)
+	{
+		board[p.getX()][p.getY()].removeFruit();
 	}
 }

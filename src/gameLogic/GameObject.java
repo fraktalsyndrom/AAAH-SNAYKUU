@@ -1,19 +1,16 @@
 package gameLogic;
 
 
-public abstract class GameObject
-{
-	private Position position;
-	
-	public GameObject(Position position)
+public class GameObject
+{	
+	GameObjectType type;
+	public GameObject(GameObjectType type)
 	{
-		this.position = position;
+		this.type = type;
 	}
 	
-	public Position getPosition()
+	public GameObjectType getType()
 	{
-		return position;
+		return type;
 	}
-	
-	public abstract boolean isLethal();
 }
