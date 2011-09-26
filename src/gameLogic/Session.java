@@ -180,8 +180,8 @@ public class Session
 			boolean spawned = false;
 			while (!spawned)
 			{
-				int x = random.nextInt(board.getWidth() - 1);
-				int y = random.nextInt(board.getHeight() - 1);
+				int x = 1 + random.nextInt(board.getWidth() - 2);
+				int y = 1 + random.nextInt(board.getHeight() - 2);
 				Position potentialFruitPosition = new Position(x, y);
 				if (!board.hasGameObject(potentialFruitPosition))
 				{
