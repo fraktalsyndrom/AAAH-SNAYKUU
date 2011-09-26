@@ -13,7 +13,7 @@ public class GameState
 	
 	public GameState(Board currentBoard, Set<Snake> snakes, int turn, int turnsUntilGrowth) 
 	{
-		board = currentBoard;
+		board = new Board(currentBoard);
 		this.snakes = snakes;
 		this.turn = turn;
 		this.turnsUntilGrowth = turnsUntilGrowth;
