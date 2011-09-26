@@ -13,8 +13,15 @@ class BrainDecision extends Thread
 	}
 	
 	public void run() 
-	{ 
-		nextMove = brain.getNextMove(currentState);
+	{
+		try
+		{
+			nextMove = brain.getNextMove(currentState);
+		}
+		catch (Throwable t)
+		{
+			t.printStackTrace();
+		}
 	}
 	
 	public Direction demandNextMove()
