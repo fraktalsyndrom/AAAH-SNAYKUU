@@ -14,7 +14,7 @@ public class MainWindow extends JFrame
 	
 	public MainWindow()
 	{
-		session = new Session(20, 15, 1, 10, 100);
+		session = new Session(20, 40, 3, 10, 100);
 		
 		gameBoard = new GameBoard(session, 16);
 				
@@ -33,8 +33,8 @@ public class MainWindow extends JFrame
 		
 		GameObjectType got = new GameObjectType("Snake", true);
 		LinkedList<Position> snakePosition = new LinkedList<Position>();
-		snakePosition.addFirst(new Position(10, 9));
-		snakePosition.addFirst(new Position(10, 10));
+		snakePosition.addFirst(new Position(10, 29));
+		snakePosition.addFirst(new Position(10, 30));
 		Snake snake = new Snake(got, "Stefan", brain, snakePosition);
 		
 		session.addSnake(snake);
