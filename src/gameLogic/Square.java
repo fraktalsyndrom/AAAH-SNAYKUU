@@ -11,9 +11,9 @@ public class Square
 		objects = new ArrayList<GameObject>();
 	}
 	
-	public Square(ArrayList<GameObject> objects)
+	public Square(Square other)
 	{
-		this.objects = objects;
+		this.objects = new ArrayList<GameObject>(other.objects);
 	}
 	
 	public boolean isEmpty()
