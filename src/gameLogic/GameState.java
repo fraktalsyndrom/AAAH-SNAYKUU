@@ -29,28 +29,6 @@ public class GameState
 		return board;
 	}
 	
-	/**
-	 * Method stubs intended to eventually be of assistance during the planning phase.
-	 * Do we want the methods to be here?
-	 */
-	public static int distanceBetween(Position from, Position to)
-	{
-		int distance = 0;
-		int fromX = from.getX();
-		int fromY = from.getY();
-		int toX = to.getX();
-		int toY = to.getY();
-		
-		if (fromX > toX)
-			distance += fromX - toX;
-		else
-			distance += toX - fromX;
-		if (fromY > toY)
-			distance += fromY - toY;
-		else
-			distance += toY - fromY;
-		return distance;
-	}
 	
 	/*
 	 * Method stub, intended to eventually calculate whether or not a
@@ -69,6 +47,28 @@ public class GameState
 	public int getTurnsUntilGrowth()
 	{
 		return turnsUntilGrowth;
+	}
+	
+	
+	/**
+	 * Method stubs intended to eventually be of assistance during the planning phase.
+	 * Do we want the methods to be here?
+	 */
+	public static int distanceBetween(Position from, Position to)
+	{
+		int distance = 0;
+		int fromX = from.getX();
+		int fromY = from.getY();
+		int toX = to.getX();
+		int toY = to.getY();
+		
+		// Calculate distance in the x-axis
+		distance += Math.abs(fromX - toX);
+		
+		// Calculate distance in the y-axis
+		distance += Math.abs(fromY - toY);
+
+		return distance;
 	}
 }
 
