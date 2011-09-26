@@ -31,7 +31,7 @@ class GameBoard extends JComponent
 		
 		Board board = session.getBoard();
 		int width = pixelsPerUnit * board.getWidth();
-		int height = pixelsPerUnit * board.getWidth();
+		int height = pixelsPerUnit * board.getHeight();
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
