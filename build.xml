@@ -19,6 +19,6 @@
         </jar>
     </target>
     <target name="bot" description="compile every custom bots">
-		<javac srcdir="bot" classpath="src" />
+		<javac srcdir="bot" classpath="class" sourcepath="src" />
     </target>
 </project>
