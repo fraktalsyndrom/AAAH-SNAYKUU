@@ -35,10 +35,9 @@ public class MainWindow extends JFrame
 		LinkedList<Position> snakePosition = new LinkedList<Position>();
 		snakePosition.addFirst(new Position(10, 29));
 		snakePosition.addFirst(new Position(10, 30));
-		Snake snake = new Snake(got, "Stefan", brain, snakePosition);
+		Snake snake = new Snake(got, "Stefan", brain, snakePosition, Direction.NORTH);
 		
 		session.addSnake(snake);
-		
 		
 		gameLoop = new GameLoop();
 		gameLoop.start();
