@@ -12,12 +12,12 @@ public class Snake extends GameObject
 	private int score = 0;
 	private boolean isDead = false;
 	
-	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position)
+	public Snake(GameObjectType type, String name, Brain brain, LinkedList<Position> position, Direction originalDirection)
 	{
 		super(type);
 		this.name = name;
 		this.brain = brain;
-		this.direction = new Direction(Direction.NORTH);
+		this.direction = originalDirection;
 		segments = position;
 	}
 	
@@ -34,6 +34,11 @@ public class Snake extends GameObject
 	public boolean isDead()
 	{
 		return isDead;
+	}
+	
+	public Direction getCurrentDirection()
+	{
+		return direction;
 	}
 	
 	void moveHead(Position pos)

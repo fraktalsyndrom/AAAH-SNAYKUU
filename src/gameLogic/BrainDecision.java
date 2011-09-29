@@ -1,10 +1,13 @@
 package gameLogic;
 
+import java.util.concurrent.TimeoutException;
+
 class BrainDecision extends Thread
 {
 	private Brain brain;
 	private GameState currentState;
 	private Direction nextMove;
+	private Throwable exception = null;
 	
 	public BrainDecision(Brain brain, GameState currentState) 
 	{
@@ -20,18 +23,21 @@ class BrainDecision extends Thread
 		}
 		catch (Throwable t)
 		{
-			t.printStackTrace();
+			exception = t;
 		}
 	}
 	
-	public Direction demandNextMove()
+	public Direction demandNextMove() throws Throwable
 	{
 		//~ This snake has taken too long to decide, and will automatically move forward.
 		if (isAlive())
 		{
-			brain.tooSlowFault();
-			return new Direction(Direction.FORWARD);
+			stop();
+			throw new TimeoutException("The brain has taken too long to decide. Summon the minions.");
 		}
+		
+		if (exception != null)
+			throw exception;
 		
 		return nextMove;
 	}

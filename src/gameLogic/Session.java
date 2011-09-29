@@ -8,6 +8,7 @@ public class Session
 	private Set<Snake> snakes = new HashSet<Snake>();
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
+	private HashMap<Snake, Direction> lastMoves = new HashMap<Snake, Direction>();
 	private GameState currentGameState;
 	
 	private long thinkingTime;
@@ -119,9 +120,18 @@ public class Session
 		
 		for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
 		{
+			Snake currentSnake = decisionThread.getKey();
 			BrainDecision decision = decisionThread.getValue();
-			Direction nextMove = decision.demandNextMove();
-			moves.put(decisionThread.getKey(), nextMove);
+			try 
+			{
+				Direction nextMove = decision.demandNextMove();
+				moves.put(currentSnake, nextMove);
+			}
+			catch (Throwable t)
+			{
+				System.out.println(t);
+				moves.put(currentSnake, currentSnake.getCurrentDirection());
+			}
 		}
 		return moves;
 	}
