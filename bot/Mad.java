@@ -13,12 +13,6 @@ public class Mad implements Brain
 	
 	public Direction getNextMove(GameState gamestate)
 	{
-		return new Direction(Direction.NORTH);
+		return Direction.NORTH;
 	}
-	
-	public void tooSlowFault()
-	{
-		System.out.println("FUCK YOU DOLPHIN I AM WHALE");
-	}
-
 }
