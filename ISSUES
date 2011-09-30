@@ -19,6 +19,20 @@ X 1 X X X 4 X
 X X X X X X X
 
 
+# Remove any game logic from MainWindow
+
+There shouldn't be any game logic in MainWindow at all. Snake
+construction should be moved to either Main or Session.
+
+
+# Loading bots from files and adding them to the game
+
+We might need to update the class loader a little, and especially move
+it to a more appropriate place than MainWindow. SnakeSettingsPanel may
+need to be able to use it for testing the classes before the game
+starts.
+
+
 ---------------------------------
 
 ***OLD ISSUES***:
