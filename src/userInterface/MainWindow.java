@@ -10,11 +10,10 @@ public class MainWindow extends JFrame
 {
 	private Session session;
 	private GameBoard gameBoard;
-	private GameLoop gameLoop;
 	
-	public MainWindow()
+	public MainWindow(Session session)
 	{
-		session = new Session(20, 40, 3, 10, 100);
+		this.session = session;
 		
 		gameBoard = new GameBoard(session, 16);
 				
@@ -40,32 +39,8 @@ public class MainWindow extends JFrame
 		session.addSnake(snake);
 		session.prepareForStart();
 		
-		gameLoop = new GameLoop();
-		gameLoop.start();
 	}
 	
-	
-	private class GameLoop extends Thread
-	{
-		public void run()
-		{
-			while(true)
-			{
-				session.tick();
-				gameBoard.repaint();
-				
-				try
-				{
-					Thread.currentThread().sleep(500);
-				}
-				catch (InterruptedException e)
-				{
-					break;
-				}
-				
-			}
-		}
-	}
 	
 	private Brain loadBrain(String name)
 	{

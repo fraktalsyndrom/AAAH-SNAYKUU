@@ -18,14 +18,6 @@ X X X X X X X
 X 1 X X X 4 X
 X X X X X X X
 
----------------------------------
-
-# Main needs restructuring; code needs to be where it belongs.
-
-Right now, Main.java creates a SettingsWindow object, which in turn 
-creates a MainWindow object, both located in the userInterface package. 
-Main should instead create a Session and a MainWindow, and also run
-the main loop.
 
 ---------------------------------
 
@@ -38,3 +30,10 @@ relative direction, and not necessarily an absolute one (perhaps even
 -only- a relative direction). To allow this, an overhaul of the 
 Direction class might be necessary.
 
+
+# Main needs restructuring; code needs to be where it belongs.
+
+Right now, Main.java creates a SettingsWindow object, which in turn 
+creates a MainWindow object, both located in the userInterface package. 
+Main should instead create a Session and a MainWindow, and also run
+the main loop.
