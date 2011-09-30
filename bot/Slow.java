@@ -16,7 +16,7 @@ public class Slow implements Brain
 		//~ Sleep for ten seconds before making the decision to continue onward.
 		try { Thread.sleep(10000); }
 		catch (InterruptedException e) { System.out.println(e); }
-		return new Direction(Direction.NORTH);
+		return Direction.WEST;
 	}
 	
 	public void tooSlowFault()
