@@ -19,6 +19,12 @@ X 1 X X X 4 X
 X X X X X X X
 
 
+# Add a statistical mode
+
+We should have a debugging/development method that runs x games with
+statistical analysis.
+
+
 # Remove any game logic from MainWindow
 
 There shouldn't be any game logic in MainWindow at all. Snake
