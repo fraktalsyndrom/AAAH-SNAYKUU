@@ -1,24 +1,43 @@
 package userInterface;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
 import java.awt.event.*;
 import gameLogic.*;
 
 public class SettingsWindow extends JFrame
 {
+	private JTabbedPane tabbedPane;	
+	private SnakeSettingsPanel snakeSettingsPanel;
+	private GameSettingsPanel gameSettingsPanel;
+	
+	
 	private JButton startButton;
 	
 	public SettingsWindow()
-	{		
+	{
+		setLayout(new BorderLayout());
+		
+		tabbedPane = new JTabbedPane();
+		
+		snakeSettingsPanel = new SnakeSettingsPanel();
+		gameSettingsPanel = new GameSettingsPanel();
+		
+		tabbedPane.addTab("Snayks", snakeSettingsPanel);
+		tabbedPane.addTab("Game settings", gameSettingsPanel);
+		
 		startButton = new JButton("Start");
 		startButton.addActionListener(new StartButtonListener());
-						
-		add(startButton);
-		pack();
+		
+		add(tabbedPane, BorderLayout.CENTER);
+		add(startButton, BorderLayout.SOUTH);
+		
+		setSize(600, 400);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-		setResizable(false);
+		//setResizable(false);
 		
 		
 	}
@@ -32,5 +51,6 @@ public class SettingsWindow extends JFrame
 			new MainWindow();
 		}
 	}
+	
 	
 }
