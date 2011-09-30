@@ -48,7 +48,6 @@ public class SettingsWindow extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			SettingsWindow.this.dispose();
-			new MainWindow();
 		}
 	}
 	
