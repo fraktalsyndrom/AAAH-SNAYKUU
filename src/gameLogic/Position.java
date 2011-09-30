@@ -1,5 +1,7 @@
 package gameLogic;
 
+import java.util.List;
+import java.util.ArrayList;
 
 public class Position 
 {
@@ -31,6 +33,19 @@ public class Position
 	public int getY()
 	{
 		return y;
+	}
+	
+	public static List<Position> getNeighbours(Position position)
+	{
+		ArrayList<Position> neighbours = new ArrayList<Position>();
+		int x = position.getX();
+		int y = position.getY();
+
+		neighbours.add(new Position(x, y+1));
+		neighbours.add(new Position(x+1, y));
+		if (y-1 > -1) neighbours.add(new Position(x, y-1));
+		if (x-1 > -1) neighbours.add(new Position(x-1, y));
+		return neighbours;
 	}
 	
 	public boolean equals(Object other)

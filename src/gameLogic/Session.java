@@ -41,7 +41,6 @@ public class Session
 		snakes.add(newSnake);
 	}
 	
-	
 	private void removeSnake(Snake snake)
 	{
 		if (!snakes.contains(snake))
@@ -214,7 +213,7 @@ public class Session
 	/**
 	 * Generates a standard snake board, sized width x height, with lethal walls around the edges.
 	 * @param width		Desired board height.
-	 * @param height	Desired board width.
+	 * @param height		Desired board width.
 	 * @return			The newly generated board.
 	 */
 	private Board createStandardBoard(int width, int height)
@@ -236,6 +235,35 @@ public class Session
 			board.addGameObject(wall, rightmostColumnPos);
 		}
 		return board;
+	}
+	
+	private void placeSnakesOnBoard()
+	{
+		LinkedList<Snake> snakeList = new LinkedList<Snake>(snakes);
+		Random random = new Random();
+		int remainingSnakes = snakeList.size();
+		
+		while (remainingSnakes > 0)
+		{
+			int x = 1 + random.nextInt(board.getWidth() - 2);
+			int y = 1 + random.nextInt(board.getHeight() - 2);
+			Position randomPos = new Position(x, y);
+			if (isAcceptedStartingPosition(randomPos)) {
+				placeSnake(snakeList.getLast(), randomPos);  //~ Needs to be implemented.
+				snakeList.removeLast();
+				--remainingSnakes;
+			}
+		}
+		
+		updateGameState();
+		
+		for (Snake snake : snakes)
+			snake.getBrain().init(currentGameState);
+	}
+	
+	private boolean isAcceptedStartingPosition(Position position)
+	{
+		return (board.hasLethalObjectWithinRange(position, 2));
 	}
 	
 	private void initGameObjects()

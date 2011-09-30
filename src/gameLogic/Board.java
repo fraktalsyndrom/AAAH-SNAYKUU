@@ -1,5 +1,8 @@
 package gameLogic;
 
+import java.util.Set;
+import java.util.HashSet;
+
 public class Board 
 {
 	private Square[][] board;
@@ -61,6 +64,54 @@ public class Board
 	{
 		return board[p.getX()][p.getY()];
 	}
+	
+	public boolean hasLethalObjectWithinRange(Position pos, int range)
+	{
+		Set<Position> visited = new HashSet<Position>();
+		breadthFirstSearch(pos, visited, range);
+		return (containsLethalObject(visited));
+	}
+	
+	private void breadthFirstSearch(Position from, Set<Position> visited, int range)
+	{
+		if (range < 0)
+			return;
+		for (Position neighbour : Position.getNeighbours(from))
+		{
+			breadthFirstSearch(neighbour, visited, --range);
+		}
+	}
+	
+	private boolean containsLethalObject(Set<Position> positions)
+	{
+		for (Position pos : positions)
+		{
+			int x = pos.getX();
+			int y = pos.getY();
+			if (board[x][y].hasSnake() || board[x][y].hasWall())
+				return true;
+		}
+		return false;
+	}
+	/*
+	public boolean hasSnakeWithinRange(Position pos, int range)
+	{
+		HashSet<Position> visited = new HashSet<Position>();
+		breadthFirstSearch(visited, pos, range);
+		return //~ visited.containsSnake();
+	}
+	
+	public void breadthFirstSearch(HashSet<Position> visited, Position from, int range) 
+	{
+		if (range < 0)
+			return;
+		range--;
+		visited.add(from);
+		for (Position p : getNeighbours(from.getY(), from.getX())) {
+			breadthFirstSearch(visited, from, range);
+		}
+	}
+	*/
 	
 	void addGameObject(GameObjectType obj, Position p)
 	{
