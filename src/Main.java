@@ -11,16 +11,11 @@ class Main
 		
 		while (settingsWindow.isVisible());
 		
-		Session session = initializeSession();
+		Session session = settingsWindow.generateSession();
 		
 		runGame(session);
 	}
-	
-	private static Session initializeSession()
-	{
-		return new Session(20, 40, 3, 10, 100);
-	}
-	
+		
 	
 	private static void runGame(Session session)
 	{

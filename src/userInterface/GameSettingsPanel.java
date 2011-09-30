@@ -25,8 +25,8 @@ class GameSettingsPanel extends JPanel
 	
 	private void initializeBoardSizeSettings()
 	{
-		boardWidth = new JTextField("10");
-		boardHeight = new JTextField("10");
+		boardWidth = new JTextField("15");
+		boardHeight = new JTextField("15");
 		
 		boardWidth.setColumns(4);
 		boardHeight.setColumns(4);

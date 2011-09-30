@@ -51,5 +51,13 @@ public class SettingsWindow extends JFrame
 		}
 	}
 	
+	public Session generateSession()
+	{
+		int width = gameSettingsPanel.getBoardWidth();
+		int height = gameSettingsPanel.getBoardHeight();
+		
+		return new Session(width, height, 3, 10, 100);
+	}
+	
 	
 }
