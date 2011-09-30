@@ -59,6 +59,11 @@ public class Session
 		return new HashSet<Snake>(snakes);
 	}
 	
+	public void prepareForStart()
+	{
+		placeSnakesOnBoard();
+	}
+	
 	/**
 	 * Move all the snakes simultaneously. In addition to movement, it also checks for collision,
 	 * kills colliding snakes, adds point when fruit is eaten, and updates the gamestate.
@@ -239,19 +244,23 @@ public class Session
 	
 	private void placeSnakesOnBoard()
 	{
-		LinkedList<Snake> snakeList = new LinkedList<Snake>(snakes);
+		LinkedList<Snake> remainingSnakes = new LinkedList<Snake>(snakes);
 		Random random = new Random();
-		int remainingSnakes = snakeList.size();
 		
-		while (remainingSnakes > 0)
+		while (remainingSnakes.size() > 0)
 		{
+			Snake snake = remainingSnakes.getLast();
 			int x = 1 + random.nextInt(board.getWidth() - 2);
 			int y = 1 + random.nextInt(board.getHeight() - 2);
 			Position randomPos = new Position(x, y);
+			
 			if (isAcceptedStartingPosition(randomPos)) {
-				placeSnake(snakeList.getLast(), randomPos);  //~ Needs to be implemented.
-				snakeList.removeLast();
-				--remainingSnakes;
+				LinkedList<Position> startingPositions = new LinkedList<Position>();
+				startingPositions.add(randomPos);
+				
+				placeSnake(snake, startingPositions);
+				snake.placeOnBoard(startingPositions, Direction.NORTH); //~ TODO: Look at the starting direction.
+				remainingSnakes.removeLast();
 			}
 		}
 		
@@ -261,9 +270,17 @@ public class Session
 			snake.getBrain().init(currentGameState);
 	}
 	
+	private void placeSnake(Snake snake, LinkedList<Position> segments)
+	{
+		for (Position pos : segments)
+		{
+			board.addGameObject(snake, pos);
+		}
+	}
+	
 	private boolean isAcceptedStartingPosition(Position position)
 	{
-		return (board.hasLethalObjectWithinRange(position, 2));
+		return (!board.hasLethalObjectWithinRange(position, 2));
 	}
 	
 	private void initGameObjects()

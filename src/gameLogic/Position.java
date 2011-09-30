@@ -57,4 +57,11 @@ public class Position
 
 		return (x == otherPosition.x && y == otherPosition.y);
 	}
+	
+	public String toString()
+	{
+		String output = "";
+		output += "{x: " + x + " y: " + y + "}";
+		return output;
+	}
 }
