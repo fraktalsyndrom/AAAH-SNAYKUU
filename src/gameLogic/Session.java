@@ -64,6 +64,15 @@ public class Session
 		placeSnakesOnBoard();
 	}
 	
+	public boolean hasEnded()
+	{
+		int numberOfLivingSnakes = snakes.size();
+		for (Snake snake : snakes)
+			if (snake.isDead())
+				--numberOfLivingSnakes;
+		return (numberOfLivingSnakes < 2);
+	}
+	
 	/**
 	 * Move all the snakes simultaneously. In addition to movement, it also checks for collision,
 	 * kills colliding snakes, adds point when fruit is eaten, and updates the gamestate.
