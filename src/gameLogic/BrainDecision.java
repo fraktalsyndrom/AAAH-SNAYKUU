@@ -27,6 +27,7 @@ class BrainDecision extends Thread
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Direction demandNextMove() throws Throwable
 	{
 		//~ This snake has taken too long to decide, and will automatically move forward.
