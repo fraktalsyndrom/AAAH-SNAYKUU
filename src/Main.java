@@ -19,7 +19,7 @@ class Main
 	
 	private static void runGame(Session session)
 	{
-		MainWindow mainWindow = new MainWindow(session);
+		MainWindow mainWindow = new MainWindow(session, 12);
 		
 		while(true)
 		{
@@ -28,7 +28,7 @@ class Main
 			
 			try
 			{
-				Thread.currentThread().sleep(500);
+				Thread.currentThread().sleep(400);
 			}
 			catch (InterruptedException e)
 			{
