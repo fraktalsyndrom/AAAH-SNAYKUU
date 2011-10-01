@@ -48,8 +48,11 @@ class GameSettingsPanel extends JPanel
 	{
 		int width = Integer.parseInt(boardWidth.getText());
 		int height = Integer.parseInt(boardHeight.getText());
+		int growthFrequency = 3;
+		int fruitFrequency = 10;
+		int thinkingTime = 100;
 		
-		Metadata metadata = new Metadata(width, height, 3, 10, 100);
+		Metadata metadata = new Metadata(width, height, growthFrequency, fruitFrequency, thinkingTime);
 		return metadata;
 	}
 	
