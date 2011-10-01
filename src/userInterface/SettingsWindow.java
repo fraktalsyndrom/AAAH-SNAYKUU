@@ -48,12 +48,15 @@ public class SettingsWindow extends JFrame
 	{
 		public void actionPerformed(ActionEvent event)
 		{
+			synchronized(SettingsWindow.this)
+			{
+				done = true;
+			}
 			SettingsWindow.this.dispose();
-			done = true;
 		}
 	}
 	
-	public boolean isDone()
+	public synchronized boolean isDone()
 	{
 		return done;
 	}
