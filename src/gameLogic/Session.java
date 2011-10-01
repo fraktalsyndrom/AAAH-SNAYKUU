@@ -9,7 +9,9 @@ public class Session
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 	private HashMap<Snake, Direction> lastMoves = new HashMap<Snake, Direction>();
+
 	private GameState currentGameState;
+	private GameResult result = new GameResult();
 	
 	private long thinkingTime;
 	private int growthFrequency;
@@ -19,6 +21,8 @@ public class Session
 	private int turnsUntilFruit;
 	private int turn = 0;
 	private int numberOfSnakes = 0;
+	
+	private Snake winner;
 	
 	public Session(int boardWidth, int boardHeight, int growthFrequency, int fruitFrequency, long thinkingTime) 
 	{
@@ -71,6 +75,13 @@ public class Session
 			if (snake.isDead())
 				--numberOfLivingSnakes;
 		return (numberOfLivingSnakes < 2);
+	}
+	
+	public GameResult getGameResult()
+	{
+		if (winner == null)
+			throw new IllegalStateException("There is no winner.");
+		return result;
 	}
 	
 	/**
@@ -170,7 +181,7 @@ public class Session
 			Square square = board.getSquare(head);
 			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
-				snake.kill();
+				killAndSetResults(snake);
 				System.out.println(snake + " HAS BEEN TERMINATED.");
 			}
 			if (square.hasFruit()) 
@@ -179,6 +190,14 @@ public class Session
 				snake.addScore(fruitValue);
 			}
 		}
+	}
+	
+	private void killAndSetResults(Snake snake)
+	{
+		int score = snake.getScore();
+		int lifespan = turn;
+		result.setSnakeScores(snake, score, lifespan);
+		snake.kill();
 	}
 		
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
