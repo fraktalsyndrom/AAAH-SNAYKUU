@@ -9,13 +9,30 @@ class Main
 	{
 		SettingsWindow settingsWindow = new SettingsWindow();
 		
-		while (!settingsWindow.isDone());
+		Session session = prepareSession(settingsWindow);
 		
-		Session session = settingsWindow.generateSession();
+		settingsWindow.dispose();
 		
 		runGame(session);
 	}
-		
+	
+	private static Session prepareSession(SettingsWindow settingsWindow)
+	{
+		try
+		{
+			settingsWindow.putThisDamnWindowInMyFace();
+			
+			while (!settingsWindow.isDone());
+			
+			return settingsWindow.generateSession();
+		}
+		catch (Exception e)
+		{
+			javax.swing.JOptionPane.showMessageDialog(settingsWindow, e);
+			return prepareSession(settingsWindow);
+		}
+	}
+
 	
 	private static void runGame(Session session)
 	{
