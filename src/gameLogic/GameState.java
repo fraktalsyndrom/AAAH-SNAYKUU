@@ -8,15 +8,13 @@ public class GameState
 {
 	private Board board;
 	private Set<Snake> snakes;
-	private int turn;
-	private int turnsUntilGrowth;
+	private Metadata metadata;
 	
-	public GameState(Board currentBoard, Set<Snake> snakes, int turn, int turnsUntilGrowth) 
+	public GameState(Board currentBoard, Set<Snake> snakes, Metadata metadata) 
 	{
 		board = new Board(currentBoard);
 		this.snakes = snakes;
-		this.turn = turn;
-		this.turnsUntilGrowth = turnsUntilGrowth;
+		this.metadata = metadata;
 	}
 	
 	public Set<Snake> getSnakes()
@@ -39,14 +37,9 @@ public class GameState
 		return false;
 	}
 	
-	public int getTurn()
+	public Metadata getMetadata()
 	{
-		return turn;
-	}
-	
-	public int getTurnsUntilGrowth()
-	{
-		return turnsUntilGrowth;
+		return metadata;
 	}
 	
 	

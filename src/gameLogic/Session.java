@@ -13,28 +13,20 @@ public class Session
 	private GameState currentGameState;
 	private GameResult result = new GameResult();
 	
-	private long thinkingTime;
-	private int growthFrequency;
-	private int fruitFrequency;
+	private Metadata metadata;
 	
-	private int turnsUntilGrowth;
-	private int turnsUntilFruit;
+	
 	private int turn = 0;
-	private int numberOfSnakes = 0;
 	
 	private Snake winner;
 	
-	public Session(int boardWidth, int boardHeight, int growthFrequency, int fruitFrequency, long thinkingTime) 
+	public Session(Metadata metadata)
 	{
+		this.metadata = metadata;
+		
 		initGameObjects();
-		board = createStandardBoard(boardWidth, boardHeight);
 		
-		this.growthFrequency = growthFrequency;
-		this.fruitFrequency = fruitFrequency;
-		this.thinkingTime = thinkingTime;
-		
-		turnsUntilGrowth = growthFrequency;
-		turnsUntilFruit = fruitFrequency;
+		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -90,6 +82,8 @@ public class Session
 	 */
 	public void tick()
 	{
+		metadata.tick();
+		
 		boolean growth = checkForGrowth();
 		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
@@ -101,13 +95,7 @@ public class Session
 	
 	private boolean checkForGrowth()
 	{
-		boolean grow = false;
-		if (--turnsUntilGrowth < 1)
-		{
-			grow = true;
-			turnsUntilGrowth = growthFrequency;
-		}
-		return grow;
+		return metadata.getTurnsUntilGrowth() == 0;
 	}
 	
 	/**
@@ -139,8 +127,14 @@ public class Session
 			brainDecision.start();
 		
 		//~ Chill out while the snakes are thinking.
-		try { Thread.sleep(thinkingTime); }
-		catch (InterruptedException e) { System.out.println(e); }
+		try
+		{
+			Thread.sleep(metadata.getMaximumThinkingTime());
+		}
+		catch (InterruptedException e)
+		{
+			System.out.println(e);
+		}
 		
 		for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
 		{
@@ -243,31 +237,29 @@ public class Session
 	
 	private boolean perhapsSpawnFruit()
 	{
-		if (--turnsUntilFruit < 1)
+		if (metadata.getTurnsUntilFruitSpawn() != 0)
+			return false;
+		
+		Random random = new Random();
+		boolean spawned = false;
+		while (!spawned)
 		{
-			Random random = new Random();
-			boolean spawned = false;
-			while (!spawned)
+			int x = 1 + random.nextInt(board.getWidth() - 2);
+			int y = 1 + random.nextInt(board.getHeight() - 2);
+			Position potentialFruitPosition = new Position(x, y);
+			if (!board.hasGameObject(potentialFruitPosition))
 			{
-				int x = 1 + random.nextInt(board.getWidth() - 2);
-				int y = 1 + random.nextInt(board.getHeight() - 2);
-				Position potentialFruitPosition = new Position(x, y);
-				if (!board.hasGameObject(potentialFruitPosition))
-				{
-					board.addGameObject(objects.get("Fruit"), potentialFruitPosition);
-					spawned = true;
-				}
+				board.addGameObject(objects.get("Fruit"), potentialFruitPosition);
+				spawned = true;
 			}
-			turnsUntilFruit = fruitFrequency;
-			return true;
 		}
-		return false;
+		return true;
 	}
 	
 	private void updateGameState()
 	{
 		turn++;
-		currentGameState = new GameState(board, snakes, turn, turnsUntilGrowth);
+		currentGameState = new GameState(board, snakes, metadata);
 	}
 	
 	/**
