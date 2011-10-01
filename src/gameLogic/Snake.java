@@ -45,6 +45,11 @@ public class Snake extends GameObject
 		return direction;
 	}
 	
+	void setCurrentDirection(Direction direction)
+	{
+		this.direction = direction;
+	}
+	
 	void moveHead(Position pos)
 	{
 		segments.addFirst(pos);
