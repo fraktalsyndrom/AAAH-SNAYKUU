@@ -149,7 +149,13 @@ public class Session
 			try 
 			{
 				Direction nextMove = decision.demandNextMove();
-				moves.put(currentSnake, nextMove);
+				if (isValidMove(currentSnake, nextMove))
+				{
+					moves.put(currentSnake, nextMove);
+					currentSnake.setCurrentDirection(nextMove);
+				}
+				else
+					moves.put(currentSnake, currentSnake.getCurrentDirection());
 			}
 			catch (Throwable t)
 			{
@@ -159,7 +165,27 @@ public class Session
 		}
 		return moves;
 	}
+	
+	private boolean isValidMove(Snake snake, Direction direction)
+	{
+		switch (snake.getCurrentDirection())
+		{
+			case NORTH:
+				return (direction != Direction.SOUTH);
 
+			case WEST:
+				return (direction != Direction.EAST);
+
+			case SOUTH:
+				return (direction != Direction.NORTH);
+
+			case EAST:
+				return (direction != Direction.WEST);
+			
+			default:
+				throw new IllegalArgumentException("No such Direction exists.");
+		}
+	}
 	
 	private void moveAllSnakes(Map<Snake, Direction> moves, boolean growSnakes)
 	{
@@ -168,6 +194,21 @@ public class Session
 			moveSnake(snakeMove.getKey(), snakeMove.getValue(), growSnakes);
 		}
 	}
+	
+	private void moveSnake(Snake snake, Direction dir, boolean grow)
+	{
+		Position currentHeadPosition = snake.getHead();
+		Position currentTailPosition = snake.getTail();
+		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		board.addGameObject(snake, newHeadPosition);
+		snake.moveHead(newHeadPosition);
+		if (!grow)
+		{
+			board.removeGameObject(snake, currentTailPosition);
+			snake.removeTail();
+		}
+	}
+
 	
 	private void checkForCollision()
 	{
@@ -198,20 +239,6 @@ public class Session
 		int lifespan = turn;
 		result.setSnakeScores(snake, score, lifespan);
 		snake.kill();
-	}
-		
-	private void moveSnake(Snake snake, Direction dir, boolean grow)
-	{
-		Position currentHeadPosition = snake.getHead();
-		Position currentTailPosition = snake.getTail();
-		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
-		board.addGameObject(snake, newHeadPosition);
-		snake.moveHead(newHeadPosition);
-		if (!grow)
-		{
-			board.removeGameObject(snake, currentTailPosition);
-			snake.removeTail();
-		}
 	}
 	
 	private boolean perhapsSpawnFruit()
