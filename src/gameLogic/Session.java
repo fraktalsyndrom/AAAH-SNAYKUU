@@ -11,11 +11,12 @@ public class Session
 	private HashMap<Snake, Direction> lastMoves = new HashMap<Snake, Direction>();
 
 	private GameState currentGameState;
-	private GameResult result = new GameResult();
+	private GameResult gameResult = new GameResult();
 	
 	private long thinkingTime;
 	private int growthFrequency;
 	private int fruitFrequency;
+	private int fruitGoal;
 	
 	private int turnsUntilGrowth;
 	private int turnsUntilFruit;
@@ -74,14 +75,30 @@ public class Session
 		for (Snake snake : snakes)
 			if (snake.isDead())
 				--numberOfLivingSnakes;
-		return (numberOfLivingSnakes < 2);
+		if (numberOfLivingSnakes < 2)
+		{
+			gameResult.setEndGameCondition(GameResult.DEATH_FINISH);
+			return true;
+		}
+		
+		for (Map.Entry<Snake, Integer> snakeScore : gameResult.getScores().entrySet())
+		{
+			if (snakeScore.getValue() >= fruitGoal)
+			{
+				gameResult.setEndGameCondition(GameResult.FRUIT_FINISH);
+				return true;
+			}
+		}
+		return false;
 	}
 	
+	/**
+	 * Note that this method does not guarantee that the game has ended.
+	 * Check using hasEnded() first before assuming that this will return a final gameResult.
+	 */
 	public GameResult getGameResult()
 	{
-		if (winner == null)
-			throw new IllegalStateException("There is no winner.");
-		return result;
+		return gameResult;
 	}
 	
 	/**
@@ -237,7 +254,7 @@ public class Session
 	{
 		int score = snake.getScore();
 		int lifespan = turn;
-		result.setSnakeScores(snake, score, lifespan);
+		gameResult.setSnakeScores(snake, score, lifespan);
 		snake.kill();
 	}
 	
