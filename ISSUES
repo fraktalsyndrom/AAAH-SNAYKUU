@@ -19,16 +19,17 @@ X 1 X X X 4 X
 X X X X X X X
 
 
+# Add debugging information in GameState
+
+We could put debugging information in the GameState object sent to
+brains for any possible errors, like if the brain is too slow or if
+it tries to move in an invalid direction.
+
+
 # Add a statistical mode
 
 We should have a debugging/development method that runs x games with
 statistical analysis.
-
-
-# Remove any game logic from MainWindow
-
-There shouldn't be any game logic in MainWindow at all. Snake
-construction should be moved to either Main or Session.
 
 
 # Loading bots from files and adding them to the game
@@ -57,3 +58,9 @@ Right now, Main.java creates a SettingsWindow object, which in turn
 creates a MainWindow object, both located in the userInterface package. 
 Main should instead create a Session and a MainWindow, and also run
 the main loop.
+
+# Remove any game logic from MainWindow
+
+There shouldn't be any game logic in MainWindow at all. Snake
+construction should be moved to either Main or Session.
+
