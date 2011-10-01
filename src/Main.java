@@ -9,7 +9,7 @@ class Main
 	{
 		SettingsWindow settingsWindow = new SettingsWindow();
 		
-		while (settingsWindow.isVisible());
+		while (!settingsWindow.isDone());
 		
 		Session session = settingsWindow.generateSession();
 		

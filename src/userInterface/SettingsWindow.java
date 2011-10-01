@@ -8,6 +8,7 @@ import gameLogic.*;
 
 public class SettingsWindow extends JFrame
 {
+	private boolean done = false;
 	private JTabbedPane tabbedPane;	
 	private SnakeSettingsPanel snakeSettingsPanel;
 	private GameSettingsPanel gameSettingsPanel;
@@ -48,7 +49,13 @@ public class SettingsWindow extends JFrame
 		public void actionPerformed(ActionEvent event)
 		{
 			SettingsWindow.this.dispose();
+			done = true;
 		}
+	}
+	
+	public boolean isDone()
+	{
+		return done;
 	}
 	
 	public Session generateSession()
