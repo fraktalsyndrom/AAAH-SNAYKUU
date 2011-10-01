@@ -8,11 +8,11 @@ public class MainWindow extends JFrame
 	private Session session;
 	private GameBoard gameBoard;
 	
-	public MainWindow(Session session)
+	public MainWindow(Session session, int pixelsPerSquare)
 	{
 		this.session = session;
 		
-		gameBoard = new GameBoard(session, 16);
+		gameBoard = new GameBoard(session, pixelsPerSquare);
 				
 		add(gameBoard);
 		pack();
@@ -20,22 +20,6 @@ public class MainWindow extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
-		
-		/*Brain brain = loadBrain("Mad");
-
-		
-		if (brain == null)
-			JOptionPane.showMessageDialog(this, "BRAINFUCK SHIT");
-		
-		GameObjectType got = new GameObjectType("Snake", true);
-		LinkedList<Position> snakePosition = new LinkedList<Position>();
-		snakePosition.addFirst(new Position(10, 29));
-		snakePosition.addFirst(new Position(10, 30));
-		Snake snake = new Snake(got, "Stefan", brain);
-		
-		session.addSnake(snake);
-		session.prepareForStart();*/
-		
 	}
 	
 	
