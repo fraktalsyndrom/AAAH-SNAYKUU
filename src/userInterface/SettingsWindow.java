@@ -56,7 +56,15 @@ public class SettingsWindow extends JFrame
 		int width = gameSettingsPanel.getBoardWidth();
 		int height = gameSettingsPanel.getBoardHeight();
 		
-		return new Session(width, height, 3, 10, 100);
+		Session session = new Session(width, height, 3, 10, 100);
+		
+		for (Snake snake : snakeSettingsPanel.getSnakeList())
+		{
+			session.addSnake(snake);
+		}
+		
+		session.prepareForStart();
+		return session;
 	}
 	
 	
