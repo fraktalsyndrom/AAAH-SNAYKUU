@@ -317,6 +317,43 @@ public class Session
 			snake.getBrain().init(currentGameState);
 	}
 	
+	/**
+		Metod som tar det antal ormar som ska placeras ut och brädets 
+		dimensioner, och returnerar en array av Positions, jämnt fördelade 
+		i en cirkel runt brädet. Varje orm är minst 1 ruta från kanten men 
+		i övrigt görs INGA kontroller av att antalet ormar är vettigt.
+		
+		Jag har lyckats klämma in 101 ormar på ett 40x40-bräde, sen orkade 
+		jag inte testa längre.
+		
+		Metoden används just nu inte av någonting.
+	*/
+	
+	private Position[] getStartingPositions(int snakes, int xSize, int ySize)
+	{
+		int xCenter = xSize/2;
+		int yCenter = ySize/2;
+		
+		int edgeOffset = 2;
+		
+		double angleStep = 2*Math.PI/snakes;
+		double nextStep = 0;
+		
+		Position[] output = new Position[snakes];
+		
+		for(int i = 0; i < snakes; i++)
+		{
+			int x = (int)((xCenter-edgeOffset)*Math.cos(nextStep));
+			int y = (int)((yCenter-edgeOffset)*Math.sin(nextStep));
+			
+			output[i] = new Position(xCenter+x, yCenter+y);
+			
+			nextStep += angleStep;
+		}
+		
+		return output;
+	}
+	
 	private void placeSnake(Snake snake, LinkedList<Position> segments)
 	{
 		for (Position pos : segments)
