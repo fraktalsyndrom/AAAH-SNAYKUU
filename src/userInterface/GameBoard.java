@@ -57,11 +57,16 @@ class GameBoard extends JComponent
 				Position pos = new Position(x, y);
 				if (board.hasGameObject(pos))
 				{
-					if (board.hasSnake(pos))
-						g.setColor(Color.GREEN);
-					if (board.hasFruit(pos))
+					if (board.hasSnake(pos)) {
+						//~ Snake snake = (Snake)board.getSquare(pos).getGameObject();
+						//~ if (snake.isDead())
+							//~ g.setColor(Color.GRAY);
+						//~ else
+							g.setColor(Color.GREEN);
+					}
+					else if (board.hasFruit(pos))
 						g.setColor(Color.RED);
-					if (board.hasWall(pos))
+					else if (board.hasWall(pos))
 						g.setColor(Color.WHITE);
 					int xPosition = x * pixelsPerUnit;
 					int yPosition = y * pixelsPerUnit;

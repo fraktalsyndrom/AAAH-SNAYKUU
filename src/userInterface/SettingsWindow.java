@@ -37,10 +37,14 @@ public class SettingsWindow extends JFrame
 		setSize(600, 400);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
 		//setResizable(false);
+		setVisible(true);
 		
-		
+	}
+	
+	public void putThisDamnWindowInMyFace()
+	{
+		done = false;
 	}
 	
 	
@@ -52,7 +56,6 @@ public class SettingsWindow extends JFrame
 			{
 				done = true;
 			}
-			SettingsWindow.this.dispose();
 		}
 	}
 	
@@ -63,13 +66,9 @@ public class SettingsWindow extends JFrame
 	
 	public Session generateSession()
 	{
-		int width = gameSettingsPanel.getBoardWidth();
-		int height = gameSettingsPanel.getBoardHeight();
-		int growthFrequency = 3;
-		int fruitFrequency = 10;
-		long thinkingTime = 100;
+		Metadata metadata = gameSettingsPanel.generateMetadata();
 		
-		Session session = new Session(width, height, growthFrequency, fruitFrequency, thinkingTime);
+		Session session = new Session(metadata);
 		
 		for (Snake snake : snakeSettingsPanel.getSnakeList())
 		{

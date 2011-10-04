@@ -89,6 +89,13 @@ public class Square
 		return snakes;
 	}
 	
+	public GameObject getGameObject()
+	{
+		if (objects.size() != 1)
+			throw new IllegalStateException("Trying to getGameObject from a Square with more than one object.");
+		return objects.get(0);
+	}
+	
 	void removeFruit()
 	{
 		Iterator objectIterator = objects.iterator();
