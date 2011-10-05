@@ -10,11 +10,11 @@ public class Session
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 
 	private GameState currentGameState;
-	private GameResult result = new GameResult();
+	private GameResult gameResult = new GameResult();
 	
 	private Metadata metadata;
-	
-		
+
+
 	private Snake winner;
 	
 	private RecordedGame recordedGame;
@@ -67,14 +67,32 @@ public class Session
 		for (Snake snake : snakes)
 			if (snake.isDead())
 				--numberOfLivingSnakes;
-		return (numberOfLivingSnakes < 2);
+		if (numberOfLivingSnakes < 2)
+		{
+			gameResult.setEndGameCondition(GameResult.DEATH_FINISH);
+			cleanUp();
+			return true;
+		}
+		
+		for (Map.Entry<Snake, Integer> snakeScore : gameResult.getScores().entrySet())
+		{
+			if (snakeScore.getValue() >= metadata.getFruitGoal())
+			{
+				gameResult.setEndGameCondition(GameResult.FRUIT_FINISH);
+				cleanUp();
+				return true;
+			}
+		}
+		return false;
 	}
 	
+	/**
+	 * Note that this method does not guarantee that the game has ended.
+	 * Check using hasEnded() first before assuming that this will return a final gameResult.
+	 */
 	public GameResult getGameResult()
 	{
-		if (winner == null)
-			throw new IllegalStateException("There is no winner.");
-		return result;
+		return gameResult;
 	}
 	
 	/**
@@ -233,9 +251,13 @@ public class Session
 	
 	private void killAndSetResults(Snake snake)
 	{
+		if (snake.isDead())
+			return;
+
 		int score = snake.getScore();
 		int lifespan = recordedGame.getTurnCount();
-		result.setSnakeScores(snake, score, lifespan);
+		gameResult.setSnakeScores(snake, score, lifespan);
+
 		snake.kill();
 	}
 	
@@ -333,6 +355,17 @@ public class Session
 	private boolean isAcceptedStartingPosition(Position position)
 	{
 		return (!board.hasLethalObjectWithinRange(position, 2));
+	}
+	
+	private void cleanUp()
+	{
+		for (Snake snake : snakes)
+		{
+			if (!snake.isDead())
+			{
+				killAndSetResults(snake);
+			}
+		}
 	}
 	
 	private void initGameObjects()
