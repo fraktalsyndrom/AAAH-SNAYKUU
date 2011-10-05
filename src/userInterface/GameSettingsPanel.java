@@ -51,8 +51,9 @@ class GameSettingsPanel extends JPanel
 		int growthFrequency = 3;
 		int fruitFrequency = 10;
 		int thinkingTime = 100;
+		int fruitGoal = 5;
 		
-		Metadata metadata = new Metadata(width, height, growthFrequency, fruitFrequency, thinkingTime);
+		Metadata metadata = new Metadata(width, height, growthFrequency, fruitFrequency, thinkingTime, fruitGoal);
 		return metadata;
 	}
 	

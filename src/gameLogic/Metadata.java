@@ -8,30 +8,16 @@ public class Metadata
 	private int thinkingTime;
 	private int growthFrequency;
 	private int fruitFrequency;
+	private int fruitGoal;
 	
-	private int turnsUntilGrowth;
-	private int turnsUntilFruit;
-	private int turn = 0;
-	
-	public Metadata(int boardWidth, int boardHeight, int growthFrequency, int fruitFrequency, int thinkingTime)
+	public Metadata(int boardWidth, int boardHeight, int growthFrequency, int fruitFrequency, int thinkingTime, int fruitGoal)
 	{
 		this.boardWidth = boardWidth;
 		this.boardHeight = boardHeight;
 		this.growthFrequency = growthFrequency;
 		this.fruitFrequency = fruitFrequency;
 		this.thinkingTime = thinkingTime;
-		
-		turnsUntilGrowth = growthFrequency;
-		turnsUntilFruit = fruitFrequency;
-	}
-	
-	void tick()
-	{
-		if (--turnsUntilGrowth < 0)
-			turnsUntilGrowth = growthFrequency;
-		
-		if (--turnsUntilFruit < 0)
-			turnsUntilFruit = fruitFrequency;
+		this.fruitGoal = fruitGoal;
 	}
 	
 	public int getBoardWidth()
@@ -49,14 +35,18 @@ public class Metadata
 		return thinkingTime;
 	}
 	
-	public int getTurnsUntilGrowth()
+	public int getGrowthFrequency()
 	{
-		return turnsUntilGrowth;
+		return growthFrequency;
 	}
 	
-	public int getTurnsUntilFruitSpawn()
+	public int getFruitFrequency()
 	{
-		return turnsUntilFruit;
+		return fruitFrequency;
 	}
 	
+	public int getFruitGoal()
+	{
+		return fruitGoal;
+	}
 }

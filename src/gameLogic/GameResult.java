@@ -1,8 +1,10 @@
 package gameLogic;
 
+import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class GameResult
@@ -10,7 +12,10 @@ public class GameResult
 	private Map<Snake, Integer> scores;
 	private Map<Snake, Integer> lifespans;
 	private TreeMap<Snake, Integer> finalStandings;
-	private int fruitGoal;
+	private int endGameCondition;
+	
+	public static final int FRUIT_FINISH = 1;
+	public static final int DEATH_FINISH = 2;
 	
 	public GameResult()
 	{
@@ -34,75 +39,52 @@ public class GameResult
 		return lifespans;
 	}
 	
-	public Map<Snake, Integer> calculateFinalStandings(boolean fruitFinish)
+	void setEndGameCondition(int endGameCondition)
 	{
-		finalStandings = new TreeMap<Snake, Integer>();
-		
-		if (fruitFinish)
-			finalStandings = calculateFinalFruitStandings();
-		else
-			finalStandings = calculateFinalLifespanStandings();
-		
-		return finalStandings;
+		if (endGameCondition < 1 || endGameCondition > 2)
+			throw new IllegalArgumentException("endGameCondition must be either FRUIT_FINISH (= 1) or DEATH_FINISH (= 2).");
+		this.endGameCondition = endGameCondition;
 	}
 	
-	private TreeMap<Snake, Integer> calculateFinalFruitStandings()
+	public Map<Snake, Integer> calculateFinalScore()
 	{
-		TreeMap<Snake, Integer> finalStandings = new TreeMap<Snake, Integer>();
-		TreeMap<Snake, Integer> tempScores = new TreeMap<Snake, Integer>(new SnakeScoreComparator());
-		tempScores.putAll(scores);
-
-		int currentPlacement = 1;
-		int snakesAtCurrentPlacement = 0;
-		int currentScore = 0;
-		
-		while (tempScores.size() > 0)
+		TreeMap<Snake, Integer> finalScore;
+		switch (endGameCondition)
 		{
-			System.out.println("In calculateFinalFruitStandings()");
-			for (Map.Entry<Snake, Integer> snakeEntry : tempScores.entrySet())
-			{
-				Snake snake = snakeEntry.getKey();
-				int snakeScore = snakeEntry.getValue();
-				if (snakeScore < currentScore)
-					break;
-				finalStandings.put(snake, currentPlacement);
-				++snakesAtCurrentPlacement;
-				tempScores.remove(snake);
-			}
-			currentPlacement += snakesAtCurrentPlacement;
-			snakesAtCurrentPlacement = 0;
+			case FRUIT_FINISH:
+				finalScore = new TreeMap<Snake, Integer>(new SnakeScoreComparator());
+				finalScore.putAll(scores);
+				break;
+			case DEATH_FINISH:
+				finalScore = new TreeMap<Snake, Integer>(new SnakeLifespanComparator());
+				finalScore.putAll(lifespans);
+				break;
+			default:
+				throw new IllegalStateException("endGameCondition is set to an invalid value/is null");
 		}
-		
-		return finalStandings;
+		return finalScore;
 	}
 	
-	private TreeMap<Snake, Integer> calculateFinalLifespanStandings()
+	public ArrayList<Snake> getWinnersFrom(Map<Snake, Integer> results)
 	{
-		TreeMap finalStandings = new TreeMap<Snake, Integer>();
-		TreeMap<Snake, Integer> tempLifespans = new TreeMap<Snake, Integer>(new SnakeLifespanComparator());
-		tempLifespans.putAll(lifespans);
-		
-		int currentPlacement = 1;
-		int snakesAtCurrentPlacement = 0;
-		int currentLifespan = 0;
-		
-		while (tempLifespans.size() > 0)
+		ArrayList<Snake> winners = new ArrayList<Snake>();
+		int highestScore = -1;
+		for (Map.Entry<Snake, Integer> entry : results.entrySet())
 		{
-			System.out.println("In calculateFinalLifespanStandings()");
-			for (Map.Entry<Snake, Integer> snakeEntry : tempLifespans.entrySet())
+			Snake currentSnake = entry.getKey();
+			int currentScore = entry.getValue();
+			if (currentScore > highestScore)
 			{
-				Snake snake = snakeEntry.getKey();
-				int snakeLifespan = snakeEntry.getValue();
-				if (snakeLifespan < currentLifespan)
-					break;
-				finalStandings.put(snake, ++snakesAtCurrentPlacement);
-				tempLifespans.remove(snake);
+				winners.clear();
+				highestScore = currentScore;
+				winners.add(currentSnake);
 			}
-			currentPlacement += snakesAtCurrentPlacement;
-			snakesAtCurrentPlacement = 0;
+			else if (currentScore == highestScore)
+			{
+				winners.add(currentSnake);
+			}
 		}
-		
-		return finalStandings;
+		return winners;
 	}
 	
 	private class SnakeScoreComparator implements Comparator<Snake>

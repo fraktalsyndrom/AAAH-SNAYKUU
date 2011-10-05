@@ -1,7 +1,8 @@
-
 import gameLogic.Session;
+import gameLogic.GameResult;
 import userInterface.SettingsWindow;
 import userInterface.MainWindow;
+import userInterface.PostGameWindow;
 
 class Main
 {		
@@ -38,7 +39,7 @@ class Main
 	{
 		MainWindow mainWindow = new MainWindow(session, 12);
 		
-		while(true)
+		while(!session.hasEnded())
 		{
 			session.tick();
 			mainWindow.repaint();
@@ -51,7 +52,7 @@ class Main
 			{
 				break;
 			}
-			
 		}
+		new PostGameWindow(session.getGameResult());
 	}
 }

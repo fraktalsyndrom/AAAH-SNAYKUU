@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <project name="Snaykuu" default="compile">
     <target name="clean" description="remove intermediate files">
-        <delete dir="classes"/>
+        <delete dir="classes" />
     </target>
     <target name="clobber" depends="clean" description="remove all artifact files">
-        <delete file="snaykuu.jar"/>
+        <delete file="snaykuu.jar" />
     </target>
     <target name="compile" depends="clobber" description="compile the Java source code to class files">
-        <mkdir dir="classes"/>
-        <javac srcdir="src" destdir="classes"/>
+        <mkdir dir="classes" />
+        <javac srcdir="src" destdir="classes" />
     </target>
     <target name="jar" depends="compile" description="create a Jar file for the application">
         <jar destfile="snaykuu.jar">
-            <fileset dir="classes" includes="**/*.class"/>
+            <fileset dir="classes" includes="**/*.class" />
             <manifest>
-                <attribute name="Main-Class" value="Main"/>
+                <attribute name="Main-Class" value="Main" />
             </manifest>
         </jar>
     </target>
