@@ -8,17 +8,16 @@ public class Session
 	private Set<Snake> snakes = new HashSet<Snake>();
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
-	private HashMap<Snake, Direction> lastMoves = new HashMap<Snake, Direction>();
 
 	private GameState currentGameState;
 	private GameResult result = new GameResult();
 	
 	private Metadata metadata;
 	
-	
-	private int turn = 0;
-	
+		
 	private Snake winner;
+	
+	private RecordedGame recordedGame;
 	
 	public Session(Metadata metadata)
 	{
@@ -27,6 +26,8 @@ public class Session
 		initGameObjects();
 		
 		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
+		
+		recordedGame = new RecordedGame(metadata, new Board(board));
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -82,20 +83,23 @@ public class Session
 	 */
 	public void tick()
 	{
-		metadata.tick();
-		
 		boolean growth = checkForGrowth();
 		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
 		checkForCollision();
 		if (perhapsSpawnFruit())
 			System.out.println("FRUIT SPAWNED");
+		
 		updateGameState();
+		
+		Frame frame = new Frame(board);
+		recordedGame.addFrame(frame);
 	}
 	
 	private boolean checkForGrowth()
 	{
-		return metadata.getTurnsUntilGrowth() == 0;
+		int timeTillGrowth = recordedGame.getTurnCount() % metadata.getGrowthFrequency();
+		return timeTillGrowth == 0;
 	}
 	
 	/**
@@ -230,14 +234,16 @@ public class Session
 	private void killAndSetResults(Snake snake)
 	{
 		int score = snake.getScore();
-		int lifespan = turn;
+		int lifespan = recordedGame.getTurnCount();
 		result.setSnakeScores(snake, score, lifespan);
 		snake.kill();
 	}
 	
 	private boolean perhapsSpawnFruit()
 	{
-		if (metadata.getTurnsUntilFruitSpawn() != 0)
+		int timeTillFruitSpawn = recordedGame.getTurnCount() % metadata.getFruitFrequency();
+		
+		if (timeTillFruitSpawn != 0)
 			return false;
 		
 		Random random = new Random();
@@ -258,7 +264,6 @@ public class Session
 	
 	private void updateGameState()
 	{
-		turn++;
 		currentGameState = new GameState(board, snakes, metadata);
 	}
 	
