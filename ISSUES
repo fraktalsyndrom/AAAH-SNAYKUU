@@ -1,22 +1,15 @@
 #### Copied from our 'Issues' page on GitHub:
 
-# How to determine starting locations of snakes?
+# Expand the snake placement algorithm
 
-An algorithm for this is needed. Do we want them to spawn in fixed
-locations, or should it be random? Is there a maximum limit to the 
-number of players?
-
-Take a look at this illustration of a board below (X represents an
-empty square, numbers each represent a snake). This could easily 
-be extended to accommodate for more players, as long as the board 
-size is increased.
-
-X X X X X X X
-X 3 X X X 2 X
-X X X X X X X
-X X X X X X X
-X 1 X X X 4 X
-X X X X X X X
+As of now, getting starting positions for the snakes is simple, but only
+if we want them to start at a size of 1. When snakes are placed on the
+board, we want them to be able to occupy more than one space from the 
+beginning. One possibility is to expand the snake's body somehow from the
+starting head position.
+Also, the snakes' starting directions needs to be more cleverly decided.
+Right now, they all move towards Direction.NORTH, but this won't work if
+we want snakes to be able to spawn larger than one square.
 
 
 # Add debugging information in GameState
@@ -26,10 +19,18 @@ brains for any possible errors, like if the brain is too slow or if
 it tries to move in an invalid direction.
 
 
-# Add a statistical mode
+# Add a statistical/developer mode
 
-We should have a debugging/development method that runs x games with
-statistical analysis.
+We should have a debugging/development method that quickly runs x games
+(without graphics) with statistical analysis.
+
+
+# Improve look of PostGameWindow
+
+- Allow starting a new game from within without having to restart the entier
+program.
+- Add more statistics (?)
+- De-uglify.
 
 
 # Loading bots from files and adding them to the game
@@ -64,3 +65,20 @@ the main loop.
 There shouldn't be any game logic in MainWindow at all. Snake
 construction should be moved to either Main or Session.
 
+# How to determine starting locations of snakes?
+
+An algorithm for this is needed. Do we want them to spawn in fixed
+locations, or should it be random? Is there a maximum limit to the 
+number of players?
+
+Take a look at this illustration of a board below (X represents an
+empty square, numbers each represent a snake). This could easily 
+be extended to accommodate for more players, as long as the board 
+size is increased.
+
+X X X X X X X
+X 3 X X X 2 X
+X X X X X X X
+X X X X X X X
+X 1 X X X 4 X
+X X X X X X X
