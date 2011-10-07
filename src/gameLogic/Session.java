@@ -318,28 +318,16 @@ public class Session
 	
 	private void placeSnakesOnBoard()
 	{
-		LinkedList<Snake> remainingSnakes = new LinkedList<Snake>(snakes);
-		Random random = new Random();
-		
-		while (remainingSnakes.size() > 0)
+		Position[] startingPositions = getStartingPositions(snakes.size(), board.getWidth(), board.getHeight());
+		int positionIndex = 0;
+		for (Snake snake : snakes)
 		{
-			Snake snake = remainingSnakes.getLast();
-			int x = 1 + random.nextInt(board.getWidth() - 2);
-			int y = 1 + random.nextInt(board.getHeight() - 2);
-			Position randomPos = new Position(x, y);
-			
-			if (isAcceptedStartingPosition(randomPos)) {
-				LinkedList<Position> startingPositions = new LinkedList<Position>();
-				startingPositions.add(randomPos);
-				
-				placeSnake(snake, startingPositions);
-				snake.placeOnBoard(startingPositions, Direction.NORTH); //~ TODO: Look at the starting direction.
-				remainingSnakes.removeLast();
-			}
+			LinkedList<Position> snakePositions = new LinkedList<Position>();
+			snakePositions.add(startingPositions[positionIndex++]);
+			snake.placeOnBoard(snakePositions, Direction.NORTH); //~ TODO: A nicer way to determine starting direction.
 		}
 		
 		updateGameState();
-		
 		for (Snake snake : snakes)
 			snake.getBrain().init(currentGameState);
 	}
