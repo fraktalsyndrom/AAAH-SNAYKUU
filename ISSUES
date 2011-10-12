@@ -33,14 +33,6 @@ program.
 - De-uglify.
 
 
-# Loading bots from files and adding them to the game
-
-We might need to update the class loader a little, and especially move
-it to a more appropriate place than MainWindow. SnakeSettingsPanel may
-need to be able to use it for testing the classes before the game
-starts.
-
-
 ---------------------------------
 
 ***OLD ISSUES***:
@@ -60,10 +52,20 @@ creates a MainWindow object, both located in the userInterface package.
 Main should instead create a Session and a MainWindow, and also run
 the main loop.
 
+
 # Remove any game logic from MainWindow
 
 There shouldn't be any game logic in MainWindow at all. Snake
 construction should be moved to either Main or Session.
+
+
+# Loading bots from files and adding them to the game
+
+We might need to update the class loader a little, and especially move
+it to a more appropriate place than MainWindow. SnakeSettingsPanel may
+need to be able to use it for testing the classes before the game
+starts.
+
 
 # How to determine starting locations of snakes?
 
