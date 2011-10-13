@@ -2,7 +2,7 @@ package gameLogic;
 
 public enum ErrorState
 {
-	NO_ERROR, TOO_SLOW;
+	NO_ERROR, TOO_SLOW, EXCEPTION;
 	
 	public String toString()
 	{
@@ -13,6 +13,9 @@ public enum ErrorState
 			
 			case TOO_SLOW:
 				return "Your bot is too slow";
+			
+			case EXCEPTION:
+				return "Your bot threw an exception";
 		}
 		
 		throw new IllegalStateException("This ErrorState is not defined");

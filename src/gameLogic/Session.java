@@ -6,6 +6,7 @@ public class Session
 {
 	private Board board;
 	private Set<Snake> snakes = new HashSet<Snake>();
+	private Map<Snake, ErrorState> snakeErrors = new HashMap<Snake, ErrorState>();
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 
@@ -63,7 +64,7 @@ public class Session
 			if (snake.isDead())
 				--numberOfLivingSnakes;
 
-		if (numberOfLivingSnakes == 0 || (numberOfLivingSnakes < 2 && snakes.size() > 2))
+		if (numberOfLivingSnakes == 0 || (numberOfLivingSnakes < 2 && snakes.size() >= 2))
 			return true;
 		
 		
@@ -127,7 +128,13 @@ public class Session
 		{
 			if (!snake.isDead())
 			{
-				GameState currentGameState = new GameState(board, snakes, metadata);
+				ErrorState errorState = ErrorState.NO_ERROR;
+				if (snakeErrors.containsKey(snake))
+				{
+					errorState = snakeErrors.get(snake);
+					snakeErrors.remove(snake);
+				}
+				GameState currentGameState = new GameState(board, snakes, metadata, errorState);
 				BrainDecision bd = new BrainDecision(snake, currentGameState);
 				decisionThreads.put(snake, bd);
 			}
@@ -151,22 +158,25 @@ public class Session
 		{
 			Snake currentSnake = decisionThread.getKey();
 			BrainDecision decision = decisionThread.getValue();
+			Direction actualMove = currentSnake.getCurrentDirection();
 			try 
 			{
 				Direction nextMove = decision.demandNextMove();
 				if (isValidMove(currentSnake, nextMove))
-				{
-					moves.put(currentSnake, nextMove);
-					currentSnake.setCurrentDirection(nextMove);
-				}
-				else
-					moves.put(currentSnake, currentSnake.getCurrentDirection());
+					actualMove = nextMove;
+			}
+			catch (java.util.concurrent.TimeoutException t)
+			{
+				snakeErrors.put(currentSnake, ErrorState.TOO_SLOW);
 			}
 			catch (Throwable t)
 			{
 				System.out.println(t);
-				moves.put(currentSnake, currentSnake.getCurrentDirection());
+				snakeErrors.put(currentSnake, ErrorState.EXCEPTION);
 			}
+			
+			moves.put(currentSnake, actualMove);
+			currentSnake.setCurrentDirection(actualMove);
 		}
 		return moves;
 	}

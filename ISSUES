@@ -12,13 +12,6 @@ Right now, they all move towards Direction.NORTH, but this won't work if
 we want snakes to be able to spawn larger than one square.
 
 
-# Add debugging information in GameState
-
-We could put debugging information in the GameState object sent to
-brains for any possible errors, like if the brain is too slow or if
-it tries to move in an invalid direction.
-
-
 # Add a statistical/developer mode
 
 We should have a debugging/development method that quickly runs x games
@@ -84,3 +77,11 @@ X X X X X X X
 X X X X X X X
 X 1 X X X 4 X
 X X X X X X X
+
+
+# Add debugging information in GameState
+
+We could put debugging information in the GameState object sent to
+brains for any possible errors, like if the brain is too slow or if
+it tries to move in an invalid direction.
+
