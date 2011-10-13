@@ -34,7 +34,9 @@ public class GameState
 	 */
 	public boolean willCollide(Snake snake, Direction dir)
 	{
-		return false;
+		Position currentHeadPosition = snake.getHead();
+		Position nextHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		return (board.getSquare(nextHeadPosition).isLethal());
 	}
 	
 	public Metadata getMetadata()
@@ -64,4 +66,3 @@ public class GameState
 		return distance;
 	}
 }
-
