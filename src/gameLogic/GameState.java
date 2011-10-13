@@ -15,16 +15,17 @@ import java.util.HashSet;
 
 public class GameState
 {
-	private ErrorState errorState = ErrorState.NO_ERROR;
+	private ErrorState errorState;
 	private Board board;
 	private Set<Snake> snakes;
 	private Metadata metadata;
 	
-	GameState(Board currentBoard, Set<Snake> snakes, Metadata metadata) 
+	GameState(Board currentBoard, Set<Snake> snakes, Metadata metadata, ErrorState errorState)
 	{
 		board = new Board(currentBoard);
 		this.snakes = new HashSet<Snake>(snakes);
 		this.metadata = metadata;
+		this.errorState = errorState;
 	}
 	
 	/**
@@ -62,7 +63,7 @@ public class GameState
 	}
 
 	/**
-	 * Returns the ErrorState for the previous turn, for example telling telling a brain it it
+	 * Returns the ErrorState for the previous turn, for example telling a brain it
 	 * took too long to decide last turn.
 	 *
 	 * @return	The ErrorState object for last turn.
