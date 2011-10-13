@@ -6,12 +6,6 @@ import java.util.Random;
 public class RandomBot implements Brain
 {
 	private Random random = new Random();
-	private GameState gameState;
-	
-	public void init(GameState initialState)
-	{
-		gameState = initialState;
-	}
 	
 	public Direction getNextMove(GameState gamestate)
 	{
