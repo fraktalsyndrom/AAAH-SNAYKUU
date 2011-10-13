@@ -39,7 +39,7 @@ class Main
 	{
 		MainWindow mainWindow = new MainWindow(session, 12);
 		
-		while(!session.hasEnded())
+		while (!session.hasEnded())
 		{
 			session.tick();
 			mainWindow.repaint();
