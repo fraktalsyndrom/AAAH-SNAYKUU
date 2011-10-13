@@ -29,6 +29,46 @@ public enum Direction
 		
 		return new Position(x, y);
 	}
+	
+	public Direction turnLeft()
+	{
+		switch (this)
+		{
+			case WEST:
+				return SOUTH;
+			
+			case SOUTH:
+				return EAST;
+			
+			case EAST:
+				return NORTH;
+			
+			case NORTH:
+				return WEST;
+		}
+		
+		throw new IllegalStateException("This direction is invalid");
+	}
+	
+	public Direction turnRight()
+	{
+		switch (this)
+		{
+			case WEST:
+				return NORTH;
+			
+			case NORTH:
+				return EAST;
+
+			case EAST:
+				return SOUTH;
+			
+			case SOUTH:
+				return WEST;
+		}
+		
+		throw new IllegalStateException("This direction is invalid");
+	}
 
 	static Direction getDirectionFromPositionToPosition(Position from, Position to)
 	{

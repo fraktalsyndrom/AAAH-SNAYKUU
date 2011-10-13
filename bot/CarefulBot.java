@@ -15,19 +15,7 @@ public class CarefulBot implements Brain
 		Direction previousDirection = self.getCurrentDirection();
 		if (gamestate.willCollide(self, previousDirection))
 		{
-			switch (previousDirection)
-			{
-				case NORTH:
-					return Direction.WEST;
-				case WEST:
-					return Direction.SOUTH;
-				case SOUTH:
-					return Direction.EAST;
-				case EAST:
-					return Direction.NORTH;
-				default:
-					return previousDirection;
-			}
+			return previousDirection.turnLeft();
 		}
 		return previousDirection;
 	}
