@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.List;
 
 public class PostGameWindow extends JFrame
 {
@@ -42,22 +42,24 @@ public class PostGameWindow extends JFrame
 		repaint();
 	}
 	
+	
 	private void printStandings()
 	{
-		Map<Snake, Integer> results = finalResult.calculateFinalScore();
-		ArrayList<Snake> winners = finalResult.getWinnersFrom(results);
+		List<List<Snake>> winners = finalResult.getWinners();
+		
 		headerLabel.setText("SNAYKUU RESULTS");
-		centerArea.setText("Winner(s):\n");
-		for (Snake winnerSnake : winners)
+		
+		int placement = 1;
+		centerArea.setText("SCORES:\n");
+		
+		for (List<Snake> snakeList : winners)
 		{
-			centerArea.append("\t" + winnerSnake + "\n");
-		}
-		centerArea.append("\nResults:\n");
-		for (Map.Entry<Snake, Integer> resultEntry : results.entrySet())
-		{
-			Snake snake = resultEntry.getKey();
-			int score = resultEntry.getValue();
-			centerArea.append("\t" + snake + "\t" + score + "\n");
+			centerArea.append(placement + ":");
+			for (Snake snake : snakeList)
+			{
+				centerArea.append("\t" + snake + " (" + snake.getScore() + ", " + snake.getLifespan() + ")\n");
+				++placement;
+			}
 		}
 	}
 	
