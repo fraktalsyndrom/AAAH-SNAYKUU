@@ -3,11 +3,20 @@ package gameLogic;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * @author 	Arian Jafari
+ *
+ * This class represents the entire game board through a 2D-array of Square objects.
+ * Each Square, in turn, contains GameObjects, such as fruits, walls, or other snakes.
+ * 
+ * @see	Square
+ */
+
 public class Board 
 {
 	private Square[][] board;
 	
-	public Board(int width, int height)
+	Board(int width, int height)
 	{
 		if (width < 1 || height < 1)
 			throw new IllegalArgumentException("Board size must be greater than 0");
@@ -16,8 +25,11 @@ public class Board
 			for (int y = 0; y < height; ++y)
 				board[x][y] = new Square();
 	}
-
-	public Board(Board other)
+	
+	/**
+	 * Copy constructor.
+	 */
+	Board(Board other)
 	{
 		this.board = new Square[other.getWidth()][other.getHeight()];
 		for (int x = 0; x < getWidth(); ++x)
@@ -25,46 +37,94 @@ public class Board
 				board[x][y] = new Square(other.board[x][y]);
 	}
 	
+	/**
+	 * Gets the width of the board (the 2D-array).
+	 * 
+	 * @return	The width of the board.
+	 */
 	public int getWidth()
 	{
 		return board.length;
 	}
 	
+	/**
+	 * Gets the height of the board (the 2D-array).
+	 * 
+	 * @return	The height of the board.
+	 */
 	public int getHeight()
 	{
 		return board[0].length;
 	}
 	
+	/**
+	 * Returns whether or not the board contains any game object at the given position.
+	 * Doesn't perform any checks on what type of object it is, like if it is lethal or not.
+	 * 
+	 * @param	p	The position we want to check for game objects.
+	 * @return	Whether or not the board contains a game object at the given position.
+	 */
 	public boolean hasGameObject(Position p)
 	{
-		return hasGameObject(p.getX(), p.getY());
+		return (!board[p.getX()][p.getY()].isEmpty());
 	}
 	
-	public boolean hasGameObject(int x, int y)
-	{
-		return (!board[x][y].isEmpty());
-	}
-	
+	/**
+	 * Returns whether or not the board contains a fruit at the given position.
+	 * 
+	 * @param	p	The position we want to check for fruit.
+	 * @return	Whether or not the board contains a fruit at the given position.
+	 */
 	public boolean hasFruit(Position p)
 	{
 		return (board[p.getX()][p.getY()].hasFruit());
 	}
 	
+	/**
+	 * Returns whether or not the board contains a wall at the given position.
+	 * 
+	 * @param	p	The position we want to check for walls.
+	 * @return	Whether or not the board contains a wall at the given position.
+	 */
 	public boolean hasWall(Position p)
 	{
 		return (board[p.getX()][p.getY()].hasWall());
 	}
 	
+	/**
+	 * Returns whether or not the board contains a snake at the given position.
+	 * 
+	 * @param	p	The position we want to check for snakes.
+	 * @return	Whether or not the board contains a snake at the given position.
+	 * @see		Square
+	 */
 	public boolean hasSnake(Position p)
 	{
 		return (board[p.getX()][p.getY()].hasSnake());
 	}
 	
+	/**
+	 * Gets a Square at 
+	 * 
+	 * @param	p	The position in the board where we want to get the Square from.
+	 * @return	The Square at the specified position.
+	 * @see 		Square
+	 */
 	public Square getSquare(Position p)
 	{
 		return board[p.getX()][p.getY()];
 	}
 	
+	/**
+	 * Calculates whether or not the board contains a lethal object within a given radius of
+	 * a certain square. Works by using a depth-first search.
+	 * 
+	 * @param	pos		The position which we want to check.
+	 * @param	range	The number of squares we wish to exand, e.g.
+	 *					the radius of the area we want to check.
+	 * @return	A boolean indicating whether or not there is a lethal object
+	 *			within the given range of the specified position.
+	 */
 	public boolean hasLethalObjectWithinRange(Position pos, int range)
 	{
 		Set<Position> visited = new HashSet<Position>();
@@ -93,25 +153,6 @@ public class Board
 		}
 		return false;
 	}
-	/*
-	public boolean hasSnakeWithinRange(Position pos, int range)
-	{
-		HashSet<Position> visited = new HashSet<Position>();
-		breadthFirstSearch(visited, pos, range);
-		return //~ visited.containsSnake();
-	}
-	
-	public void breadthFirstSearch(HashSet<Position> visited, Position from, int range) 
-	{
-		if (range < 0)
-			return;
-		range--;
-		visited.add(from);
-		for (Position p : getNeighbours(from.getY(), from.getX())) {
-			breadthFirstSearch(visited, from, range);
-		}
-	}
-	*/
 	
 	void addGameObject(GameObjectType obj, Position p)
 	{

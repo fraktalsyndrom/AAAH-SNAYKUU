@@ -55,8 +55,17 @@ public class Square
 		return false;
 	}
 	
+	public GameObject getGameObject()
+	{
+		if (objects.size() > 1)
+			throw new IllegalStateException("Trying to getGameObject from a Square with more than one object.");
+		if (objects.isEmpty())
+			return null;
+		return objects.get(0);
+	}
+	
 	// Remove a fruit from the square, returning its value.
-	public int eatFruit()
+	int eatFruit()
 	{
 		for (GameObject object : objects)
 		{
@@ -87,13 +96,6 @@ public class Square
 			if (object instanceof Snake)
 				snakes.add((Snake)object);
 		return snakes;
-	}
-	
-	public GameObject getGameObject()
-	{
-		if (objects.size() != 1)
-			throw new IllegalStateException("Trying to getGameObject from a Square with more than one object.");
-		return objects.get(0);
 	}
 	
 	void removeFruit()
