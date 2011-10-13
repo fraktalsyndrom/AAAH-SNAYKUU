@@ -1,9 +1,25 @@
 package gameLogic;
 
+/**
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ *
+ * This is an enum representing a direction in which a snake can move. Directions are
+ * what getNextMove in the Brain interface are supposed to return.
+ * Note that these are absolute directions, e.g. NORTH, and not relative
+ * directions, e.g. FORWARD.
+ * 
+ */
+
 public enum Direction
 {
 	NORTH, WEST, SOUTH, EAST;
 	
+	/**
+	 * Gets the next position a snake would end up in if it continues in this direction.
+	 * 
+	 * @return	The next position if movement continues in this direction.
+	 */
 	public Position calculateNextPosition(Position oldPosition)
 	{
 		int x = oldPosition.getX(), y = oldPosition.getY();
@@ -30,6 +46,11 @@ public enum Direction
 		return new Position(x, y);
 	}
 	
+	/**
+	 * Returns a new direction that would be the same as turning left.
+	 * 
+	 * @return	The direction towards which one would move if one turned left.
+	 */
 	public Direction turnLeft()
 	{
 		switch (this)
@@ -50,6 +71,11 @@ public enum Direction
 		throw new IllegalStateException("This direction is invalid");
 	}
 	
+	/**
+	 * Returns a new direction that would be the same as turning right.
+	 * 
+	 * @return	The direction towards which one would move if one turned right.
+	 */
 	public Direction turnRight()
 	{
 		switch (this)
@@ -70,11 +96,22 @@ public enum Direction
 		throw new IllegalStateException("This direction is invalid");
 	}
 
-	static Direction getDirectionFromPositionToPosition(Position from, Position to)
+	/**
+	 * Returns the direction between two positions, as long as they are on a straight line.
+	 * 
+	 * @param	from		The starting position
+	 * @param	to		The destination position.
+	 *
+	 * @return	The direction towards which one needs to move from the starting position
+	 *			in order to reach the destination.
+	 * 
+	 * @throws	An IllegalArgumentException either if the two positions are the same
+	 *			or if they are not on a straight line.
+	 */
+	public static Direction getDirectionFromPositionToPosition(Position from, Position to)
 	{
 		if (from.equals(to))
 			throw new IllegalArgumentException("Don't force us to divide by zero please");
-			//~ TODO: Wouldn't this be dividing by one and not zero? Investigate.
 		
 		if (from.getX() == to.getX())
 		{
@@ -91,6 +128,6 @@ public enum Direction
 				return Direction.WEST;
 		}
 		
-		throw new IllegalArgumentException("The two points must be.");
+		throw new IllegalArgumentException("The two points must be on a line.");
 	}
 }

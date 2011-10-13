@@ -1,6 +1,6 @@
 package gameLogic;
 
-import java.util.*;
+import java.util.LinkedList;
 
 /**
  * @author 	Sixten Hilborn
