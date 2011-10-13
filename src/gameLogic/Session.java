@@ -9,7 +9,6 @@ public class Session
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 
-	private GameState currentGameState;
 	private GameResult gameResult = new GameResult();
 	
 	private Metadata metadata;
@@ -108,8 +107,6 @@ public class Session
 		if (perhapsSpawnFruit())
 			System.out.println("FRUIT SPAWNED");
 		
-		updateGameState();
-		
 		Frame frame = new Frame(board);
 		recordedGame.addFrame(frame);
 	}
@@ -139,6 +136,7 @@ public class Session
 		{
 			if (!snake.isDead())
 			{
+				GameState currentGameState = new GameState(board, snakes, metadata);
 				BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
 				decisionThreads.put(snake, bd);
 			}
@@ -213,8 +211,8 @@ public class Session
 	
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		Position currentHeadPosition = snake.getHead();
-		Position currentTailPosition = snake.getTail();
+		Position currentHeadPosition = snake.getHeadPosition();
+		Position currentTailPosition = snake.getTailPosition();
 		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
 		board.addGameObject(snake, newHeadPosition);
 		snake.moveHead(newHeadPosition);
@@ -234,7 +232,7 @@ public class Session
 			if (snake.isDead())
 				continue;
 			
-			Position head = snake.getHead();
+			Position head = snake.getHeadPosition();
 			Square square = board.getSquare(head);
 			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
@@ -284,11 +282,6 @@ public class Session
 		return true;
 	}
 	
-	private void updateGameState()
-	{
-		currentGameState = new GameState(board, snakes, metadata);
-	}
-	
 	/**
 	 * Generates a standard snake board, sized width x height, with lethal walls around the edges.
 	 * @param width		Desired board height.
@@ -327,9 +320,6 @@ public class Session
 			snake.placeOnBoard(snakePositions, Direction.NORTH); //~ TODO: A nicer way to determine starting direction.
 		}
 		
-		updateGameState();
-		for (Snake snake : snakes)
-			snake.getBrain().init(currentGameState);
 	}
 	
 	/**

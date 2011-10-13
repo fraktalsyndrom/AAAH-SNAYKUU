@@ -1,6 +1,5 @@
 package gameLogic;
 
-
 import java.util.Set;
 import java.util.HashSet;
 
@@ -10,21 +9,29 @@ public class GameState
 	private Set<Snake> snakes;
 	private Metadata metadata;
 	
-	public GameState(Board currentBoard, Set<Snake> snakes, Metadata metadata) 
+	GameState(Board currentBoard, Set<Snake> snakes, Metadata metadata) 
 	{
 		board = new Board(currentBoard);
-		this.snakes = snakes;
+		this.snakes = new HashSet<Snake>(snakes);
 		this.metadata = metadata;
 	}
 	
+	/**
+	 * 
+	 */
 	public Set<Snake> getSnakes()
 	{
-		return new HashSet<Snake>(snakes);
+		return snakes;
 	}
 	
 	public Board getBoard()
 	{
 		return board;
+	}
+	
+	public Metadata getMetadata()
+	{
+		return metadata;
 	}
 	
 	
@@ -37,10 +44,6 @@ public class GameState
 		return false;
 	}
 	
-	public Metadata getMetadata()
-	{
-		return metadata;
-	}
 	
 	
 	/**

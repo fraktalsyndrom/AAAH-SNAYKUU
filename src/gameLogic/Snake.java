@@ -19,18 +19,18 @@ public class Snake extends GameObject
 		this.brain = brain;
 	}
 	
-	public void placeOnBoard(LinkedList<Position> segments, Direction originalDirection)
+	void placeOnBoard(LinkedList<Position> segments, Direction originalDirection)
 	{
 		this.segments = segments;
 		direction = originalDirection;
 	}
 	
-	public Position getHead()
+	public Position getHeadPosition()
 	{
 		return segments.getFirst();
 	}
 	
-	public Position getTail()
+	public Position getTailPosition()
 	{
 		return segments.getLast();
 	}
