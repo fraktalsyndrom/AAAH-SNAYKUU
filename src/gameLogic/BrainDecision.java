@@ -4,14 +4,14 @@ import java.util.concurrent.TimeoutException;
 
 class BrainDecision extends Thread
 {
-	private Brain brain;
+	private Snake snake;
 	private GameState currentState;
 	private Direction nextMove;
 	private Throwable exception = null;
 	
-	public BrainDecision(Brain brain, GameState currentState) 
+	public BrainDecision(Snake snake, GameState currentState) 
 	{
-		this.brain = brain;
+		this.snake = snake;
 		this.currentState = currentState;
 	}
 	
@@ -19,7 +19,7 @@ class BrainDecision extends Thread
 	{
 		try
 		{
-			nextMove = brain.getNextMove(currentState);
+			nextMove = snake.getBrain().getNextMove(snake, currentState);
 		}
 		catch (Throwable t)
 		{
