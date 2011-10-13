@@ -85,7 +85,7 @@ public class GameState
 	 * 
 	 * @param	snake	The snake you wish you perform the check for.
 	 * @param	dir		The hypothetical direction in which the snake moves.
-	 * @return 	A boolean: true if the next position contains a lethal object, false if not.
+	 * @return 	A boolean; true if the next position contains a lethal object, false if not.
 	 */
 	public boolean willCollide(Snake snake, Direction dir)
 	{
