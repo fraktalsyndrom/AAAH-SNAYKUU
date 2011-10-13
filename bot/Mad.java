@@ -11,7 +11,7 @@ public class Mad implements Brain
 		gameState = initialState;
 	}
 	
-	public Direction getNextMove(GameState gamestate)
+	public Direction getNextMove(Snake yourSnake, GameState gamestate)
 	{
 		return Direction.NORTH;
 	}

@@ -13,7 +13,7 @@ public class RandomBot implements Brain
 		gameState = initialState;
 	}
 	
-	public Direction getNextMove(GameState gamestate)
+	public Direction getNextMove(Snake yourSnake, GameState gamestate)
 	{
 		switch (random.nextInt(4))
 		{
