@@ -3,13 +3,16 @@
     <target name="clean" description="remove intermediate files">
         <delete dir="classes" />
     </target>
+
     <target name="clobber" depends="clean" description="remove all artifact files">
         <delete file="snaykuu.jar" />
     </target>
+
     <target name="compile" depends="clobber" description="compile the Java source code to class files">
         <mkdir dir="classes" />
         <javac srcdir="src" destdir="classes" />
     </target>
+
     <target name="jar" depends="compile" description="create a Jar file for the application">
         <jar destfile="snaykuu.jar">
             <fileset dir="classes" includes="**/*.class" />
@@ -18,7 +21,12 @@
             </manifest>
         </jar>
     </target>
+	
     <target name="bot" description="compile every custom bots">
 		<javac srcdir="bot" classpath="class" sourcepath="src" />
     </target>
+
+	<target name="run" description="execute the Jar file">
+		<java jar="snaykuu.jar" fork="true"/>
+	</target>
 </project>
