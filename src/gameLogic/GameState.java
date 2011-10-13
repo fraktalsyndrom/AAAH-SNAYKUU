@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 public class GameState
 {
+	private ErrorState errorState = ErrorState.NO_ERROR;
 	private Board board;
 	private Set<Snake> snakes;
 	private Metadata metadata;
@@ -32,6 +33,11 @@ public class GameState
 	public Metadata getMetadata()
 	{
 		return metadata;
+	}
+	
+	public ErrorState getErrorState()
+	{
+		return errorState;
 	}
 	
 	
