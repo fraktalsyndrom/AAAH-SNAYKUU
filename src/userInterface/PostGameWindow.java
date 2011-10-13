@@ -33,7 +33,7 @@ public class PostGameWindow extends JFrame
 		standingsPanel.add(new JScrollPane(centerArea), BorderLayout.CENTER);
 		standingsPanel.add(closeButton, BorderLayout.SOUTH);
 		
-		setSize(200, 300);
+		setSize(400, 400);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -45,22 +45,9 @@ public class PostGameWindow extends JFrame
 	
 	private void printStandings()
 	{
-		List<List<Snake>> winners = finalResult.getWinners();
-		
 		headerLabel.setText("SNAYKUU RESULTS");
 		
-		int placement = 1;
-		centerArea.setText("SCORES:\n");
-		
-		for (List<Snake> snakeList : winners)
-		{
-			centerArea.append(placement + ":");
-			for (Snake snake : snakeList)
-			{
-				centerArea.append("\t" + snake + " (" + snake.getScore() + ", " + snake.getLifespan() + ")\n");
-				++placement;
-			}
-		}
+		centerArea.setText("SCORES:\n" + finalResult);
 	}
 	
 	private class CloseButtonListener implements ActionListener

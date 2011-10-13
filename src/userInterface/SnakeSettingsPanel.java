@@ -6,7 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import gameLogic.*;
 import javax.swing.filechooser.*;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.net.*;
 
 class SnakeSettingsPanel extends JPanel
@@ -14,8 +15,7 @@ class SnakeSettingsPanel extends JPanel
 	private JList snakeJList;
 	private SnakeManagementPanel snakeManagementPanel;
 	private SnakeInfoPanel snakeInfoPanel;
-	private ArrayList<Snake> snakeList = new ArrayList<Snake>();
-	private GameObjectType gameObjectTypeSnake = new GameObjectType("Snake", true);
+	private Map<String, Brain> brains = new TreeMap<String, Brain>();
 	
 	public SnakeSettingsPanel()
 	{
@@ -96,9 +96,9 @@ class SnakeSettingsPanel extends JPanel
 				if (brain == null)
 					return;
 				
-				Snake snake = new Snake(gameObjectTypeSnake, name, brain);
-				snakeList.add(snake);
-				snakeJList.setListData(snakeList.toArray());
+				brains.put(name, brain);
+				
+				snakeJList.setListData(brains.keySet().toArray());
 			}
 		}
 	}
@@ -156,8 +156,8 @@ class SnakeSettingsPanel extends JPanel
 	}
 	
 	
-	public ArrayList<Snake> getSnakeList()
+	public Map<String, Brain> getBrains()
 	{
-		return snakeList;
+		return brains;
 	}
 }

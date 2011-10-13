@@ -11,10 +11,11 @@ class Main
 		SettingsWindow settingsWindow = new SettingsWindow();
 		
 		Session session = prepareSession(settingsWindow);
+		int gameSpeed = settingsWindow.getGameSpeed();
 		
 		settingsWindow.dispose();
 		
-		runGame(session);
+		runGame(session, gameSpeed);
 	}
 	
 	private static Session prepareSession(SettingsWindow settingsWindow)
@@ -35,7 +36,7 @@ class Main
 	}
 
 	
-	private static void runGame(Session session)
+	private static void runGame(Session session, int gameSpeed)
 	{
 		MainWindow mainWindow = new MainWindow(session, 12);
 		
@@ -46,7 +47,7 @@ class Main
 			
 			try
 			{
-				Thread.currentThread().sleep(400);
+				Thread.currentThread().sleep(gameSpeed);
 			}
 			catch (InterruptedException e)
 			{

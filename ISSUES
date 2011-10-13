@@ -12,16 +12,17 @@ Right now, they all move towards Direction.NORTH, but this won't work if
 we want snakes to be able to spawn larger than one square.
 
 
-# Add a statistical/developer mode
+# Two snakes using same brain
 
-We should have a debugging/development method that quickly runs x games
-(without graphics) with statistical analysis.
+Two snakes should be able to use the same brain class, but not the same
+brain instance. The class loader should also be able to reload a brain
+between two games.
 
 
 # Improve look of PostGameWindow
 
 - Allow starting a new game from within without having to restart the entier
-program.
+program (both rematches and be able to change settings in between).
 - Add more statistics (?)
 - De-uglify.
 
@@ -85,3 +86,8 @@ We could put debugging information in the GameState object sent to
 brains for any possible errors, like if the brain is too slow or if
 it tries to move in an invalid direction.
 
+
+# Add a statistical/developer mode
+
+We should have a debugging/development method that quickly runs x games
+(without graphics) with statistical analysis.

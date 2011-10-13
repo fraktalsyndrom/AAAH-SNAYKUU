@@ -5,6 +5,7 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import gameLogic.*;
+import java.util.Map;
 
 public class SettingsWindow extends JFrame
 {
@@ -12,6 +13,7 @@ public class SettingsWindow extends JFrame
 	private JTabbedPane tabbedPane;	
 	private SnakeSettingsPanel snakeSettingsPanel;
 	private GameSettingsPanel gameSettingsPanel;
+	private DeveloperPanel developerPanel;
 	
 	
 	private JButton startButton;
@@ -24,9 +26,11 @@ public class SettingsWindow extends JFrame
 		
 		snakeSettingsPanel = new SnakeSettingsPanel();
 		gameSettingsPanel = new GameSettingsPanel();
+		developerPanel = new DeveloperPanel(this);
 		
 		tabbedPane.addTab("Snayks", snakeSettingsPanel);
 		tabbedPane.addTab("Game settings", gameSettingsPanel);
+		tabbedPane.addTab("Developer", developerPanel);
 		
 		startButton = new JButton("Start");
 		startButton.addActionListener(new StartButtonListener());
@@ -70,13 +74,21 @@ public class SettingsWindow extends JFrame
 		
 		Session session = new Session(metadata);
 		
-		for (Snake snake : snakeSettingsPanel.getSnakeList())
+		GameObjectType objectType = new GameObjectType("Snake", true);
+		
+		for (Map.Entry<String, Brain> brain : snakeSettingsPanel.getBrains().entrySet())
 		{
+			Snake snake = new Snake(objectType, brain.getKey(), brain.getValue());
 			session.addSnake(snake);
 		}
 		
 		session.prepareForStart();
 		return session;
+	}
+	
+	public int getGameSpeed()
+	{
+		return gameSettingsPanel.getGameSpeed();
 	}
 	
 	

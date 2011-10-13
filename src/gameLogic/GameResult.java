@@ -87,6 +87,26 @@ public class GameResult
 		return winners;
 	}
 	
+	public String toString()
+	{
+		List<List<Snake>> winners = getWinners();
+		
+		int placement = 1;
+		String retVal = "";
+		
+		for (List<Snake> snakeList : winners)
+		{
+			retVal += (placement + ":");
+			for (Snake snake : snakeList)
+			{
+				retVal += ("\t" + snake + " (" + snake.getScore() + ", " + snake.getLifespan() + ")\n");
+				++placement;
+			}
+		}
+		
+		return retVal;
+	}
+	
 	private static class SnakeScoreComparator implements Comparator<Snake>
 	{
 		public int compare(Snake first, Snake second)

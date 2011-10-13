@@ -12,6 +12,7 @@ class GameSettingsPanel extends JPanel
 	private JLabel lolText;
 	private JTextField boardWidth;
 	private JTextField boardHeight;
+	private JTextField gameSpeed;
 	
 	public GameSettingsPanel()
 	{
@@ -21,6 +22,12 @@ class GameSettingsPanel extends JPanel
 		add(lolText);
 		
 		initializeBoardSizeSettings();
+		
+		JPanel gameSpeedPanel = new JPanel();
+		gameSpeedPanel.add(new JLabel("Game speed:"));
+		gameSpeed = new JTextField("300");
+		gameSpeedPanel.add(gameSpeed);
+		add(gameSpeedPanel);
 	}
 	
 	private void initializeBoardSizeSettings()
@@ -46,8 +53,8 @@ class GameSettingsPanel extends JPanel
 	
 	public Metadata generateMetadata()
 	{
-		int width = Integer.parseInt(boardWidth.getText());
-		int height = Integer.parseInt(boardHeight.getText());
+		int width = Integer.parseInt(boardWidth.getText()) + 2;
+		int height = Integer.parseInt(boardHeight.getText()) + 2;
 		int growthFrequency = 3;
 		int fruitFrequency = 10;
 		int thinkingTime = 100;
@@ -55,6 +62,11 @@ class GameSettingsPanel extends JPanel
 		
 		Metadata metadata = new Metadata(width, height, growthFrequency, fruitFrequency, thinkingTime, fruitGoal);
 		return metadata;
+	}
+	
+	public int getGameSpeed()
+	{
+		return Integer.parseInt(gameSpeed.getText());
 	}
 	
 }
