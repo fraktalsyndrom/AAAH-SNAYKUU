@@ -145,14 +145,24 @@ public class Session
 			brainDecision.start();
 		
 		//~ Chill out while the snakes are thinking.
-		try
+		for (long time = System.currentTimeMillis(); System.currentTimeMillis() < time + metadata.getMaximumThinkingTime(); )
 		{
-			Thread.sleep(metadata.getMaximumThinkingTime());
+			boolean everyoneIsDone = true;
+			for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
+			{
+				if (decisionThread.getValue().isAlive())
+				{
+					everyoneIsDone = false;
+					break;
+				}
+			}
+			
+			if (everyoneIsDone)
+				break;
+			
+			sleep(1);
 		}
-		catch (InterruptedException e)
-		{
-			System.out.println(e);
-		}
+		
 		
 		for (Map.Entry<Snake, BrainDecision> decisionThread : decisionThreads.entrySet())
 		{
@@ -179,6 +189,18 @@ public class Session
 			currentSnake.setCurrentDirection(actualMove);
 		}
 		return moves;
+	}
+	
+	static private void sleep(int ms)
+	{
+		try
+		{
+			Thread.sleep(ms);
+		}
+		catch (InterruptedException e)
+		{
+			System.out.println(e);
+		}
 	}
 	
 	private boolean isValidMove(Snake snake, Direction direction)
