@@ -13,9 +13,6 @@ public class Session
 	private GameResult gameResult = new GameResult();
 	
 	private Metadata metadata;
-
-
-	private Snake winner;
 	
 	private RecordedGame recordedGame;
 	
@@ -139,7 +136,7 @@ public class Session
 		{
 			if (!snake.isDead())
 			{
-				BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
+				BrainDecision bd = new BrainDecision(snake, currentGameState);
 				decisionThreads.put(snake, bd);
 			}
 		}
@@ -318,7 +315,7 @@ public class Session
 	
 	private void placeSnakesOnBoard()
 	{
-		Position[] startingPositions = getStartingPositions(snakes.size(), board.getWidth(), board.getHeight());
+		Position[] startingPositions = getStartingHeadPositions(snakes.size(), board.getWidth(), board.getHeight());
 		int positionIndex = 0;
 		for (Snake snake : snakes)
 		{
@@ -328,8 +325,6 @@ public class Session
 		}
 		
 		updateGameState();
-		for (Snake snake : snakes)
-			snake.getBrain().init(currentGameState);
 	}
 	
 	/**
@@ -344,7 +339,7 @@ public class Session
 		Metoden används just nu inte av någonting.
 	*/
 	
-	private Position[] getStartingPositions(int snakes, int xSize, int ySize)
+	private Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
 	{
 		int xCenter = xSize/2;
 		int yCenter = ySize/2;
@@ -368,7 +363,7 @@ public class Session
 		
 		return output;
 	}
-	
+		
 	private void placeSnake(Snake snake, LinkedList<Position> segments)
 	{
 		for (Position pos : segments)
