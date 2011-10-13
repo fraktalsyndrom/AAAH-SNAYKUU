@@ -3,6 +3,16 @@ package gameLogic;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+ * @author 	Sixten Hilborn
+ * @author	Arian Jafari
+ * 
+ * The GameState is a representation of the game at a given moment in time. It contains references
+ * to the game board (containing a matrix of Squares, which in turn contain all game objects),
+ * the current Metadata (turns until growth/spawning of fruit, among other things), all snakes
+ * participating in this game session, and an ErrorState enum.
+ */
+
 public class GameState
 {
 	private ErrorState errorState = ErrorState.NO_ERROR;
@@ -51,13 +61,20 @@ public class GameState
 		return metadata;
 	}
 
+	/**
+	 * Returns the ErrorState for the previous turn, for example telling telling a brain it it
+	 * took too long to decide last turn.
+	 *
+	 * @return	The ErrorState object for last turn.
+	 * @see 		ErrorState
+	 */
 	public ErrorState getErrorState()
 	{
 		return errorState;
 	}
 	
 	
-	/*
+	/**
 	 * This method can be used to help calculate whether or not a given snake will collide next
 	 * turn if it continues in a given direction. It looks at the square the snake will end up in,
 	 * and then checks if that square contains a lethal object. Note that this method returning false 
