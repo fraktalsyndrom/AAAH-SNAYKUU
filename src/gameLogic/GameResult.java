@@ -12,22 +12,25 @@ public class GameResult
 	private Map<Snake, Integer> scores;
 	private Map<Snake, Integer> lifespans;
 	private TreeMap<Snake, Integer> finalStandings;
-	private int endGameCondition;
+	private Metadata metadata;
 	
 	public static final int FRUIT_FINISH = 1;
 	public static final int DEATH_FINISH = 2;
 	
-	public GameResult()
+	public GameResult(Set<Snake> snakes, Metadata metadata)
 	{
 		scores = new HashMap<Snake, Integer>();
 		lifespans = new HashMap<Snake, Integer>();
+		
+		for (Snake snake : snakes)
+		{
+			scores.put(snake, snake.getScore());
+			lifespans.put(snake, snake.getLifespan());
+		}
+		
+		this.metadata = metadata;
 	}
 	
-	public void setSnakeScores(Snake snake, int score, int lifespan)
-	{
-		scores.put(snake, score);
-		lifespans.put(snake, lifespan);
-	}
 	
 	public Map<Snake, Integer> getScores()
 	{
@@ -39,17 +42,21 @@ public class GameResult
 		return lifespans;
 	}
 	
-	void setEndGameCondition(int endGameCondition)
+	private int getEndGameCondition()
 	{
-		if (endGameCondition < 1 || endGameCondition > 2)
-			throw new IllegalArgumentException("endGameCondition must be either FRUIT_FINISH (= 1) or DEATH_FINISH (= 2).");
-		this.endGameCondition = endGameCondition;
+		for (Map.Entry<Snake, Integer> scoreEntry : scores.entrySet())
+		{
+			if (scoreEntry.getValue() == metadata.getFruitGoal())
+				return FRUIT_FINISH;
+		}
+		
+		return DEATH_FINISH;
 	}
 	
 	public Map<Snake, Integer> calculateFinalScore()
 	{
 		TreeMap<Snake, Integer> finalScore;
-		switch (endGameCondition)
+		switch (getEndGameCondition())
 		{
 			case FRUIT_FINISH:
 				finalScore = new TreeMap<Snake, Integer>(new SnakeScoreComparator());
@@ -87,19 +94,19 @@ public class GameResult
 		return winners;
 	}
 	
-	private class SnakeScoreComparator implements Comparator<Snake>
+	private static class SnakeScoreComparator implements Comparator<Snake>
 	{
 		public int compare(Snake first, Snake second)
 		{
-			return (scores.get(second) - scores.get(first));
+			return second.getScore() - first.getScore();
 		}
 	}
 	
-	private class SnakeLifespanComparator implements Comparator<Snake>
+	private static class SnakeLifespanComparator implements Comparator<Snake>
 	{
 		public int compare(Snake first, Snake second)
 		{
-			return (lifespans.get(second) - lifespans.get(first));
+			return second.getLifespan() - first.getLifespan();
 		}
 	}
 }
