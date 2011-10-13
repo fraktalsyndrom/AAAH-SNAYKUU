@@ -2,5 +2,5 @@ package gameLogic;
 
 public interface Brain
 {
-	public Direction getNextMove(GameState gamestate);
+	public Direction getNextMove(Snake yourSnake, GameState gamestate);
 }

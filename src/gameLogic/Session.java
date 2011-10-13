@@ -137,7 +137,7 @@ public class Session
 			if (!snake.isDead())
 			{
 				GameState currentGameState = new GameState(board, snakes, metadata);
-				BrainDecision bd = new BrainDecision(snake.getBrain(), currentGameState);
+				BrainDecision bd = new BrainDecision(snake, currentGameState);
 				decisionThreads.put(snake, bd);
 			}
 		}

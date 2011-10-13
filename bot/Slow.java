@@ -4,7 +4,7 @@ import gameLogic.*;
 
 public class Slow implements Brain
 {
-	public Direction getNextMove(GameState gameState)
+	public Direction getNextMove(Snake yourSnake, GameState gameState)
 	{
 		//~ Sleep for ten seconds before making the decision to continue onward.
 		try { Thread.sleep(10000); }

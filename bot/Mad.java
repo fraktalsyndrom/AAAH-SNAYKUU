@@ -4,7 +4,7 @@ import gameLogic.*;
 
 public class Mad implements Brain
 {
-	public Direction getNextMove(GameState gamestate)
+	public Direction getNextMove(Snake yourSnake, GameState gamestate)
 	{
 		return Direction.NORTH;
 	}
