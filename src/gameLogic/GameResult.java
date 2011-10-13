@@ -1,17 +1,15 @@
 package gameLogic;
 
 import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Comparator;
 
 public class GameResult
 {
-	private Map<Snake, Integer> scores;
-	private Map<Snake, Integer> lifespans;
-	private TreeMap<Snake, Integer> finalStandings;
+	private TreeSet<Snake> sortedSnakes;
+	
 	private Metadata metadata;
 	
 	public static final int FRUIT_FINISH = 1;
@@ -19,77 +17,72 @@ public class GameResult
 	
 	public GameResult(Set<Snake> snakes, Metadata metadata)
 	{
-		scores = new HashMap<Snake, Integer>();
-		lifespans = new HashMap<Snake, Integer>();
+		this.metadata = metadata;
 		
-		for (Snake snake : snakes)
+		sortedSnakes = new TreeSet<Snake>(getSnakeComparator(snakes));
+		sortedSnakes.addAll(snakes);
+	}
+	
+	private Comparator<Snake> getSnakeComparator(Set<Snake> snakes)
+	{
+		switch (getEndGameCondition(snakes))
 		{
-			scores.put(snake, snake.getScore());
-			lifespans.put(snake, snake.getLifespan());
+			case FRUIT_FINISH:
+				return new SnakeScoreComparator();
+			case DEATH_FINISH:
+				return new SnakeLifespanComparator();
 		}
 		
-		this.metadata = metadata;
+		throw new IllegalStateException("endGameCondition is set to an invalid value/is null");
 	}
 	
-	
-	public Map<Snake, Integer> getScores()
+	private int getEndGameCondition(Set<Snake> snakes)
 	{
-		return scores;
-	}
-	
-	public Map<Snake, Integer> getLifespans()
-	{
-		return lifespans;
-	}
-	
-	private int getEndGameCondition()
-	{
-		for (Map.Entry<Snake, Integer> scoreEntry : scores.entrySet())
+		for (Snake snake : snakes)
 		{
-			if (scoreEntry.getValue() == metadata.getFruitGoal())
+			if (snake.getScore() == metadata.getFruitGoal())
 				return FRUIT_FINISH;
 		}
 		
 		return DEATH_FINISH;
 	}
 	
-	public Map<Snake, Integer> calculateFinalScore()
+	public int getEndGameCondition()
 	{
-		TreeMap<Snake, Integer> finalScore;
-		switch (getEndGameCondition())
-		{
-			case FRUIT_FINISH:
-				finalScore = new TreeMap<Snake, Integer>(new SnakeScoreComparator());
-				finalScore.putAll(scores);
-				break;
-			case DEATH_FINISH:
-				finalScore = new TreeMap<Snake, Integer>(new SnakeLifespanComparator());
-				finalScore.putAll(lifespans);
-				break;
-			default:
-				throw new IllegalStateException("endGameCondition is set to an invalid value/is null");
-		}
-		return finalScore;
+		return getEndGameCondition(sortedSnakes);
 	}
 	
-	public ArrayList<Snake> getWinnersFrom(Map<Snake, Integer> results)
+	public TreeSet<Snake> getFinalStandings()
 	{
-		ArrayList<Snake> winners = new ArrayList<Snake>();
-		int highestScore = -1;
-		for (Map.Entry<Snake, Integer> entry : results.entrySet())
+		return sortedSnakes;
+	}
+	
+	public List<List<Snake>> getWinners()
+	{
+		LinkedList<List<Snake>> winners = new LinkedList<List<Snake>>();
+		int highestScore = Integer.MAX_VALUE;
+		for (Snake snake : sortedSnakes)
 		{
-			Snake currentSnake = entry.getKey();
-			int currentScore = entry.getValue();
-			if (currentScore > highestScore)
+			int currentScore;
+			switch (getEndGameCondition())
 			{
-				winners.clear();
+				case FRUIT_FINISH:
+					currentScore = snake.getScore();
+					break;
+				case DEATH_FINISH:
+					currentScore = snake.getLifespan();
+					break;
+				default:
+					throw new IllegalStateException("ITS IMPOSSIBLE");
+			}
+			if (currentScore < highestScore)
+			{
+				winners.addLast(new LinkedList<Snake>());
+
 				highestScore = currentScore;
-				winners.add(currentSnake);
 			}
-			else if (currentScore == highestScore)
-			{
-				winners.add(currentSnake);
-			}
+			
+			winners.getLast().add(snake);
 		}
 		return winners;
 	}
@@ -98,7 +91,7 @@ public class GameResult
 	{
 		public int compare(Snake first, Snake second)
 		{
-			return second.getScore() - first.getScore();
+			return compareTwoSnakes(second.getScore() - first.getScore(), first, second);
 		}
 	}
 	
@@ -106,7 +99,19 @@ public class GameResult
 	{
 		public int compare(Snake first, Snake second)
 		{
-			return second.getLifespan() - first.getLifespan();
+			return compareTwoSnakes(second.getLifespan() - first.getLifespan(), first, second);
 		}
+	}
+	
+	private static int compareTwoSnakes(int cmp, Snake first, Snake second)
+	{
+		if (cmp != 0)
+			return cmp;
+		
+		int strcmp = first.toString().compareTo(second.toString());
+		if (strcmp != 0)
+			return strcmp;
+		
+		return second.hashCode() - first.hashCode();
 	}
 }

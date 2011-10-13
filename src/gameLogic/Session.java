@@ -217,7 +217,6 @@ public class Session
 	
 	private void checkForCollision()
 	{
-		ArrayList<Snake> deadSnakes = new ArrayList<Snake>();
 		for (Snake snake : snakes) 
 		{
 			if (snake.isDead())
@@ -230,6 +229,9 @@ public class Session
 				snake.kill();
 				System.out.println(snake + " HAS BEEN TERMINATED.");
 			}
+			else
+				snake.increaseLifespan();
+			
 			if (square.hasFruit()) 
 			{
 				int fruitValue = square.eatFruit();
