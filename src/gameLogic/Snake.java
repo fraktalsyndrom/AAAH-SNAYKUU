@@ -10,6 +10,7 @@ public class Snake extends GameObject
 	private boolean grow = false;
 	private LinkedList<Position> segments;
 	private int score = 0;
+	private int lifespan = 0;
 	private boolean isDead = false;
 	
 	public Snake(GameObjectType type, String name, Brain brain)
@@ -45,6 +46,21 @@ public class Snake extends GameObject
 		return direction;
 	}
 	
+	public int getScore()
+	{
+		return score;
+	}
+	
+	/**
+	 * Get the number of turns this snake have lived.
+	 * 
+	 * @return Age of the snake, in turns
+	 */
+	public int getLifespan()
+	{
+		return lifespan;
+	}
+	
 	void setCurrentDirection(Direction direction)
 	{
 		this.direction = direction;
@@ -69,15 +85,15 @@ public class Snake extends GameObject
 	{
 		return brain;
 	}
-	
-	public int getScore()
-	{
-		return score;
-	}
-	
+		
 	void addScore(int points)
 	{
 		score += points;
+	}
+	
+	void increaseLifespan()
+	{
+		++lifespan;
 	}
 	
 	public String toString()

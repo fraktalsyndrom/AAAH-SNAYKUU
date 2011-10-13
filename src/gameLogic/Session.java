@@ -9,8 +9,6 @@ public class Session
 	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 
-	private GameResult gameResult = new GameResult();
-	
 	private Metadata metadata;
 	
 	private RecordedGame recordedGame;
@@ -60,25 +58,21 @@ public class Session
 	public boolean hasEnded()
 	{
 		int numberOfLivingSnakes = snakes.size();
+		
 		for (Snake snake : snakes)
 			if (snake.isDead())
 				--numberOfLivingSnakes;
-		if (numberOfLivingSnakes < 2)
-		{
-			gameResult.setEndGameCondition(GameResult.DEATH_FINISH);
-			cleanUp();
+
+		if (numberOfLivingSnakes == 0 || (numberOfLivingSnakes < 2 && snakes.size() > 2))
 			return true;
-		}
 		
-		for (Map.Entry<Snake, Integer> snakeScore : gameResult.getScores().entrySet())
+		
+		for (Snake snake : snakes)
 		{
-			if (snakeScore.getValue() >= metadata.getFruitGoal())
-			{
-				gameResult.setEndGameCondition(GameResult.FRUIT_FINISH);
-				cleanUp();
+			if (snake.getScore() >= metadata.getFruitGoal())
 				return true;
-			}
 		}
+
 		return false;
 	}
 	
@@ -88,7 +82,7 @@ public class Session
 	 */
 	public GameResult getGameResult()
 	{
-		return gameResult;
+		return new GameResult(snakes, metadata);
 	}
 	
 	/**
@@ -233,7 +227,7 @@ public class Session
 			Square square = board.getSquare(head);
 			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
-				killAndSetResults(snake);
+				snake.kill();
 				System.out.println(snake + " HAS BEEN TERMINATED.");
 			}
 			if (square.hasFruit()) 
@@ -242,18 +236,6 @@ public class Session
 				snake.addScore(fruitValue);
 			}
 		}
-	}
-	
-	private void killAndSetResults(Snake snake)
-	{
-		if (snake.isDead())
-			return;
-
-		int score = snake.getScore();
-		int lifespan = recordedGame.getTurnCount();
-		gameResult.setSnakeScores(snake, score, lifespan);
-
-		snake.kill();
 	}
 	
 	private boolean perhapsSpawnFruit()
@@ -367,17 +349,6 @@ public class Session
 	private boolean isAcceptedStartingPosition(Position position)
 	{
 		return (!board.hasLethalObjectWithinRange(position, 2));
-	}
-	
-	private void cleanUp()
-	{
-		for (Snake snake : snakes)
-		{
-			if (!snake.isDead())
-			{
-				killAndSetResults(snake);
-			}
-		}
 	}
 	
 	private void initGameObjects()
