@@ -332,7 +332,7 @@ public class Session
 			
 			// Determines the quadrant the snake is in an points it outward
 			Direction snakeDirection;
-			Position p = new Postion(start.x - board.getWidth/2, start.y - board.getHeight/2);
+			Position p = new Position(start.getX() - board.getWidth()/2, start.getY() - board.getHeight()/2);
 			
 			if(p.getX() < 0)
 			{
