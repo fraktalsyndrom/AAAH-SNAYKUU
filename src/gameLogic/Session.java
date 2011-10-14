@@ -328,9 +328,39 @@ public class Session
 		int positionIndex = 0;
 		for (Snake snake : snakes)
 		{
+			Position start = startingPositions[positionIndex++];
+			
+			// Determines the quadrant the snake is in an points it outward
+			Direction snakeDirection;
+			Position p = new Postion(start.x - board.getWidth/2, start.y - board.getHeight/2);
+			
+			if(p.getX() < 0)
+			{
+				
+				if(p.getY() < 0)
+				{
+					snakeDirection = Direction.NORTH;
+					
+				} else {
+					snakeDirection = Direction.WEST;
+				}
+				
+			} else {
+				
+				if(p.getY() < 0)
+				{
+					snakeDirection = Direction.EAST;
+					
+				} else {
+					snakeDirection = Direction.SOUTH;
+				}
+			}
+			
+			// End new code
+			
 			LinkedList<Position> snakePositions = new LinkedList<Position>();
-			snakePositions.add(startingPositions[positionIndex++]);
-			snake.placeOnBoard(snakePositions, Direction.NORTH); //~ TODO: A nicer way to determine starting direction.
+			snakePositions.add(start);
+			snake.placeOnBoard(snakePositions, snakeDirection); //snakeDirection was previously Direction.NORTH
 		}
 		
 	}
@@ -344,7 +374,6 @@ public class Session
 		Jag har lyckats klämma in 101 ormar på ett 40x40-bräde, sen orkade 
 		jag inte testa längre.
 		
-		Metoden används just nu inte av någonting.
 	*/
 	
 	private Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
