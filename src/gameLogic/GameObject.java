@@ -4,7 +4,9 @@ package gameLogic;
  * This class represents an object that exists on the game board. Each GameObject
  * has a GameObjectType describing which kind of object it is (e.g. Fruit, Wall etc).
  * 
- * @see 	GameObjectType
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ * @see 		GameObjectType
  */
 
 public class GameObject

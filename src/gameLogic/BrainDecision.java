@@ -2,6 +2,10 @@ package gameLogic;
 
 import java.util.concurrent.TimeoutException;
 
+/**
+ * @author 	Sixten Hilborn
+ * @author	Arian Jafari
+ */
 class BrainDecision extends Thread
 {
 	private Snake snake;

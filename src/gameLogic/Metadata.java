@@ -1,12 +1,13 @@
 package gameLogic;
 
 /**
- * @author	Sixten Hilborn
- * 
  * This class contains all the metadata concerning the current game session.
  * such as the size of the map, the thinking time for the snakes, the frequency
  * at which snakes grow, the frequency at which fruit spawns and the number 
  * of fruits snakes need to eat to win.
+ *
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
  */
 
 public class Metadata
