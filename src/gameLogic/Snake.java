@@ -3,15 +3,15 @@ package gameLogic;
 import java.util.LinkedList;
 
 /**
- * @author 	Sixten Hilborn
- * @author	Arian Jafari
- *
  * The Snake class is a representation of each snake currently in the game,
  * including its name, its current direction, its position on the game board,
  * and its current statistics.
  *
  * It is a subclass of the GameObject class, in order for snakes to be able to
  * be inserted into Square objects.
+ *
+ * @author 	Sixten Hilborn
+ * @author	Arian Jafari
  */
 
 public class Snake extends GameObject
