@@ -4,7 +4,8 @@ import java.util.*;
 
 /**
  * Represents the internal structure of a game session.  Takes care of things such as 
- * snake movement, collision detection and victory conditions.
+ * snake movement, collision detection and victory conditions. Participants don't need
+ * to care about <code>Session</code>; it is documented for satisfying curiosity only.
  * 
  * @author	Sixten Hilborn
  * @author	Arian Jafari
