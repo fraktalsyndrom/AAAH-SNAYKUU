@@ -370,6 +370,7 @@ public class Session
 	private void placeSnakesOnBoard()
 	{
 		Position[] startingPositions = getStartingHeadPositions(snakes.size(), board.getWidth(), board.getHeight());
+		Collections.shuffle(Arrays.asList(startingPositions));
 		int positionIndex = 0;
 		for (Snake snake : snakes)
 		{
