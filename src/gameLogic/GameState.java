@@ -1,5 +1,6 @@
 package gameLogic;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -85,13 +86,34 @@ public class GameState
 	 * 
 	 * @param	snake	The snake you wish you perform the check for.
 	 * @param	dir		The hypothetical direction in which the snake moves.
-	 * @return 	A boolean; true if the next position contains a lethal object, false if not.
+	 * @return 	True if the next position contains a lethal object, false if not.
 	 */
 	public boolean willCollide(Snake snake, Direction dir)
 	{
 		Position currentHeadPosition = snake.getHeadPosition();
 		Position nextHeadPosition = dir.calculateNextPosition(currentHeadPosition);
 		return (board.getSquare(nextHeadPosition).isLethal());
+	}
+	
+	/**
+	 * Gets a list containing the positions of all the fruits currently on the board. Note that 
+	 * the list will be empty if the number of fruits on the board is 0.
+	 * 
+	 * @return	The positions of the fruits currently on the board.
+	 */
+	public ArrayList<Position> getFruits()
+	{
+		ArrayList<Position> positionsContainingFruit = new ArrayList<Position>();
+		for (int x = 0; x < metadata.getBoardWidth(); ++x)
+		{
+			for (int y = 0; y < metadata.getBoardWidth(); ++y)
+			{
+				Position currentPosition = new Position(x, y);
+				if (board.hasFruit(currentPosition))
+					positionsContainingFruit.add(currentPosition);
+			}
+		}
+		return positionsContainingFruit;
 	}
 	
 	/**
