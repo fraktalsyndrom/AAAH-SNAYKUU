@@ -2,6 +2,14 @@ package gameLogic;
 
 import java.util.*;
 
+/**
+ * Represents the internal structure of a game session.  Takes care of things such as 
+ * snake movement, collision detection and victory conditions.
+ * 
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ */
+
 public class Session
 {
 	private Board board;
@@ -33,14 +41,6 @@ public class Session
 		snakes.add(newSnake);
 	}
 	
-	private void removeSnake(Snake snake)
-	{
-		if (!snakes.contains(snake))
-			throw new IllegalArgumentException("No such snake exists.");
-		
-		snakes.remove(snake);
-	}
-	
 	public Board getBoard()
 	{
 		return board;
@@ -56,6 +56,13 @@ public class Session
 		placeSnakesOnBoard();
 	}
 	
+	/**
+	 * Checks whether the game has ended or not. If only one snake remains alive (and
+	 * the game was started using more than one snake), or if a snake has achieved the
+	 * minimum requireds score in order to win the game, this method returns true.
+	 * 
+	 * @return	<code>true</code> if the game has ended, <code>false</code> if not.
+	 */
 	public boolean hasEnded()
 	{
 		int numberOfLivingSnakes = snakes.size();
@@ -78,8 +85,11 @@ public class Session
 	}
 	
 	/**
+	 * Returns a GameResult object constructed using the current real-time results.
 	 * Note that this method does not guarantee that the game has ended.
 	 * Check using hasEnded() first before assuming that this will return a final gameResult.
+	 *
+	 * @return	The current result of this session.
 	 */
 	public GameResult getGameResult()
 	{
@@ -87,8 +97,8 @@ public class Session
 	}
 	
 	/**
-	 * Move all the snakes simultaneously. In addition to movement, it also checks for collision,
-	 * kills colliding snakes, adds point when fruit is eaten, and updates the gamestate.
+	 * Moves all the snakes simultaneously, checks for collision, kills colliding snakes, 
+	 * adds point when fruit is eaten, and updates the gamestate.
 	 */
 	public void tick()
 	{
@@ -115,6 +125,8 @@ public class Session
 	 * Spawns a single thread for each participating snake, then waits until
 	 * their allotted time is up. If a snake hasn't responed yet, it's direction
 	 * is defaulted to Direction.FORWARD.
+	 * 
+	 * @see		BrainDecision
 	 * @return 	The HashMap containing snakes and their next moves.
 	 */
 	private Map<Snake, Direction> getDecisionsFromSnakes()
@@ -203,6 +215,14 @@ public class Session
 		}
 	}
 	
+	/**
+	 * Checks that moving in a given direction is valid, e g that the snake
+	 * doesn't attempt to turn 180 degrees.
+	 * 
+	 * @param	snake	The snake we want to check.
+	 * @param	direction	The direction in which the snake is attempting to move.
+	 * @return	<code>true</code> if the attempted move is valid, <code>false</code> if not.
+	 */
 	private boolean isValidMove(Snake snake, Direction direction)
 	{
 		switch (snake.getCurrentDirection())
@@ -224,6 +244,12 @@ public class Session
 		}
 	}
 	
+	/**
+	 * Moves all the snakes by calling the <code>moveSnake</code> for each snake.
+	 * 
+	 * @param	moves		Map of each snake to its desired movement.
+	 * @param	growSnakes	Whether or not snakes are supposed to grow this turn.
+	 */
 	private void moveAllSnakes(Map<Snake, Direction> moves, boolean growSnakes)
 	{
 		for (Map.Entry<Snake, Direction> snakeMove : moves.entrySet())
@@ -232,6 +258,15 @@ public class Session
 		}
 	}
 	
+	/**
+	 * Moves a single snake in the specified direction and grows the snake if necessary.
+	 * Works by moving the position of the snake's head, and then also moving its tail
+	 * (unless growth is specified).
+	 * 
+	 * @param	snake	The snake that is going to be moved.
+	 * @param	dir		The direction in which the snake is to be moved.
+	 * @param	grow	Whether or not the snake is supposed to grow this turn.
+	 */
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
 		Position currentHeadPosition = snake.getHeadPosition();
@@ -246,7 +281,12 @@ public class Session
 		}
 	}
 
-	
+	/**
+	 * Checks if any collision has occured, and performs necessary actions. 
+	 * If the head of a snake has collided with a lethal object, that snake is 
+	 * killed (e g marked as dead). If it collided with a fruit, the appropriate amount of points is
+	 * added to that snake's score.
+	 */
 	private void checkForCollision()
 	{
 		for (Snake snake : snakes) 
@@ -272,6 +312,11 @@ public class Session
 		}
 	}
 	
+	/**
+	 * Checks if it is time to spawn a new fruit on the map, and does so if necessary.
+	 *
+	 * @return	<code>true</code> if a fruit was spawned, <code>false</code> if not.
+	 */
 	private boolean perhapsSpawnFruit()
 	{
 		int timeTillFruitSpawn = recordedGame.getTurnCount() % metadata.getFruitFrequency();
@@ -365,17 +410,23 @@ public class Session
 		
 	}
 	
-	/**
-		Metod som tar det antal ormar som ska placeras ut och brädets 
-		dimensioner, och returnerar en array av Positions, jämnt fördelade 
-		i en cirkel runt brädet. Varje orm är minst 1 ruta från kanten men 
-		i övrigt görs INGA kontroller av att antalet ormar är vettigt.
-		
-		Jag har lyckats klämma in 101 ormar på ett 40x40-bräde, sen orkade 
-		jag inte testa längre.
-		
-	*/
 	
+	//~ Metod som tar det antal ormar som ska placeras ut och bradets 
+	//~ dimensioner, och returnerar en array av Positions, jamnt fordelade 
+	//~ i en cirkel runt bradet. Varje orm ar minst 1 ruta fran kanten men 
+	//~ i ovrigt gors INGA kontroller av att antalet ormar ar vettigt.
+	
+	//~ Jag har lyckats klamma in 101 ormar pa ett 40x40-brade, sen orkade 
+	//~ jag inte testa langre.
+	
+	/**
+	 * Gets appropriate starting positions for snake heads.
+	 *
+	 * @param	snakes	The number of snakes in the game.
+	 * @param	xSize	The width of the board.
+	 * @param	ySize	The height of the board.
+	 * @return	An array of starting positions with as many elements as the number of snakes in the game.
+	 */
 	private Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
 	{
 		int xCenter = xSize/2;
@@ -400,7 +451,7 @@ public class Session
 		
 		return output;
 	}
-		
+	
 	private void placeSnake(Snake snake, LinkedList<Position> segments)
 	{
 		for (Position pos : segments)
@@ -409,6 +460,7 @@ public class Session
 		}
 	}
 	
+	//~ Deprecated?
 	private boolean isAcceptedStartingPosition(Position position)
 	{
 		return (!board.hasLethalObjectWithinRange(position, 2));
