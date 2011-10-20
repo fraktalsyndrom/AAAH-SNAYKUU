@@ -117,19 +117,32 @@ public class GameState
 	}
 	
 	
-	
-	public static ArrayList<Direction> getRelativeDirections(Position from, Position to){
+	/**
+	 * Returns in which direction one has to move in order to reach one
+	 * position from another one. Returns an ArrayList containing either one
+	 * or two elements. For example, it might contain either only <code>WEST</code>
+	 * if the destination postion is directly west of the starting position, or it
+	 * may contain both <code>WEST</code> and <code>NORTH</code> if 
+	 * the destination is towards the northwest.
+	 * 
+	 * @param	from		The starting position.
+	 * @param	to		The destination position.
+	 * @return	containing either one or two Directions, pointing towards
+	 *			the destination.
+	 */
+	public static ArrayList<Direction> getRelativeDirections(Position from, Position to)
+	{
 		ArrayList<Direction> directions = new ArrayList<Direction>();
-		if(from.getX() < to.getX()){
+		if(from.getX() < to.getX())
 			directions.add(Direction.EAST);
-		}else if(from.getX() > to.getX()){
+		else if(from.getX() > to.getX())
 			directions.add(Direction.WEST);
-		}
-		if(from.getY() < to.getY()){
+		
+		if(from.getY() < to.getY())
 			directions.add(Direction.SOUTH);
-		}else if(from.getY() > to.getY()){
+		else if(from.getY() > to.getY())
 			directions.add(Direction.NORTH);
-		}
+		
 		return directions;
 	}
 	
