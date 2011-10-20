@@ -10,6 +10,12 @@ fruit scores are placed in the same finishing position. This is not
 intended behavior.
 
 
+# Move Direction.calculateNextPosition to GameState
+
+Since all of the other help methods currently reside in GameState, so
+should this one.
+
+
 # Document EVERYTHING
 
 Starting with the objects and methods directly accessible by the brains,
