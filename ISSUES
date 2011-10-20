@@ -1,6 +1,6 @@
 #### Copied from our 'Issues' page on GitHub:
 
-# Fix tiebraekers in GameResult
+# Fix tiebreakers in GameResult
 
 There's a bug (or the lack of a feature) in GameResult where snakes who
 have differing scores are placed in the same finishing bracket.

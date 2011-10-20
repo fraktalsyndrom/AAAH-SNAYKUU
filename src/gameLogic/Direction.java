@@ -105,7 +105,7 @@ public enum Direction
 	 * @return	The direction towards which one needs to move from the starting position
 	 *			in order to reach the destination.
 	 * 
-	 * @throws	An IllegalArgumentException either if the two positions are the same
+	 * @throws	java.lang.IllegalArgumentException either if the two positions are the same
 	 *			or if they are not on a straight line.
 	 */
 	public static Direction getDirectionFromPositionToPosition(Position from, Position to)
