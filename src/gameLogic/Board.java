@@ -120,7 +120,7 @@ public class Board
 	 * a certain square. Works by using a depth-first search.
 	 * 
 	 * @param	pos		The position which we want to check.
-	 * @param	range	The number of squares we wish to exand, e.g.
+	 * @param	range	The number of squares we wish to examine, e.g.
 	 *					the radius of the area we want to check.
 	 * @return	A boolean indicating whether or not there is a lethal object
 	 *			within the given range of the specified position.

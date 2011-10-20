@@ -116,6 +116,23 @@ public class GameState
 		return positionsContainingFruit;
 	}
 	
+	
+	
+	public static ArrayList<Direction> getRelativeDirections(Position from, Position to){
+		ArrayList<Direction> directions = new ArrayList<Direction>();
+		if(from.getX() < to.getX()){
+			directions.add(Direction.EAST);
+		}else if(from.getX() > to.getX()){
+			directions.add(Direction.WEST);
+		}
+		if(from.getY() < to.getY()){
+			directions.add(Direction.SOUTH);
+		}else if(from.getY() > to.getY()){
+			directions.add(Direction.NORTH);
+		}
+		return directions;
+	}
+	
 	/**
 	 * This method can be used to calculate the distance between two positions.
 	 * 
