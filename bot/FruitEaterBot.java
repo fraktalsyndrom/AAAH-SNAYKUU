@@ -2,6 +2,7 @@ package bot;
 
 import gameLogic.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class FruitEaterBot implements Brain
 {
@@ -16,6 +17,8 @@ public class FruitEaterBot implements Brain
 		Position closestFruitPos = null;
 		Direction previousDirection = self.getCurrentDirection();
 		Direction backwards = getBackwardsDirection(previousDirection);
+		Set<Snake> otherSnakes = gamestate.getSnakes();
+		otherSnakes.remove(yourSnake);
 		
 		
 		if(!gamestate.getFruits().isEmpty()){
@@ -32,7 +35,7 @@ public class FruitEaterBot implements Brain
 			ArrayList<Direction> fruitDirections = GameState.getRelativeDirections(yourPos, closestFruitPos);
 			
 			for(Direction d : fruitDirections){
-				if(!gamestate.willCollide(self, d)){
+				if(!gamestate.willCollide(self, d) && !otherSnakeHeadIsClose(otherSnakes, yourPos, d)){
 					return d;
 				}
 			}
@@ -40,8 +43,7 @@ public class FruitEaterBot implements Brain
 		}
 		
 		
-		if (gamestate.willCollide(self, previousDirection))
-		{
+		if (gamestate.willCollide(self, previousDirection) || otherSnakeHeadIsClose(otherSnakes, yourPos, previousDirection)){
 			if(!gamestate.willCollide(self, previousDirection.turnLeft()))
 					return previousDirection.turnLeft();
 			else
@@ -50,7 +52,7 @@ public class FruitEaterBot implements Brain
 		return previousDirection;
 	}
 	
-	public Direction getBackwardsDirection(Direction previousDirection){
+	private Direction getBackwardsDirection(Direction previousDirection){
 		
 		if(previousDirection == Direction.SOUTH)
 			return Direction.NORTH;
@@ -62,5 +64,14 @@ public class FruitEaterBot implements Brain
 			return Direction.EAST;
 		return null;
 	}
+	
+	private boolean otherSnakeHeadIsClose(Set<Snake> otherSnakes, Position yourPos, Direction d){
+		for(Snake s : otherSnakes){
+			if(gamestate.distanceBetween(s.getHeadPosition(), d.calculateNextPosition(yourPos)) <= 1)
+				return true;
+		}
+		return false;
+	}
+	
 	
 }
