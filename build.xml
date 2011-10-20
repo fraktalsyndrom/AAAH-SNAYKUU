@@ -29,4 +29,8 @@
 	<target name="run" description="execute the Jar file">
 		<java jar="snaykuu.jar" fork="true"/>
 	</target>
+	
+	<target name="doc" description="run the javadoc tool">
+		<javadoc packagenames="gameLogic.*" sourcepath="src" destdir="doc" />
+	</target>
 </project>
