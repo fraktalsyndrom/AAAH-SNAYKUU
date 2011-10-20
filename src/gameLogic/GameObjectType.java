@@ -1,5 +1,9 @@
 package gameLogic;
 
+/**
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ */
 public class GameObjectType
 {
 	private String name;

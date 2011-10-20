@@ -1,14 +1,14 @@
 package gameLogic;
 
 /**
- * @author	Sixten Hilborn
- * @author	Arian Jafari
- *
  * This is an enum representing a direction in which a snake can move. Directions are
  * what getNextMove in the Brain interface are supposed to return.
  * Note that these are absolute directions, e.g. NORTH, and not relative
  * directions, e.g. FORWARD.
  * 
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ *
  */
 
 public enum Direction

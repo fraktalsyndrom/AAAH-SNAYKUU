@@ -4,12 +4,12 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * @author 	Arian Jafari
- *
  * This class represents the entire game board through a 2D-array of Square objects.
  * Each Square, in turn, contains GameObjects, such as fruits, walls, or other snakes.
  * 
- * @see	Square
+ * @author 	Sixten Hilborn
+ * @author	Arian Jafari
+ * @see		Square
  */
 
 public class Board 

@@ -2,14 +2,14 @@ package gameLogic;
 
 import java.util.*;
 
-/**
- * @author	Sixten Hilborn
- * @author	Arian Jafari
- * 
+/** 
  * Objects of this class represent a single square of the game board. Each square has a List<GameObject>
  * of all the GameObjects it contains, but it will usually only contain 0 or 1 GameObjects. The only time
  * it can contain more than one is in between turns; a special case that doesn't need any attention from a
- * brain programmer.
+ * brain programmer. 
+ *
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
  */
 
 public class Square

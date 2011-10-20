@@ -3,10 +3,24 @@ package gameLogic;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Represents a coordinate (x and y position) on the game board. All methods requiring
+ * coordinates as a parameter should be called using a Position object.
+ * 
+ * @author	Sixten Hilborn
+ * @author	Arian Jafari
+ */
+
 public class Position 
 {
 	private int x, y;
 	
+	/**
+	 * Constructs a Position object with the given coordinates.
+	 * 
+	 * @param	x	The x coordinate.
+	 * @param	y	The y coordinate.
+	 */
 	public Position(int x, int y)
 	{
 		this.x = x;
@@ -25,11 +39,21 @@ public class Position
 		y = position.y;
 	}
 	
+	/**
+	 * Gets the X coordinate of this position object.
+	 * 
+	 * @return	The x coordinate of this position.
+	 */
 	public int getX()
 	{
 		return x;
 	}
 	
+	/**
+	 * Gets the Y coordinate of this position object.
+	 * 
+	 * @return	The y coordinate of this position.
+	 */
 	public int getY()
 	{
 		return y;

@@ -1,5 +1,15 @@
 #### Copied from our 'Issues' page on GitHub:
 
+# Fix tiebraekers in GameResult
+
+There's a bug (or the lack of a feature) in GameResult where snakes who
+have differing scores are placed in the same finishing bracket.
+For example, if the game finishes without any snake reaching the 
+designated limit, snakes that died at the same time but with different
+fruit scores are placed in the same finishing position. This is not
+intended behavior.
+
+
 # Document EVERYTHING
 
 Starting with the objects and methods directly accessible by the brains,

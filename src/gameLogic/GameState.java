@@ -5,13 +5,13 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * @author 	Sixten Hilborn
- * @author	Arian Jafari
- * 
  * The GameState is a representation of the game at a given moment in time. It contains references
  * to the game board (containing a matrix of Squares, which in turn contain all game objects),
  * the current Metadata (turns until growth/spawning of fruit, among other things), all snakes
  * participating in this game session, and an ErrorState enum.
+ *
+ * @author 	Sixten Hilborn
+ * @author	Arian Jafari
  */
 
 public class GameState
