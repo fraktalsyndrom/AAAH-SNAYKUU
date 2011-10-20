@@ -1,5 +1,11 @@
 #### Copied from our 'Issues' page on GitHub:
 
+# Document EVERYTHING
+
+Starting with the objects and methods directly accessible by the brains,
+we want everything to be documented to be used with the javadoc tool.
+
+
 # Expand the snake placement algorithm
 
 As of now, getting starting positions for the snakes is simple, but only
@@ -19,9 +25,9 @@ brain instance. The class loader should also be able to reload a brain
 between two games.
 
 
-# Improve look of PostGameWindow
+# Improve PostGameWindow
 
-- Allow starting a new game from within without having to restart the entier
+- Allow starting a new game from within without having to restart the entire
 program (both rematches and be able to change settings in between).
 - Add more statistics (?)
 - De-uglify.
