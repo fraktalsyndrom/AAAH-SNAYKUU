@@ -76,9 +76,10 @@ public class SettingsWindow extends JFrame
 		
 		GameObjectType objectType = new GameObjectType("Snake", true);
 		
-		for (Map.Entry<String, Brain> brain : snakeSettingsPanel.getBrains().entrySet())
+		for (String snakeName : snakeSettingsPanel.getSnakes())
 		{
-			Snake snake = new Snake(objectType, brain.getKey(), brain.getValue());
+			Brain brain = snakeSettingsPanel.getBrains().get(snakeName);
+			Snake snake = new Snake(objectType, snakeName, brain);
 			session.addSnake(snake);
 		}
 		

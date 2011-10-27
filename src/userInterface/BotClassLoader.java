@@ -3,6 +3,7 @@ package userInterface;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import gameLogic.Brain;
 
 class BotClassLoader extends ClassLoader
 {
@@ -26,7 +27,7 @@ class BotClassLoader extends ClassLoader
 		return buffer.toByteArray();
 	}
 
-	public Class loadBotClass(URL url, String name) throws ClassNotFoundException
+	private Class loadBotClass(URL url, String name) throws ClassNotFoundException
 	{
 		try
 		{				
@@ -44,5 +45,38 @@ class BotClassLoader extends ClassLoader
 		}
 
 		return null;
+	}
+	
+	public Brain loadBrain(URL url, String name)
+	{
+		Class<?> brainClass;
+		try
+		{
+			brainClass = loadBotClass(url, name);
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new RuntimeException("Couldn't find class " + name + ": " + e);
+		}
+		
+		System.out.println("Brain class: " + brainClass + ", HC: " + brainClass.hashCode());
+		
+		Object object;
+		try
+		{
+			object = brainClass.newInstance();
+		}
+		catch (InstantiationException e)
+		{
+			throw new RuntimeException("Couldn't instantiate class " + name + ": " + e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new RuntimeException("Couldn't access class " + name + ": " + e);
+		}
+		
+		Brain brain = (Brain)object;
+		
+		return brain;
 	}
 }

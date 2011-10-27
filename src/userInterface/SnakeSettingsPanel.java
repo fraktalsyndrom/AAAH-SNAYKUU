@@ -7,7 +7,9 @@ import java.awt.event.*;
 import gameLogic.*;
 import javax.swing.filechooser.*;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.net.*;
 
 class SnakeSettingsPanel extends JPanel
@@ -15,7 +17,9 @@ class SnakeSettingsPanel extends JPanel
 	private JList snakeJList;
 	private SnakeManagementPanel snakeManagementPanel;
 	private SnakeInfoPanel snakeInfoPanel;
-	private Map<String, Brain> brains = new TreeMap<String, Brain>();
+	private Map<String, Brain> brains = new HashMap<String, Brain>();
+	private List<String> snakes = new ArrayList<String>();
+	private BotClassLoader classLoader;
 	
 	public SnakeSettingsPanel()
 	{
@@ -34,6 +38,8 @@ class SnakeSettingsPanel extends JPanel
 		add(snakeInfoPanel, BorderLayout.EAST);
 		
 		
+		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
+		classLoader = new BotClassLoader(parentClassLoader);
 	}
 	
 	
@@ -92,13 +98,25 @@ class SnakeSettingsPanel extends JPanel
 					
 				name = name.substring(0, name.lastIndexOf("."));
 				
-				Brain brain = loadBrain(url, name);
+				Brain brain = brains.get(name);
+				
 				if (brain == null)
-					return;
+				{
+					try
+					{
+						brain = classLoader.loadBrain(url, name);
+						
+						brains.put(name, brain);
+					}
+					catch (RuntimeException e)
+					{
+						JOptionPane.showMessageDialog(SnakeSettingsPanel.this, e.toString());
+						return;
+					}
+				}
 				
-				brains.put(name, brain);
-				
-				snakeJList.setListData(brains.keySet().toArray());
+				snakes.add(name);
+				snakeJList.setListData(snakes.toArray());
 			}
 		}
 	}
@@ -117,47 +135,14 @@ class SnakeSettingsPanel extends JPanel
 	
 	
 	
-	private Brain loadBrain(URL url, String name)
-	{
-		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
-	
-		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
-		
-		Class<?> brainClass;
-		try
-		{
-			brainClass = classLoader.loadBotClass(url, name);
-		}
-		catch (ClassNotFoundException e)
-		{
-			JOptionPane.showMessageDialog(this, "Couldn't find class " + name + ": " + e);
-			return null;
-		}
-		
-		Object object;
-		try
-		{
-			object = brainClass.newInstance();
-		}
-		catch (InstantiationException e)
-		{
-			JOptionPane.showMessageDialog(this, "Couldn't instantiate class " + name + ": " + e);
-			return null;
-		}
-		catch (IllegalAccessException e)
-		{
-			JOptionPane.showMessageDialog(this, "Couldn't access class " + name + ": " + e);
-			return null;
-		}
-		
-		Brain brain = (Brain)object;
-		
-		return brain;
-	}
-	
 	
 	public Map<String, Brain> getBrains()
 	{
 		return brains;
+	}
+	
+	public List<String> getSnakes()
+	{
+		return snakes;
 	}
 }
