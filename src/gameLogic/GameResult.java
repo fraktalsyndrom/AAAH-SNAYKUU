@@ -17,7 +17,7 @@ public class GameResult
 		this.snakes = snakes;
 	}
 	
-	public List<List<Snake>> getWinners() 					//~ Interesting name
+	public List<List<Snake>> getWinners()
 	{
 		ArrayList<List<Snake>> results = new ArrayList<List<Snake>>();
 		SnakeComparator snakeComparator = new SnakeComparator();
