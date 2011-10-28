@@ -91,8 +91,41 @@ public class GameState
 	public boolean willCollide(Snake snake, Direction dir)
 	{
 		Position currentHeadPosition = snake.getHeadPosition();
-		Position nextHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		Position nextHeadPosition = calculateNextPosition(dir, currentHeadPosition);
 		return (board.getSquare(nextHeadPosition).isLethal());
+	}
+	
+	/**
+	 * Gets the next position a snake would end up in if it continues in this direction.
+	 * 
+	 * @param 	direction		The current direction of the snake.
+	 * @param	oldPosition	The current position of the snake.
+	 * @return	The next position if movement continues in this direction.
+	 */
+	public static Position calculateNextPosition(Direction direction, Position oldPosition)
+	{
+		int x = oldPosition.getX(), y = oldPosition.getY();
+		
+		switch (direction)
+		{
+			case WEST:
+				--x;
+				break;
+			
+			case NORTH:
+				--y;
+				break;
+			
+			case EAST:
+				++x;
+				break;
+			
+			case SOUTH:
+				++y;
+				break;
+		}
+		
+		return new Position(x, y);
 	}
 	
 	/**

@@ -1,25 +1,9 @@
 #### Copied from our 'Issues' page on GitHub:
 
-# Fix tiebreakers in GameResult
-
-There's a bug (or the lack of a feature) in GameResult where snakes who
-have differing scores are placed in the same finishing bracket.
-For example, if the game finishes without any snake reaching the 
-designated limit, snakes that died at the same time but with different
-fruit scores are placed in the same finishing position. This is not
-intended behavior.
-
-
 # Developer mode shouldn't output to terminal
 
 Also, it should run in its own thread so that it doesn't freeze the
 entire interface.
-
-
-# Move Direction.calculateNextPosition to GameState
-
-Since all of the other help methods currently reside in GameState, so
-should this one.
 
 
 # Document EVERYTHING
@@ -119,3 +103,19 @@ it tries to move in an invalid direction.
 
 We should have a debugging/development method that quickly runs x games
 (without graphics) with statistical analysis.
+
+
+# Move Direction.calculateNextPosition to GameState
+
+Since all of the other help methods currently reside in GameState, so
+should this one.
+
+
+# Fix tiebreakers in GameResult
+
+There's a bug (or the lack of a feature) in GameResult where snakes who
+have differing scores are placed in the same finishing bracket.
+For example, if the game finishes without any snake reaching the 
+designated limit, snakes that died at the same time but with different
+fruit scores are placed in the same finishing position. This is not
+intended behavior.

@@ -18,6 +18,7 @@ public enum Direction
 	/**
 	 * Gets the next position a snake would end up in if it continues in this direction.
 	 * 
+	 * @param	oldPosition	The current position of the snake.
 	 * @return	The next position if movement continues in this direction.
 	 */
 	public Position calculateNextPosition(Position oldPosition)
