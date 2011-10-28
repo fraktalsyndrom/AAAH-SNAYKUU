@@ -104,7 +104,7 @@ class SnakeSettingsPanel extends JPanel
 				{
 					try
 					{
-						brain = classLoader.loadBrain(url, name);
+						brain = classLoader.getBrain(url, name);
 						
 						brains.put(name, brain);
 					}

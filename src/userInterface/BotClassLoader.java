@@ -7,47 +7,44 @@ import gameLogic.Brain;
 
 class BotClassLoader extends ClassLoader
 {
+	private Map<String, BrainInfo> loadedBrains = new HashMap<String, BrainInfo>();
+	
 	public BotClassLoader(ClassLoader parent)
-	{
+	{		
 		super(parent);
 	}
 	
-	private byte[] readBufferFromStream(InputStream input) throws IOException
+	public void reloadBrain(String name)
 	{
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-			
-		int data = input.read();
-		while (data != -1)
-		{
-			buffer.write(data);
-			data = input.read();
-		}
-		input.close();
+		BrainInfo brainInfo = loadedBrains.get(name);
+		if (brainInfo == null)
+			throw new IllegalArgumentException("THE NAME " + name.toUpperCase() + " DOESN'T EVEN FUCKING EXIST");
 		
-		return buffer.toByteArray();
-	}
-
-	private Class loadBotClass(URL url, String name) throws ClassNotFoundException
-	{
-		try
-		{				
-			//URL url = new URL("file:" + path);
-			URLConnection urlConnection = url.openConnection();
-			InputStream input = urlConnection.getInputStream();
-			
-			byte[] classData = readBufferFromStream(input);
-			
-			return defineClass("bot."+name, classData, 0, classData.length);
-		}
-		catch (IOException e)
-		{
-			System.out.println(e);
-		}
-
-		return null;
+		// INSURT RELOAD COAD HERE
 	}
 	
-	public Brain loadBrain(URL url, String name)
+	public void reloadAllBrains()
+	{
+		for (String name : loadedBrains.keySet())
+			reloadBrain(name);
+	}	
+	
+	public Brain getBrain(URL url, String name)
+	{
+		BrainInfo brainInfo = loadedBrains.get(name);
+		
+		if (brainInfo == null)
+		{
+			Brain brain = loadBrain(url, name);
+			brainInfo = new BrainInfo(brain, url);
+			loadedBrains.put(name, brainInfo);
+		}
+		
+		return brainInfo.getBrain();
+	}
+	
+	
+	private Brain loadBrain(URL url, String name)
 	{
 		Class<?> brainClass;
 		try
@@ -78,5 +75,66 @@ class BotClassLoader extends ClassLoader
 		Brain brain = (Brain)object;
 		
 		return brain;
+	}
+	
+	
+	private Class loadBotClass(URL url, String name) throws ClassNotFoundException
+	{
+		try
+		{				
+			//URL url = new URL("file:" + path);
+			URLConnection urlConnection = url.openConnection();
+			InputStream input = urlConnection.getInputStream();
+			
+			byte[] classData = readBufferFromStream(input);
+			
+			return defineClass("bot."+name, classData, 0, classData.length);
+		}
+		catch (IOException e)
+		{
+			System.out.println(e);
+		}
+
+		return null;
+	}
+	
+	
+	private byte[] readBufferFromStream(InputStream input) throws IOException
+	{
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			
+		int data = input.read();
+		while (data != -1)
+		{
+			buffer.write(data);
+			data = input.read();
+		}
+		input.close();
+		
+		return buffer.toByteArray();
+	}
+
+	
+	
+	private class BrainInfo
+	{
+		private Brain brain;
+		private URL url;
+		
+		public BrainInfo(Brain brain, URL url)
+		{
+			this.brain = brain;
+			this.url = url;
+		}
+		
+		public Brain getBrain()
+		{
+			return brain;
+		}
+		
+		public URL getUrl()
+		{
+			return url;
+		}
 	}
 }
