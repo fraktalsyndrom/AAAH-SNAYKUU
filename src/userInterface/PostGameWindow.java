@@ -13,7 +13,10 @@ public class PostGameWindow extends JFrame
 	private JPanel standingsPanel;
 	private JLabel headerLabel, standingsLabel;
 	private JTextArea centerArea;
-	private JButton closeButton;
+	private JButton newGameButton;
+	private JButton rematchButton;
+	private JButton exitButton;
+	private GameEndType gameEndType = null;
 	
 	public PostGameWindow(GameResult finalResult)
 	{
@@ -23,15 +26,27 @@ public class PostGameWindow extends JFrame
 		standingsPanel.setLayout(new BorderLayout());
 		add(standingsPanel);
 		
-		closeButton = new JButton("Close");
-		closeButton.addActionListener(new CloseButtonListener());
+		newGameButton = new JButton("New game");
+		newGameButton.addActionListener(new NewGameButtonListener());
+		
+		rematchButton = new JButton("Rematch");
+		rematchButton.addActionListener(new RematchButtonListener());
+		
+		exitButton = new JButton("Exit");
+		exitButton.addActionListener(new CloseButtonListener());
+		
 		headerLabel = new JLabel();
 		centerArea = new JTextArea();
 		centerArea.setEditable(false);
 		
 		standingsPanel.add(headerLabel, BorderLayout.NORTH);
 		standingsPanel.add(new JScrollPane(centerArea), BorderLayout.CENTER);
-		standingsPanel.add(closeButton, BorderLayout.SOUTH);
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(newGameButton);
+		buttonPanel.add(rematchButton);
+		buttonPanel.add(exitButton);
+		standingsPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		setSize(400, 400);
 		setVisible(true);
@@ -50,11 +65,65 @@ public class PostGameWindow extends JFrame
 		centerArea.setText("SCORES:\n" + finalResult);
 	}
 	
+	static private void sleep(int ms)
+	{
+		try
+		{
+			Thread.sleep(ms);
+		}
+		catch (InterruptedException e)
+		{
+			System.out.println(e);
+		}
+	}
+	
+	public GameEndType getGameEndType()
+	{
+		while (true)
+		{
+			synchronized (this)
+			{
+				if (gameEndType != null)
+					break;
+			}
+			sleep(1);
+		}
+		
+		dispose();
+		
+		return gameEndType;
+	}
+	
+	private class NewGameButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			synchronized (PostGameWindow.this)
+			{
+				gameEndType = GameEndType.NEW_GAME;
+			}
+		}
+	}
+	
+	private class RematchButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			synchronized (PostGameWindow.this)
+			{
+				gameEndType = GameEndType.REMATCH;
+			}
+		}
+	}
+	
 	private class CloseButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			System.exit(0);
+			synchronized (PostGameWindow.this)
+			{
+				gameEndType = GameEndType.EXIT;
+			}
 		}
 	}
 }
