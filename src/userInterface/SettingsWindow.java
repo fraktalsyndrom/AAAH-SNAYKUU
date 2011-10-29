@@ -42,13 +42,12 @@ public class SettingsWindow extends JFrame
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//setResizable(false);
-		setVisible(true);
-		
 	}
 	
 	public void putThisDamnWindowInMyFace()
 	{
 		done = false;
+		setVisible(true);
 	}
 	
 	
