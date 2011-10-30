@@ -16,7 +16,7 @@ class Main
 		
 		settingsWindow.dispose();
 		
-		System.setSecurityManager(new ExitSecurityManager());
+		//~ System.setSecurityManager(new ExitSecurityManager());
 		
 		GameEndType gameEndType;
 		do
