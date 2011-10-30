@@ -67,7 +67,7 @@ public class FruitEaterBot implements Brain
 	
 	private boolean otherSnakeHeadIsClose(Set<Snake> otherSnakes, Position yourPos, Direction d){
 		for(Snake s : otherSnakes){
-			if(gamestate.distanceBetween(s.getHeadPosition(), d.calculateNextPosition(yourPos)) <= 1)
+			if(gamestate.distanceBetween(s.getHeadPosition(), gamestate.calculateNextPosition(d, yourPos)) <= 1)
 				return true;
 		}
 		return false;

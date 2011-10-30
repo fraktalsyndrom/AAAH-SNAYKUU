@@ -194,7 +194,7 @@ public class Session
 			}
 			catch (Throwable t)
 			{
-				System.out.println(t);
+				System.out.println(currentSnake + " is tossing an exception in our face: " + t);
 				snakeErrors.put(currentSnake, ErrorState.EXCEPTION);
 			}
 			
