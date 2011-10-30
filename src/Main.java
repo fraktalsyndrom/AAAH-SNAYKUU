@@ -15,6 +15,8 @@ class Main
 		
 		settingsWindow.dispose();
 		
+		System.setSecurityManager(new ExitSecurityManager());
+		
 		runGame(session, gameSpeed);
 	}
 	
