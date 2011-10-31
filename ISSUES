@@ -39,6 +39,16 @@ program (both rematches and be able to change settings in between).
 - De-uglify.
 
 
+# Replay
+
+Fix the replay system. We need to create a JFrame for this.
+
+
+# Kills
+
+Snakes will get one point for each kill. This does however not affect
+the game result
+
 ---------------------------------
 
 ***OLD ISSUES***:
