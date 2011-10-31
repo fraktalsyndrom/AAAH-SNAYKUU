@@ -14,13 +14,13 @@ class Main
 		
 		Session session = prepareSession(settingsWindow);
 		
-		settingsWindow.dispose();
-		
 		//~ System.setSecurityManager(new ExitSecurityManager());
 		
 		GameEndType gameEndType;
 		do
 		{
+			settingsWindow.dispose();
+			
 			int gameSpeed = settingsWindow.getGameSpeed();
 			gameEndType = runGame(session, gameSpeed);
 			
