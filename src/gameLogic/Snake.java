@@ -117,8 +117,6 @@ public class Snake extends GameObject
 			directionLog.put(p, originalDirection);
 			
 		}
-		
-		direction = originalDirection;
 	}
 	
 	Position moveHead(Direction dir)
