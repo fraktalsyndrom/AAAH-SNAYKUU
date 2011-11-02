@@ -19,7 +19,6 @@ public class Snake extends GameObject
 {
 	private String name;
 	private Brain brain;
-	private Direction direction;
 	private boolean grow = false;
 	private LinkedList<Position> segments;
 	private HashMap<Position, Direction> directionLog = new HashMap<Position, Direction>();
@@ -120,11 +119,6 @@ public class Snake extends GameObject
 		}
 		
 		direction = originalDirection;
-	}
-	
-	void setCurrentDirection(Direction direction)
-	{
-		this.direction = direction;
 	}
 	
 	Position moveHead(Direction dir)
