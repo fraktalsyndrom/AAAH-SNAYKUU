@@ -199,7 +199,7 @@ public class Session
 			}
 			
 			moves.put(currentSnake, actualMove);
-			currentSnake.setCurrentDirection(actualMove);
+			//currentSnake.setCurrentDirection(actualMove); //~experimentellt utkommenterad
 		}
 		return moves;
 	}
@@ -270,15 +270,11 @@ public class Session
 	 */
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		Position currentHeadPosition = snake.getHeadPosition();
-		Position currentTailPosition = snake.getTailPosition();
-		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		Position newHeadPosition = snake.moveHead(dir);
 		board.addGameObject(snake, newHeadPosition);
-		snake.moveHead(newHeadPosition);
 		if (!grow)
 		{
-			board.removeGameObject(snake, currentTailPosition);
-			snake.removeTail();
+			board.removeGameObject(snake, snake.removeTail());
 		}
 	}
 

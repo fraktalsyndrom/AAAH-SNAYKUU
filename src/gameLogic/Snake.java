@@ -1,6 +1,7 @@
 package gameLogic;
 
 import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
  * The Snake class is a representation of each snake currently in the game,
@@ -21,6 +22,7 @@ public class Snake extends GameObject
 	private Direction direction;
 	private boolean grow = false;
 	private LinkedList<Position> segments;
+	private HashMap<Position, Direction> directionLog = new HashMap<Position, Direction>();
 	private int score = 0;
 	private int lifespan = 0;
 	private boolean isDead = false;
@@ -73,7 +75,7 @@ public class Snake extends GameObject
 	 */
 	public Direction getCurrentDirection()
 	{
-		return direction;
+		return directionLog.get(getHeadPosition());
 	}
 	
 	/**
@@ -110,6 +112,13 @@ public class Snake extends GameObject
 	void placeOnBoard(LinkedList<Position> segments, Direction originalDirection)
 	{
 		this.segments = segments;
+		
+		for(Position p : segments) {
+			
+			directionLog.put(p, originalDirection);
+			
+		}
+		
 		direction = originalDirection;
 	}
 	
@@ -118,14 +127,18 @@ public class Snake extends GameObject
 		this.direction = direction;
 	}
 	
-	void moveHead(Position pos)
+	Position moveHead(Direction dir)
 	{
+		Position pos = dir.calculateNextPosition(getHeadPosition());
 		segments.addFirst(pos);
+		directionLog.put(pos, dir);
+		
+		return pos;
 	}	
 	
-	void removeTail()
+	Position removeTail()
 	{
-		segments.removeLast();
+		return segments.removeLast();
 	}
 	
 	void kill()
