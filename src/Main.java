@@ -65,6 +65,7 @@ class Main
 	private static GameEndType runGame(Session session, int gameSpeed, int pixelsPerUnit)
 	{
 		MainWindow mainWindow = new MainWindow(session, pixelsPerUnit);
+		session.tick();
 		mainWindow.repaint();
 		sleep(1000);
 		
