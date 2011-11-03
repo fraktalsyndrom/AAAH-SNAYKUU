@@ -2,6 +2,8 @@ package userInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Iterator;
+import java.awt.geom.AffineTransform;
 import gameLogic.*;
 
 class GameBoard extends JComponent
@@ -49,7 +51,6 @@ class GameBoard extends JComponent
 		
 		g.setColor(Color.GREEN);
 		
-
 		for (int x = 0; x < board.getWidth(); ++x)
 		{
 			for (int y = 0; y < board.getHeight(); ++y)
@@ -74,5 +75,54 @@ class GameBoard extends JComponent
 				}
 			}
 		}
+		//Debugkod följer.
+		/*
+		Graphics2D g2d = (Graphics2D)g;
+		
+		GameState gs = session.getCurrentState();
+		
+		for(Snake s : gs.getSnakes())
+		{
+			Direction prevDir = null;
+			for(Iterator<Position> iter = s.getSegments().iterator(); iter.hasNext(); ) 
+			{
+				Position pos = iter.next();
+				Direction dir = s.getDirection(pos);
+				
+				SnakeSegment segment;
+				
+				if(!iter.hasNext()) //sista elementet
+				{
+					segment = SnakeSegment.TAIL;
+				} 
+				else if(prevDir == null) //första elementet
+				{
+					segment = SnakeSegment.HEAD;
+				}
+				else
+				{
+					//TODO: turns, player colors
+					segment = SnakeSegment.MIDDLE;
+				}
+				
+				AffineTransform transform = segment.getTransformation(dir, pos, pixelsPerUnit);
+				
+				g2d.drawImage(segment.getImage(), transform, null);
+				
+				prevDir = dir;
+			}
+		}
+		
+		for(Position fruit : gs.getFruits())
+		{
+			//TODO: fruits
+		}*/
+		
 	}
+	/*
+	@SuppressWarnings("unchecked")
+	private Graphics2D bajsjava(Graphics g) 
+	{
+		return (Graphics2D)g;
+	}*/
 }

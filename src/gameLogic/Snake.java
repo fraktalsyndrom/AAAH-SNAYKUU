@@ -152,4 +152,15 @@ public class Snake extends GameObject
 	{
 		++lifespan;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public LinkedList<Position> getSegments()
+	{
+		return (LinkedList<Position>)(segments.clone());
+	}
+	
+	public Direction getDirection(Position pos)
+	{
+		return directionLog.get(pos);
+	}
 }

@@ -78,7 +78,7 @@ public class SettingsWindow extends JFrame
 		for (String snakeName : snakeSettingsPanel.getSnakes())
 		{
 			Brain brain = snakeSettingsPanel.getBrains().get(snakeName);
-			Snake snake = new Snake(objectType, snakeName, brain);
+			Snake snake = new Snake(objectType, snakeName, brain); //Här behöver brain klonas.
 			session.addSnake(snake);
 		}
 		
