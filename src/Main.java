@@ -68,18 +68,12 @@ class Main
 		mainWindow.repaint();
 		sleep(1000);
 		
-		long lastFrame = System.currentTimeMillis();
-		
 		while (!session.hasEnded())
 		{
-			long frameTime = gameSpeed - (System.currentTimeMillis() - lastFrame);
-			lastFrame = System.currentTimeMillis();
-			
 			session.tick();
 			mainWindow.repaint();
 			
-			if (frameTime > 0)
-				sleep(frameTime);
+			sleep(gameSpeed);
 		}
 		
 		PostGameWindow postGameWindow = new PostGameWindow(session.getGameResult());
