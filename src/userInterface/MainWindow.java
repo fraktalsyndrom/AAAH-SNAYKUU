@@ -12,8 +12,6 @@ public class MainWindow extends JFrame
 	{
 		this.session = session;
 		
-		SnakeSegment s = SnakeSegment.HEAD;
-		
 		gameBoard = new GameBoard(session, pixelsPerSquare);
 				
 		add(gameBoard);
