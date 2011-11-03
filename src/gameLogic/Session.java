@@ -431,22 +431,30 @@ public class Session
 	 */
 	private Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
 	{
+		Random random = new Random();
+		
 		int xCenter = xSize/2;
 		int yCenter = ySize/2;
 		
 		int edgeOffset = 2;
+		//int 
 		
 		double angleStep = 2*Math.PI/snakes;
-		double nextStep = 0;
+		double nextStep = random.nextDouble() * 2 * Math.PI;
+		
+		//random.nextInt()%5
 		
 		Position[] output = new Position[snakes];
 		
-		for(int i = 0; i < snakes; i++)
+		for(int i = 0; i < snakes; ++i)
 		{
-			int x = (int)((xCenter-edgeOffset)*Math.cos(nextStep));
-			int y = (int)((yCenter-edgeOffset)*Math.sin(nextStep));
+			int xRadi = xCenter - edgeOffset;
+			int yRadi = yCenter - edgeOffset;
 			
-			output[i] = new Position(xCenter+x, yCenter+y);
+			int x = (int)(xRadi * Math.cos(nextStep));
+			int y = (int)(yRadi * Math.sin(nextStep));
+			
+			output[i] = new Position(xCenter + x, yCenter + y);
 			
 			nextStep += angleStep;
 		}
