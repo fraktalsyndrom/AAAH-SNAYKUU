@@ -91,5 +91,9 @@ public class SettingsWindow extends JFrame
 		return gameSettingsPanel.getGameSpeed();
 	}
 	
+	public int getPixelsPerUnit()
+	{
+		return gameSettingsPanel.getPixelsPerUnit();
+	}
 	
 }
