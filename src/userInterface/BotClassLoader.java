@@ -7,7 +7,7 @@ import gameLogic.Brain;
 
 class BotClassLoader extends ClassLoader
 {
-	private Map<String, BrainInfo> loadedBrains = new HashMap<String, BrainInfo>();
+	private Map<String, BrainClassInfo> loadedBrainClasses = new HashMap<String, BrainClassInfo>();
 	
 	public BotClassLoader(ClassLoader parent)
 	{		
@@ -16,8 +16,8 @@ class BotClassLoader extends ClassLoader
 	
 	public void reloadBrain(String name)
 	{
-		BrainInfo brainInfo = loadedBrains.get(name);
-		if (brainInfo == null)
+		BrainClassInfo brainClassInfo = loadedBrainClasses.get(name);
+		if (brainClassInfo == null)
 			throw new IllegalArgumentException("THE NAME " + name.toUpperCase() + " DOESN'T EVEN FUCKING EXIST");
 		
 		// INSURT RELOAD COAD HERE
@@ -25,39 +25,18 @@ class BotClassLoader extends ClassLoader
 	
 	public void reloadAllBrains()
 	{
-		for (String name : loadedBrains.keySet())
+		for (String name : loadedBrainClasses.keySet())
 			reloadBrain(name);
 	}	
 	
 	public Brain getBrain(URL url, String name)
 	{
-		BrainInfo brainInfo = loadedBrains.get(name);
-		
-		if (brainInfo == null)
-		{
-			Brain brain = loadBrain(url, name);
-			brainInfo = new BrainInfo(brain, url);
-			loadedBrains.put(name, brainInfo);
-		}
-		
-		return brainInfo.getBrain();
+		return newBrain(getBrainClass(url, name));
 	}
 	
 	
-	private Brain loadBrain(URL url, String name)
+	private Brain newBrain(Class<?> brainClass)
 	{
-		Class<?> brainClass;
-		try
-		{
-			brainClass = loadBotClass(url, name);
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new RuntimeException("Couldn't find class " + name + ": " + e);
-		}
-		
-		System.out.println("Brain class: " + brainClass + ", HC: " + brainClass.hashCode());
-		
 		Object object;
 		try
 		{
@@ -65,16 +44,38 @@ class BotClassLoader extends ClassLoader
 		}
 		catch (InstantiationException e)
 		{
-			throw new RuntimeException("Couldn't instantiate class " + name + ": " + e);
+			throw new RuntimeException("Couldn't instantiate class " + brainClass.getName() + ": " + e);
 		}
 		catch (IllegalAccessException e)
 		{
-			throw new RuntimeException("Couldn't access class " + name + ": " + e);
+			throw new RuntimeException("Couldn't access class " + brainClass.getName() + ": " + e);
 		}
 		
 		Brain brain = (Brain)object;
 		
 		return brain;
+	}
+	
+	
+	private Class<?> getBrainClass(URL url, String name)
+	{
+		BrainClassInfo brainClassInfo = loadedBrainClasses.get(name);
+		
+		if (brainClassInfo == null)
+		{
+			try
+			{
+				Class<?> brainClass = loadBotClass(url, name);
+				brainClassInfo = new BrainClassInfo(brainClass, url);
+				loadedBrainClasses.put(name, brainClassInfo);
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new RuntimeException("Couldn't find class " + name + ": " + e);
+			}
+		}
+		
+		return brainClassInfo.getBrainClass();
 	}
 	
 	
@@ -116,20 +117,20 @@ class BotClassLoader extends ClassLoader
 
 	
 	
-	private class BrainInfo
+	private class BrainClassInfo
 	{
-		private Brain brain;
+		private Class<?> brainClass;
 		private URL url;
 		
-		public BrainInfo(Brain brain, URL url)
+		public BrainClassInfo(Class<?> brainClass, URL url)
 		{
-			this.brain = brain;
+			this.brainClass = brainClass;
 			this.url = url;
 		}
 		
-		public Brain getBrain()
+		public Class<?> getBrainClass()
 		{
-			return brain;
+			return brainClass;
 		}
 		
 		public URL getUrl()
