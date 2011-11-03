@@ -16,6 +16,7 @@
     <target name="jar" depends="compile" description="create a Jar file for the application">
         <jar destfile="snaykuu.jar">
             <fileset dir="classes" includes="**/*.class" />
+            <fileset dir="." includes="img/*.bmp" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
@@ -32,5 +33,12 @@
 	
 	<target name="doc" description="run the javadoc tool">
 		<javadoc packagenames="gameLogic.*" sourcepath="src" destdir="doc" />
+	</target>
+	
+	<target name="crun" depends="jar" description="compile, jar and run">
+		<java jar="snaykuu.jar" fork="true"/>
+	</target>
+	
+	<target name="all" depends="doc,bot,crun" description="all of the above">
 	</target>
 </project>

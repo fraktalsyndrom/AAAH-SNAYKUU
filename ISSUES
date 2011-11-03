@@ -6,12 +6,6 @@ Also, it should run in its own thread so that it doesn't freeze the
 entire interface.
 
 
-# Document EVERYTHING
-
-Starting with the objects and methods directly accessible by the brains,
-we want everything to be documented to be used with the javadoc tool.
-
-
 # Expand the snake placement algorithm
 
 As of now, getting starting positions for the snakes is simple, but only
@@ -48,84 +42,3 @@ Fix the replay system. We need to create a JFrame for this.
 
 Snakes will get one point for each kill. This does however not affect
 the game result
-
----------------------------------
-
-***OLD ISSUES***:
-
-# Increased support for relative directions is necessary.
-
-We want to allow getNextMove() (in class Brain) to be able to return a 
-relative direction, and not necessarily an absolute one (perhaps even
--only- a relative direction). To allow this, an overhaul of the 
-Direction class might be necessary.
-
-
-# Main needs restructuring; code needs to be where it belongs.
-
-Right now, Main.java creates a SettingsWindow object, which in turn 
-creates a MainWindow object, both located in the userInterface package. 
-Main should instead create a Session and a MainWindow, and also run
-the main loop.
-
-
-# Remove any game logic from MainWindow
-
-There shouldn't be any game logic in MainWindow at all. Snake
-construction should be moved to either Main or Session.
-
-
-# Loading bots from files and adding them to the game
-
-We might need to update the class loader a little, and especially move
-it to a more appropriate place than MainWindow. SnakeSettingsPanel may
-need to be able to use it for testing the classes before the game
-starts.
-
-
-# How to determine starting locations of snakes?
-
-An algorithm for this is needed. Do we want them to spawn in fixed
-locations, or should it be random? Is there a maximum limit to the 
-number of players?
-
-Take a look at this illustration of a board below (X represents an
-empty square, numbers each represent a snake). This could easily 
-be extended to accommodate for more players, as long as the board 
-size is increased.
-
-X X X X X X X
-X 3 X X X 2 X
-X X X X X X X
-X X X X X X X
-X 1 X X X 4 X
-X X X X X X X
-
-
-# Add debugging information in GameState
-
-We could put debugging information in the GameState object sent to
-brains for any possible errors, like if the brain is too slow or if
-it tries to move in an invalid direction.
-
-
-# Add a statistical/developer mode
-
-We should have a debugging/development method that quickly runs x games
-(without graphics) with statistical analysis.
-
-
-# Move Direction.calculateNextPosition to GameState
-
-Since all of the other help methods currently reside in GameState, so
-should this one.
-
-
-# Fix tiebreakers in GameResult
-
-There's a bug (or the lack of a feature) in GameResult where snakes who
-have differing scores are placed in the same finishing bracket.
-For example, if the game finishes without any snake reaching the 
-designated limit, snakes that died at the same time but with different
-fruit scores are placed in the same finishing position. This is not
-intended behavior.

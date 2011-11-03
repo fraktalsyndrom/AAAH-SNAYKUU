@@ -13,7 +13,19 @@ package gameLogic;
 
 public enum Direction
 {
-	NORTH, WEST, SOUTH, EAST;
+	NORTH(0,-1), WEST(-1,0), SOUTH(0,1), EAST(1,0);
+	
+	private Position dirUnitVector;
+	
+	Direction(int x, int y)
+	{
+		dirUnitVector = new Position(x,y);
+	}
+	
+	public Position getDirectionVector()
+	{
+		return dirUnitVector;
+	}
 	
 	/**
 	 * Gets the next position a snake would end up in if it continues in this direction.

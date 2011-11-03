@@ -32,6 +32,12 @@ public class Session
 		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
 		
 		recordedGame = new RecordedGame(metadata, new Board(board));
+		
+	}
+	
+	public GameState getCurrentState()
+	{
+		return new GameState(board, snakes, metadata, ErrorState.NO_ERROR);
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -199,7 +205,7 @@ public class Session
 			}
 			
 			moves.put(currentSnake, actualMove);
-			currentSnake.setCurrentDirection(actualMove);
+			
 		}
 		return moves;
 	}
@@ -270,15 +276,11 @@ public class Session
 	 */
 	private void moveSnake(Snake snake, Direction dir, boolean grow)
 	{
-		Position currentHeadPosition = snake.getHeadPosition();
-		Position currentTailPosition = snake.getTailPosition();
-		Position newHeadPosition = dir.calculateNextPosition(currentHeadPosition);
+		Position newHeadPosition = snake.moveHead(dir);
 		board.addGameObject(snake, newHeadPosition);
-		snake.moveHead(newHeadPosition);
 		if (!grow)
 		{
-			board.removeGameObject(snake, currentTailPosition);
-			snake.removeTail();
+			board.removeGameObject(snake, snake.removeTail());
 		}
 	}
 
