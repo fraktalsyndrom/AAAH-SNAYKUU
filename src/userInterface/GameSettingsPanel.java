@@ -27,7 +27,7 @@ class GameSettingsPanel extends JPanel
 		initializeBoardSizeSettings();
 		
 		JPanel gameSpeedPanel = new JPanel();
-		gameSpeedPanel.add(new JLabel("Game speed:"));
+		gameSpeedPanel.add(new JLabel("Game speed (smaller is faster):"));
 		gameSpeed = new JTextField("300");
 		gameSpeedPanel.add(gameSpeed);
 		add(gameSpeedPanel);

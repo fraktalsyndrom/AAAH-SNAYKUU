@@ -32,6 +32,12 @@ public class Session
 		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
 		
 		recordedGame = new RecordedGame(metadata, new Board(board));
+		
+	}
+	
+	public GameState getCurrentState()
+	{
+		return new GameState(board, snakes, metadata, ErrorState.NO_ERROR);
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -199,7 +205,7 @@ public class Session
 			}
 			
 			moves.put(currentSnake, actualMove);
-			//currentSnake.setCurrentDirection(actualMove); //~experimentellt utkommenterad
+			
 		}
 		return moves;
 	}
