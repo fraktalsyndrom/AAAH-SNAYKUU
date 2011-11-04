@@ -22,7 +22,8 @@ class Main
 			settingsWindow.dispose();
 			
 			int gameSpeed = settingsWindow.getGameSpeed();
-			gameEndType = runGame(session, gameSpeed);
+			int pixelsPerUnit = settingsWindow.getPixelsPerUnit();
+			gameEndType = runGame(session, gameSpeed, pixelsPerUnit);
 			
 			if (gameEndType == GameEndType.NEW_GAME)
 				session = prepareSession(settingsWindow);
@@ -48,25 +49,32 @@ class Main
 			return prepareSession(settingsWindow);
 		}
 	}
+	
+	private static void sleep(long ms)
+	{
+		try
+		{
+			Thread.currentThread().sleep(ms);
+		}
+		catch (InterruptedException e)
+		{
+		}
+	}
 
 	
-	private static GameEndType runGame(Session session, int gameSpeed)
+	private static GameEndType runGame(Session session, int gameSpeed, int pixelsPerUnit)
 	{
-		MainWindow mainWindow = new MainWindow(session, 12);
+		MainWindow mainWindow = new MainWindow(session, pixelsPerUnit);
+		session.tick();
+		mainWindow.repaint();
+		sleep(1000);
 		
 		while (!session.hasEnded())
 		{
 			session.tick();
 			mainWindow.repaint();
 			
-			try
-			{
-				Thread.currentThread().sleep(gameSpeed);
-			}
-			catch (InterruptedException e)
-			{
-				break;
-			}
+			sleep(gameSpeed);
 		}
 		
 		PostGameWindow postGameWindow = new PostGameWindow(session.getGameResult());

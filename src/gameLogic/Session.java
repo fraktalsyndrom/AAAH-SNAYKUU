@@ -32,6 +32,12 @@ public class Session
 		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
 		
 		recordedGame = new RecordedGame(metadata, new Board(board));
+		
+	}
+	
+	public GameState getCurrentState()
+	{
+		return new GameState(board, snakes, metadata, ErrorState.NO_ERROR);
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -199,7 +205,7 @@ public class Session
 			}
 			
 			moves.put(currentSnake, actualMove);
-			//currentSnake.setCurrentDirection(actualMove); //~experimentellt utkommenterad
+			
 		}
 		return moves;
 	}
@@ -427,22 +433,27 @@ public class Session
 	 */
 	private static Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
 	{
+		Random random = new Random();
+		
 		int xCenter = xSize/2;
 		int yCenter = ySize/2;
 		
-		int edgeOffset = 3;
+		int edgeOffset = 2;
 		
 		double angleStep = 2*Math.PI/snakes;
-		double nextStep = Math.PI/4;
+		double nextStep = random.nextDouble() * 2 * Math.PI;
 		
 		Position[] output = new Position[snakes];
 		
-		for(int i = 0; i < snakes; i++)
+		for(int i = 0; i < snakes; ++i)
 		{
-			int x = (int)((xCenter-edgeOffset)*Math.cos(nextStep)+0.5);
-			int y = (int)((yCenter-edgeOffset)*Math.sin(nextStep)-0.5);
+			int xRadi = xCenter - edgeOffset;
+			int yRadi = yCenter - edgeOffset;
 			
-			output[i] = new Position(xCenter+x, yCenter+y);
+			int x = (int)(xRadi * Math.cos(nextStep)+0.5);
+			int y = (int)(yRadi * Math.sin(nextStep)-0.5);
+			
+			output[i] = new Position(xCenter + x, yCenter + y);
 			
 			nextStep += angleStep;
 		}
@@ -457,12 +468,6 @@ public class Session
 			board.addGameObject(snake, pos);
 		}
 	}
-	
-	//~ Deprecated?
-	//~ private boolean isAcceptedStartingPosition(Position position)
-	//~ {
-		//~ return (!board.hasLethalObjectWithinRange(position, 2));
-	//~ }
 	
 	private void initGameObjects()
 	{
