@@ -7,17 +7,19 @@ import java.net.URL;
 import gameLogic.Direction;
 import gameLogic.Position;
 
-enum SnakeSegment
+enum GraphicsTile
 {
-	HEAD("snake_head.bmp"),
-	TAIL("snake_tail.bmp"),
-	MIDDLE("snake_body.bmp");
+	SNAKEHEAD("snake_head.bmp"),
+	SNAKETAIL("snake_tail.bmp"),
+	SNAKEBODY("snake_body.bmp");
+	//FRUIT();
+	//WALL();
 	
 	private Image image;
 	private int imgHeight;
 	private int imgWidth;
 	
-	SnakeSegment(String s)
+	GraphicsTile(String s)
 	{
 		try
 		{
@@ -85,11 +87,11 @@ enum SnakeSegment
 				break;
 		}
 		
-		flatmatrix[4] *= pixelsPerUnit;
-		flatmatrix[5] *= pixelsPerUnit;
+		flatmatrix[4] *= (pixelsPerUnit);
+		flatmatrix[5] *= (pixelsPerUnit);
 		
-		flatmatrix[4] += translationCorrector[0];
-		flatmatrix[5] += translationCorrector[1];
+		//flatmatrix[4] += translationCorrector[0];
+		//flatmatrix[5] += translationCorrector[1];
 		
 		return new AffineTransform(flatmatrix);
 		
