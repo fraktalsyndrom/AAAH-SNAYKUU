@@ -425,22 +425,22 @@ public class Session
 	 * @param	ySize	The height of the board.
 	 * @return	An array of starting positions with as many elements as the number of snakes in the game.
 	 */
-	private Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
+	private static Position[] getStartingHeadPositions(int snakes, int xSize, int ySize)
 	{
 		int xCenter = xSize/2;
 		int yCenter = ySize/2;
 		
-		int edgeOffset = 2;
+		int edgeOffset = 3;
 		
 		double angleStep = 2*Math.PI/snakes;
-		double nextStep = 0;
+		double nextStep = Math.PI/4;
 		
 		Position[] output = new Position[snakes];
 		
 		for(int i = 0; i < snakes; i++)
 		{
-			int x = (int)((xCenter-edgeOffset)*Math.cos(nextStep));
-			int y = (int)((yCenter-edgeOffset)*Math.sin(nextStep));
+			int x = (int)((xCenter-edgeOffset)*Math.cos(nextStep)+0.5);
+			int y = (int)((yCenter-edgeOffset)*Math.sin(nextStep)-0.5);
 			
 			output[i] = new Position(xCenter+x, yCenter+y);
 			
@@ -459,10 +459,10 @@ public class Session
 	}
 	
 	//~ Deprecated?
-	private boolean isAcceptedStartingPosition(Position position)
-	{
-		return (!board.hasLethalObjectWithinRange(position, 2));
-	}
+	//~ private boolean isAcceptedStartingPosition(Position position)
+	//~ {
+		//~ return (!board.hasLethalObjectWithinRange(position, 2));
+	//~ }
 	
 	private void initGameObjects()
 	{
