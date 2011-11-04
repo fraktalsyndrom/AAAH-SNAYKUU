@@ -76,7 +76,7 @@ class GameBoard extends JComponent
 			}
 		}
 		//Debugkod följer.
-		/*
+		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		GameState gs = session.getCurrentState();
@@ -88,24 +88,26 @@ class GameBoard extends JComponent
 			{
 				Position pos = iter.next();
 				Direction dir = s.getDirection(pos);
+				Direction useDir = dir;
 				
 				SnakeSegment segment;
 				
-				if(!iter.hasNext()) //sista elementet
-				{
-					segment = SnakeSegment.TAIL;
-				} 
-				else if(prevDir == null) //första elementet
+				if(prevDir == null) //första elementet
 				{
 					segment = SnakeSegment.HEAD;
 				}
+				else if(!iter.hasNext()) //sista elementet
+				{
+					segment = SnakeSegment.TAIL;
+					useDir = prevDir;
+				} 
 				else
 				{
 					//TODO: turns, player colors
 					segment = SnakeSegment.MIDDLE;
 				}
 				
-				AffineTransform transform = segment.getTransformation(dir, pos, pixelsPerUnit);
+				AffineTransform transform = segment.getTransformation(useDir, pos, pixelsPerUnit);
 				
 				g2d.drawImage(segment.getImage(), transform, null);
 				
@@ -113,16 +115,17 @@ class GameBoard extends JComponent
 			}
 		}
 		
+		
+		SnakeSegment s = SnakeSegment.HEAD;
+		g2d.drawImage(s.getImage(), s.getTransformation(Direction.NORTH, new Position(0,0), pixelsPerUnit), null);
+		g2d.drawImage(s.getImage(), s.getTransformation(Direction.EAST, new Position(1,0), pixelsPerUnit), null);
+		g2d.drawImage(s.getImage(), s.getTransformation(Direction.WEST, new Position(0,1), pixelsPerUnit), null);
+		g2d.drawImage(s.getImage(), s.getTransformation(Direction.SOUTH, new Position(1,1), pixelsPerUnit), null);
+		
 		for(Position fruit : gs.getFruits())
 		{
 			//TODO: fruits
-		}*/
+		}
 		
 	}
-	/*
-	@SuppressWarnings("unchecked")
-	private Graphics2D bajsjava(Graphics g) 
-	{
-		return (Graphics2D)g;
-	}*/
 }

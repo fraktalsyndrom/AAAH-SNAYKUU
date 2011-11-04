@@ -14,6 +14,8 @@ enum SnakeSegment
 	MIDDLE("snake_body.bmp");
 	
 	private Image image;
+	private int imgHeight;
+	private int imgWidth;
 	
 	SnakeSegment(String s)
 	{
@@ -21,6 +23,8 @@ enum SnakeSegment
 		{
 			URL temp = getClass().getResource("/img/"+s);
 			image = ImageIO.read(temp);
+			imgHeight = image.getHeight(null);
+			imgWidth = image.getWidth(null);
 			
 		}
 		catch(Exception e)
@@ -38,36 +42,56 @@ enum SnakeSegment
 	
 	AffineTransform getTransformation(Direction dir, Position pos, int pixelsPerUnit)
 	{
-		AffineTransform at = new AffineTransform();
 		
-		System.out.println(at);
+		//See the java6 API spec for AffineTransform for details on syntax.
 		
-		at.scale(pixelsPerUnit, pixelsPerUnit);
-		at.translate(pos.getX()*pixelsPerUnit, pos.getY()*pixelsPerUnit);
+		float[] flatmatrix = {0, 0, 0, 0, pos.getX(), pos.getY()};
+		float[] translationCorrector = {0, 0};
 		
-		
-		Position rotationVector = dir.getDirectionVector();
-		at.rotate(rotationVector.getX(), rotationVector.getY());
-		/*
 		switch(dir)
 		{
-			case SOUTH:
-				at.translate(1, 0);
+			case NORTH:
+				flatmatrix[1] += -1;
+				flatmatrix[2] += 1;
+				flatmatrix[5] += 1;
+				
+				translationCorrector[0] = 1;
 				break;
 				
 			case WEST:
-				at.translate(1, 1);
+				flatmatrix[0] += -1;
+				flatmatrix[3] += -1;
+				flatmatrix[4] += 1;
+				flatmatrix[5] += 1;
+				
+				translationCorrector[0] = -1;
+				translationCorrector[1] = -1;
 				break;
 				
-			case NORTH:
-				at.translate(0, 1);
+			case SOUTH:
+				flatmatrix[1] += 1;
+				flatmatrix[2] += -1;
+				flatmatrix[4] += 1;
+				
+				translationCorrector[1] = 1;
+				break;
 				
 			default:
+				flatmatrix[0] += 1;
+				flatmatrix[3] += 1;
+				
+				translationCorrector[0] = 1;
+				translationCorrector[1] = 1;
 				break;
 		}
-		*/
 		
-		return at;
+		flatmatrix[4] *= pixelsPerUnit;
+		flatmatrix[5] *= pixelsPerUnit;
+		
+		flatmatrix[4] += translationCorrector[0];
+		flatmatrix[5] += translationCorrector[1];
+		
+		return new AffineTransform(flatmatrix);
 		
 	}
 }
