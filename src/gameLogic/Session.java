@@ -17,6 +17,8 @@ public class Session
 	private Set<Snake> snakes = new HashSet<Snake>();
 	private Map<Snake, ErrorState> snakeErrors = new HashMap<Snake, ErrorState>();
 	
+	private Random random = new Random();
+	
 	private HashMap<String, GameObjectType> objects = new HashMap<String, GameObjectType>();
 
 	private Metadata metadata;
@@ -327,7 +329,6 @@ public class Session
 		if (timeTillFruitSpawn != 0)
 			return false;
 		
-		Random random = new Random();
 		boolean spawned = false;
 		while (!spawned)
 		{
