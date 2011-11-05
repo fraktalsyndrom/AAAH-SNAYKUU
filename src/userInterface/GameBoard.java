@@ -134,16 +134,16 @@ class GameBoard extends JComponent
 		
 		
 		//BEGIN DEBUG SNAKE
-		GraphicsTile t = GraphicsTile.SNAKEHEAD;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(0,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		// GraphicsTile t = GraphicsTile.SNAKEHEAD;
+		// g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(0,0), pixelsPerXUnit, pixelsPerYUnit), null);
 		
-		t = GraphicsTile.SNAKEBODY;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.NORTH, new Position(1,0), pixelsPerXUnit, pixelsPerYUnit), null);
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(2,0), pixelsPerXUnit, pixelsPerYUnit), null);
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(3,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		// t = GraphicsTile.SNAKEBODY;
+		// g2d.drawImage(t.getImage(), t.getTransformation(Direction.NORTH, new Position(1,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		// g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(2,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		// g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(3,0), pixelsPerXUnit, pixelsPerYUnit), null);
 		
-		t = GraphicsTile.SNAKETAIL;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.SOUTH, new Position(4,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		// t = GraphicsTile.SNAKETAIL;
+		// g2d.drawImage(t.getImage(), t.getTransformation(Direction.SOUTH, new Position(4,0), pixelsPerXUnit, pixelsPerYUnit), null);
 		//END DEBUG SNAKE
 		
 		for(Position fruit : gs.getFruits())
