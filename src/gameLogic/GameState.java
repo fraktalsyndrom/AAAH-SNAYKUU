@@ -149,6 +149,26 @@ public class GameState
 		return positionsContainingFruit;
 	}
 	
+	/**
+	 * Gets a list containing the positions of all the walls currently on the board. Note that 
+	 * the list will be empty if the number of walls on the board is 0.
+	 * 
+	 * @return	The positions of the walls currently on the board.
+	 */
+	public ArrayList<Position> getWalls()
+	{
+		ArrayList<Position> positionsContainingWall = new ArrayList<Position>();
+		for (int x = 0; x < metadata.getBoardWidth(); ++x)
+		{
+			for (int y = 0; y < metadata.getBoardWidth(); ++y)
+			{
+				Position currentPosition = new Position(x, y);
+				if (board.hasWall(currentPosition))
+					positionsContainingWall.add(currentPosition);
+			}
+		}
+		return positionsContainingWall;
+	}
 	
 	/**
 	 * Returns in which direction one has to move in order to reach one
