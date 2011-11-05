@@ -9,10 +9,13 @@ import gameLogic.Position;
 
 enum GraphicsTile
 {
-	SNAKEHEAD("snake_head.bmp"),
-	SNAKETAIL("snake_tail.bmp"),
-	SNAKEBODY("snake_body.bmp"),
-	FRUIT("fruit.bmp");
+	SNAKEHEAD("snake_head.png"),
+	SNAKETAIL("snake_tail.png"),
+	SNAKEBODY("snake_body.png"),
+	SNAKELEFT("snake_left.png"),
+	SNAKERIGHT("snake_right.png"),
+	SNAKEMONAD("snake_monad.png"),
+	FRUIT("fruit.png");
 	//WALL();
 	
 	private Image image;

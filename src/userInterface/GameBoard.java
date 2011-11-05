@@ -137,7 +137,11 @@ class GameBoard extends JComponent
 				
 				GraphicsTile segment;
 				
-				if(prevDir == null) //första elementet
+				if(prevDir == null && !iter.hasNext()) //första elementet
+				{
+					segment = GraphicsTile.SNAKEMONAD;
+				}
+				else if(prevDir == null) //första elementet
 				{
 					segment = GraphicsTile.SNAKEHEAD;
 				}
@@ -146,9 +150,19 @@ class GameBoard extends JComponent
 					segment = GraphicsTile.SNAKETAIL;
 					useDir = prevDir;
 				} 
+				else if(prevDir != dir)
+				{
+					if(prevDir.turnLeft() == dir)
+					{
+						segment = GraphicsTile.SNAKERIGHT;
+					}
+					else
+					{
+						segment = GraphicsTile.SNAKELEFT;
+					}
+				}
 				else
 				{
-					//TODO: turns, player colors
 					segment = GraphicsTile.SNAKEBODY;
 				}
 				
