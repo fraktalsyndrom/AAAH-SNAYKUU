@@ -11,13 +11,13 @@ enum GraphicsTile
 {
 	SNAKEHEAD("snake_head.bmp"),
 	SNAKETAIL("snake_tail.bmp"),
-	SNAKEBODY("snake_body.bmp");
-	//FRUIT();
+	SNAKEBODY("snake_body.bmp"),
+	FRUIT("fruit.bmp");
 	//WALL();
 	
 	private Image image;
-	private int imgHeight;
-	private int imgWidth;
+	private float imgHeight;
+	private float imgWidth;
 	
 	GraphicsTile(String s)
 	{
@@ -42,56 +42,99 @@ enum GraphicsTile
 		
 	}
 	
-	AffineTransform getTransformation(Direction dir, Position pos, int pixelsPerUnit)
+	AffineTransform getTransformation(Direction dir, Position pos, int pixelsPerXUnit, int pixelsPerYUnit)
 	{
 		
-		//See the java6 API spec for AffineTransform for details on syntax.
+		//~ See the java6 API spec for AffineTransform for details on syntax.
 		
-		float[] flatmatrix = {0, 0, 0, 0, pos.getX(), pos.getY()};
+		float[] flatmatrix = {0.0f, 0.0f, 0.0f, 0.0f, (float)(pos.getX()), (float)(pos.getY())};
 		float[] translationCorrector = {0, 0};
+		float[] scaleAdjuster = {0, 0};
 		
-		switch(dir)
+		
+		//~ Rotate around the image's own center and set a 
+		//  few variables for late fine-tuning.
+		if(dir != null)
 		{
-			case NORTH:
-				flatmatrix[1] += -1;
-				flatmatrix[2] += 1;
-				flatmatrix[5] += 1;
-				
-				translationCorrector[0] = 1;
-				break;
-				
-			case WEST:
-				flatmatrix[0] += -1;
-				flatmatrix[3] += -1;
-				flatmatrix[4] += 1;
-				flatmatrix[5] += 1;
-				
-				translationCorrector[0] = -1;
-				translationCorrector[1] = -1;
-				break;
-				
-			case SOUTH:
-				flatmatrix[1] += 1;
-				flatmatrix[2] += -1;
-				flatmatrix[4] += 1;
-				
-				translationCorrector[1] = 1;
-				break;
-				
-			default:
-				flatmatrix[0] += 1;
-				flatmatrix[3] += 1;
-				
-				translationCorrector[0] = 1;
-				translationCorrector[1] = 1;
-				break;
+			switch(dir)
+			{
+				case NORTH:
+					flatmatrix[1] += -1;
+					flatmatrix[2] += 1;
+					flatmatrix[5] += 1;
+					
+					scaleAdjuster[1] = 1;
+					break;
+					
+				case WEST:
+					flatmatrix[0] += -1;
+					flatmatrix[3] += -1;
+					flatmatrix[4] += 1;
+					flatmatrix[5] += 1;
+					
+					translationCorrector[1] = -1;
+					
+					scaleAdjuster[0] = 1;
+					break;
+					
+				case SOUTH:
+					flatmatrix[1] += 1;
+					flatmatrix[2] += -1;
+					flatmatrix[4] += 1;
+					
+					translationCorrector[0] = -1;
+					translationCorrector[1] = -1;
+					
+					scaleAdjuster[1] = 1;
+					break;
+					
+				default:
+					flatmatrix[0] += 1;
+					flatmatrix[3] += 1;
+					
+					translationCorrector[0] = -1;
+					
+					scaleAdjuster[0] = 1;
+					break;
+					
+			}
+		}
+		else
+		{
+			flatmatrix[0] += 1;
+			flatmatrix[3] += 1;
 		}
 		
-		flatmatrix[4] *= (pixelsPerUnit);
-		flatmatrix[5] *= (pixelsPerUnit);
+		//~ Scale the image according to current window size.
+		for(int i = 0; i < 4; ++i)
+		{
+			if(i%2 == 0)
+			{
+				flatmatrix[i] = flatmatrix[i]*((pixelsPerXUnit+scaleAdjuster[0])/imgWidth);
+			}
+			else
+			{
+				flatmatrix[i] = flatmatrix[i]*((pixelsPerYUnit+scaleAdjuster[1])/imgHeight);
+			}
+		}
 		
-		//flatmatrix[4] += translationCorrector[0];
-		//flatmatrix[5] += translationCorrector[1];
+		//~ Translate to the correct point.
+		flatmatrix[4] = 1+flatmatrix[4]+flatmatrix[4]*pixelsPerXUnit;
+		flatmatrix[5] = 1+flatmatrix[5]+flatmatrix[5]*pixelsPerYUnit;
+		
+		
+		//~ Adjust for rotational positioning artifacts.
+		flatmatrix[4] += translationCorrector[0];
+		flatmatrix[5] += translationCorrector[1];
+		
+		
+		System.out.print("["+flatmatrix[0]);
+		for(int i = 1; i < flatmatrix.length; ++i)
+		{
+			System.out.print(", "+flatmatrix[i]);
+		}
+		System.out.println("]");
+		
 		
 		return new AffineTransform(flatmatrix);
 		
