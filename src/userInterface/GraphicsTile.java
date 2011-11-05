@@ -15,8 +15,8 @@ enum GraphicsTile
 	SNAKELEFT("snake_left.png"),
 	SNAKERIGHT("snake_right.png"),
 	SNAKEMONAD("snake_monad.png"),
-	FRUIT("fruit.png");
-	//WALL();
+	FRUIT("fruit.png"),
+	WALL("wall.png");
 	
 	private Image image;
 	private float imgHeight;
@@ -56,7 +56,7 @@ enum GraphicsTile
 		
 		
 		//~ Rotate around the image's own center and set a 
-		//  few variables for late fine-tuning.
+		//  few variables for later fine-tuning.
 		if(dir != null)
 		{
 			switch(dir)
@@ -129,15 +129,6 @@ enum GraphicsTile
 		//~ Adjust for rotational positioning artifacts.
 		flatmatrix[4] += translationCorrector[0];
 		flatmatrix[5] += translationCorrector[1];
-		
-		
-		System.out.print("["+flatmatrix[0]);
-		for(int i = 1; i < flatmatrix.length; ++i)
-		{
-			System.out.print(", "+flatmatrix[i]);
-		}
-		System.out.println("]");
-		
 		
 		return new AffineTransform(flatmatrix);
 		

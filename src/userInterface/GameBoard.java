@@ -49,66 +49,13 @@ class GameBoard extends JComponent
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		/*
-		Board board = session.getBoard();
-		int width = pixelsPerUnit * board.getWidth();
-		int height = pixelsPerUnit * board.getHeight();
 		
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.BLACK);
-		
-		for (int x = 1; x < board.getWidth(); ++x)
-		{
-			g.drawLine(x * pixelsPerUnit, 0, x * pixelsPerUnit, height);
-		}
-		
-		for (int y = 1; y < board.getHeight(); ++y)
-		{
-			g.drawLine(0, y * pixelsPerUnit, width, y * pixelsPerUnit);
-		}
-		
-		g.setColor(Color.GREEN);
-		
-		for (int x = 0; x < board.getWidth(); ++x)
-		{
-			for (int y = 0; y < board.getHeight(); ++y)
-			{
-				Position pos = new Position(x, y);
-				if (board.hasGameObject(pos))
-				{
-					if (board.hasWall(pos))
-						g.setColor(Color.BLACK);
-					else if (board.hasSnake(pos)) {
-						//~ Snake snake = (Snake)board.getSquare(pos).getGameObject();
-						//~ if (snake.isDead())
-							//~ g.setColor(Color.GRAY);
-						//~ else
-							g.setColor(Color.WHITE);
-					}
-					else if (board.hasFruit(pos))
-						g.setColor(Color.RED);
-					int xPosition = x * pixelsPerUnit;
-					int yPosition = y * pixelsPerUnit;
-					g.fillRect(xPosition, yPosition, pixelsPerUnit, pixelsPerUnit);
-				}
-			}
-		}
-		*/
-		
-		Graphics2D g2d = (Graphics2D)g;
 		GameState gs = session.getCurrentState();
 		Board board = gs.getBoard();
 		
+		//Basic preparation.
 		g.setColor(background);
 		g.fillRect(0, 0, graphicsWidth, graphicsHeight);
-		
-		//Den här utritningen borde inte behöva hårdkodas.
-		g.setColor(wall);
-		g.fillRect(1, 1, graphicsWidth-2, pixelsPerYUnit);
-		g.fillRect(1, 1, pixelsPerXUnit, graphicsHeight-2);
-		g.fillRect(graphicsWidth-1, 1, -pixelsPerXUnit, graphicsHeight-2);
-		g.fillRect(1, graphicsHeight-1, graphicsWidth-2, -pixelsPerYUnit);
 		
 		g.setColor(grid);
 		
@@ -124,6 +71,17 @@ class GameBoard extends JComponent
 		{
 			g.drawLine(0, lineYpos, graphicsWidth, lineYpos);
 			lineYpos += (pixelsPerYUnit+1);
+		}
+		
+		//Image drawing.
+		Graphics2D g2d = (Graphics2D)g;
+		
+		for(Position wall : gs.getWalls())
+		{
+			
+			GraphicsTile icon = GraphicsTile.WALL;
+			
+			g2d.drawImage(icon.getImage(), icon.getTransformation(null, wall, pixelsPerXUnit, pixelsPerYUnit), null);
 		}
 		
 		for(Snake s : gs.getSnakes())
@@ -152,9 +110,9 @@ class GameBoard extends JComponent
 				} 
 				else if(prevDir != dir)
 				{
-					if(prevDir.turnLeft() == dir)
+					if(prevDir.turnLeft() == dir) 
 					{
-						segment = GraphicsTile.SNAKERIGHT;
+						segment = GraphicsTile.SNAKERIGHT; // Oklart varför det här är rätt, men det är det.
 					}
 					else
 					{
