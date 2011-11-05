@@ -2,6 +2,8 @@ package userInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Iterator;
 import java.awt.geom.AffineTransform;
 import gameLogic.*;
@@ -9,28 +11,45 @@ import gameLogic.*;
 class GameBoard extends JComponent
 {
 	private Session session;
-	private int pixelsPerUnit;
+	private int pixelsPerXUnit, pixelsPerYUnit;
+	private int graphicsWidth, graphicsHeight;
+	private int boardWidth, boardHeight;
+	private Color background = Color.WHITE;
+	private Color wall = Color.BLACK;
+	private Color grid = Color.GRAY;
 	
 	public GameBoard(Session session, int pixelsPerUnit)
 	{
 		this.session = session;
-		this.pixelsPerUnit = pixelsPerUnit;
+		this.pixelsPerXUnit = pixelsPerUnit;
+		this.pixelsPerYUnit = pixelsPerUnit;
+		this.addComponentListener(new CompLis());
 		
-		int width = session.getBoard().getWidth() * pixelsPerUnit;
-		int height = session.getBoard().getHeight() * pixelsPerUnit;
+		boardWidth = session.getBoard().getWidth();
+		boardHeight = session.getBoard().getHeight();
 		
-		setSize(width, height);
+		/*
+		 * The grid needs space to be in that is not inside a game square.
+		 * Hence we add 1 pixel (for the first line), plus the number of squares 
+		 * (for each subsequent line), and multiply the number of squares 
+		 * by the size of each square.
+		 * The result is the total drawing area.
+		 */
+		graphicsWidth = 1+boardWidth+boardWidth*pixelsPerXUnit;
+		graphicsHeight = 1+boardHeight+boardHeight*pixelsPerYUnit;
 		
-		Dimension d = new Dimension(width, height);
-		setMaximumSize(d);
-		setMinimumSize(d);
+		setSize(graphicsWidth, graphicsHeight);
+		
+		Dimension d = new Dimension(graphicsWidth, graphicsHeight);
+		// setMaximumSize(d);
+		// setMinimumSize(d);
 		setPreferredSize(d);
 	}
 	
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		
+		/*
 		Board board = session.getBoard();
 		int width = pixelsPerUnit * board.getWidth();
 		int height = pixelsPerUnit * board.getHeight();
@@ -75,11 +94,37 @@ class GameBoard extends JComponent
 				}
 			}
 		}
-		
+		*/
 		
 		Graphics2D g2d = (Graphics2D)g;
-		
 		GameState gs = session.getCurrentState();
+		Board board = gs.getBoard();
+		
+		g.setColor(background);
+		g.fillRect(0, 0, graphicsWidth, graphicsHeight);
+		
+		//Den här utritningen borde inte behöva hårdkodas.
+		g.setColor(wall);
+		g.fillRect(1, 1, graphicsWidth-2, pixelsPerYUnit);
+		g.fillRect(1, 1, pixelsPerXUnit, graphicsHeight-2);
+		g.fillRect(graphicsWidth-1, 1, -pixelsPerXUnit, graphicsHeight-2);
+		g.fillRect(1, graphicsHeight-1, graphicsWidth-2, -pixelsPerYUnit);
+		
+		g.setColor(grid);
+		
+		int lineXpos = 0;
+		for(int x = 0; x < graphicsWidth; ++x) //Vertical lines
+		{
+			g.drawLine(lineXpos, 0, lineXpos, graphicsHeight);
+			lineXpos += (pixelsPerXUnit+1);
+		}
+		
+		int lineYpos = 0;
+		for(int y = 0; y < graphicsHeight; ++y) //Horizontal lines
+		{
+			g.drawLine(0, lineYpos, graphicsWidth, lineYpos);
+			lineYpos += (pixelsPerYUnit+1);
+		}
 		
 		for(Snake s : gs.getSnakes())
 		{
@@ -107,7 +152,7 @@ class GameBoard extends JComponent
 					segment = GraphicsTile.SNAKEBODY;
 				}
 				
-				AffineTransform transform = segment.getTransformation(useDir, pos, pixelsPerUnit);
+				AffineTransform transform = segment.getTransformation(useDir, pos, pixelsPerXUnit, pixelsPerYUnit);
 				
 				g2d.drawImage(segment.getImage(), transform, null);
 				
@@ -115,28 +160,40 @@ class GameBoard extends JComponent
 			}
 		}
 		
+		
+		//BEGIN DEBUG SNAKE
 		GraphicsTile t = GraphicsTile.SNAKEHEAD;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(1,1), pixelsPerUnit), null);
+		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(0,0), pixelsPerXUnit, pixelsPerYUnit), null);
 		
 		t = GraphicsTile.SNAKEBODY;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(2,1), pixelsPerUnit), null);
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(3,1), pixelsPerUnit), null);
+		g2d.drawImage(t.getImage(), t.getTransformation(Direction.NORTH, new Position(1,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(2,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		g2d.drawImage(t.getImage(), t.getTransformation(Direction.EAST, new Position(3,0), pixelsPerXUnit, pixelsPerYUnit), null);
 		
 		t = GraphicsTile.SNAKETAIL;
-		g2d.drawImage(t.getImage(), t.getTransformation(Direction.WEST, new Position(4,1), pixelsPerUnit), null);
+		g2d.drawImage(t.getImage(), t.getTransformation(Direction.SOUTH, new Position(4,0), pixelsPerXUnit, pixelsPerYUnit), null);
+		//END DEBUG SNAKE
 		
-		/*
 		for(Position fruit : gs.getFruits())
 		{
-			~GraphicsTile.FRUIT är ännu ej implementerad i väntan på grafik.
 			
 			GraphicsTile icon = GraphicsTile.FRUIT;
 			
-			g2d.drawImage(icon.getImage(), icon.getTransformation(Direction.EAST, fruit, pixelsPerUnit), null);
-			
+			g2d.drawImage(icon.getImage(), icon.getTransformation(null, fruit, pixelsPerXUnit, pixelsPerYUnit), null);
 		}
 		
-		// Här vill man kanske rita ut väggar med egen grafik.
-		*/
+	}
+	
+	class CompLis extends ComponentAdapter
+	{
+		@Override
+		public void componentResized(ComponentEvent ce)
+		{
+			pixelsPerXUnit = (getWidth()-1-boardWidth)/boardWidth;
+			graphicsWidth = 1+boardWidth+boardWidth*pixelsPerXUnit;
+			
+			pixelsPerYUnit = (getHeight()-1-boardHeight)/boardHeight;
+			graphicsHeight = 1+boardHeight+boardHeight*pixelsPerYUnit;
+		}
 	}
 }
