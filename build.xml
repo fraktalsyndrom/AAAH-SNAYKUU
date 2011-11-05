@@ -16,7 +16,7 @@
     <target name="jar" depends="compile" description="create a Jar file for the application">
         <jar destfile="snaykuu.jar">
             <fileset dir="classes" includes="**/*.class" />
-            <fileset dir="." includes="img/*.bmp" />
+            <fileset dir="." includes="img/*" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
