@@ -139,7 +139,7 @@ public class GameState
 		ArrayList<Position> positionsContainingFruit = new ArrayList<Position>();
 		for (int x = 0; x < metadata.getBoardWidth(); ++x)
 		{
-			for (int y = 0; y < metadata.getBoardWidth(); ++y)
+			for (int y = 0; y < metadata.getBoardHeight(); ++y)
 			{
 				Position currentPosition = new Position(x, y);
 				if (board.hasFruit(currentPosition))
@@ -160,7 +160,7 @@ public class GameState
 		ArrayList<Position> positionsContainingWall = new ArrayList<Position>();
 		for (int x = 0; x < metadata.getBoardWidth(); ++x)
 		{
-			for (int y = 0; y < metadata.getBoardWidth(); ++y)
+			for (int y = 0; y < metadata.getBoardHeight(); ++y)
 			{
 				Position currentPosition = new Position(x, y);
 				if (board.hasWall(currentPosition))
