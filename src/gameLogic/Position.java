@@ -1,5 +1,6 @@
 package gameLogic;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @author	Arian Jafari
  */
 
-public class Position 
+public class Position implements Serializable
 {
 	private int x, y;
 	
