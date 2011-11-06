@@ -50,6 +50,11 @@ public class RecordedGame implements Game, Serializable
 	
 	public void setCurrentReplayFrame(int index)
 	{
+		if (index < 0)
+			index = 0;
+		else if (index > getTurnCount() - 1)
+			index = getTurnCount() - 1;
+		
 		currentFrameIndex = index;
 	}
 	
