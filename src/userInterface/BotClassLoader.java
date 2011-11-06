@@ -7,7 +7,7 @@ import gameLogic.Brain;
 
 class BotClassLoader extends ClassLoader
 {
-	private Map<String, BrainClassInfo> loadedBrainClasses = new HashMap<String, BrainClassInfo>();
+	private Map<String, Class<?>> loadedBrainClasses = new HashMap<String, Class<?>>();
 	
 	public BotClassLoader(ClassLoader parent)
 	{		
@@ -16,9 +16,9 @@ class BotClassLoader extends ClassLoader
 	
 	public void reloadBrain(String name)
 	{
-		BrainClassInfo brainClassInfo = loadedBrainClasses.get(name);
-		if (brainClassInfo == null)
-			throw new IllegalArgumentException("THE NAME " + name.toUpperCase() + " DOESN'T EVEN FUCKING EXIST");
+		Class<?> brainClass = loadedBrainClasses.get(name);
+		if (brainClass == null)
+			throw new IllegalArgumentException("THE NAME " + name.toUpperCase() + " DOESN'T EVEN EXIST");
 		
 		// INSURT RELOAD COAD HERE
 	}
@@ -29,9 +29,9 @@ class BotClassLoader extends ClassLoader
 			reloadBrain(name);
 	}	
 	
-	public Brain getBrain(URL url, String name)
+	public Brain getBrain(String name)
 	{
-		return newBrain(getBrainClass(url, name));
+		return newBrain(getBrainClass(name));
 	}
 	
 	
@@ -56,18 +56,21 @@ class BotClassLoader extends ClassLoader
 		return brain;
 	}
 	
-	
-	private Class<?> getBrainClass(URL url, String name)
+	public Class<?> getClass(String name)
 	{
-		BrainClassInfo brainClassInfo = loadedBrainClasses.get(name);
+		return getBrainClass(name);
+	}
+	
+	private Class<?> getBrainClass(String name)
+	{
+		Class<?> brainClass = loadedBrainClasses.get(name);
 		
-		if (brainClassInfo == null)
+		if (brainClass == null)
 		{
 			try
 			{
-				Class<?> brainClass = loadClass("bot."+name, true); //(url, name);
-				brainClassInfo = new BrainClassInfo(brainClass, url);
-				loadedBrainClasses.put(name, brainClassInfo);
+				brainClass = loadClass("bot."+name, true);
+				loadedBrainClasses.put(name, brainClass);
 			}
 			catch (ClassNotFoundException e)
 			{
@@ -75,32 +78,9 @@ class BotClassLoader extends ClassLoader
 			}
 		}
 		
-		return brainClassInfo.getBrainClass();
+		return brainClass;
 	}
 	
-	
-	private Class loadBotClass(URL url, String name) throws ClassNotFoundException
-	{
-		try
-		{				
-			URLConnection urlConnection = url.openConnection();
-			InputStream input = urlConnection.getInputStream();
-			
-			byte[] classData = readBufferFromStream(input);
-						
-			//return defineClass("bot."+name, classData, 0, classData.length);
-			Class newClass = defineClass(null, classData, 0, classData.length);
-			if (newClass != null)
-				return newClass;
-				
-		}
-		catch (IOException e)
-		{
-			System.out.println(e);
-		}
-
-		throw new ClassNotFoundException(name);
-	}
 	
 	protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException
 	{
@@ -168,42 +148,4 @@ class BotClassLoader extends ClassLoader
 		return buff;
 	}
 	
-	private byte[] readBufferFromStream(InputStream input) throws IOException
-	{
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-			
-		int data = input.read();
-		while (data != -1)
-		{
-			buffer.write(data);
-			data = input.read();
-		}
-		input.close();
-		
-		return buffer.toByteArray();
-	}
-
-	
-	
-	private class BrainClassInfo
-	{
-		private Class<?> brainClass;
-		private URL url;
-		
-		public BrainClassInfo(Class<?> brainClass, URL url)
-		{
-			this.brainClass = brainClass;
-			this.url = url;
-		}
-		
-		public Class<?> getBrainClass()
-		{
-			return brainClass;
-		}
-		
-		public URL getUrl()
-		{
-			return url;
-		}
-	}
 }

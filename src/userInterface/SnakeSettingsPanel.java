@@ -7,63 +7,101 @@ import java.awt.event.*;
 import gameLogic.*;
 import javax.swing.filechooser.*;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.net.*;
+import java.io.*;
 
 class SnakeSettingsPanel extends JPanel
 {
 	private JList snakeJList;
+	private JList brainJList;
 	private SnakeManagementPanel snakeManagementPanel;
-	private SnakeInfoPanel snakeInfoPanel;
-	private Map<String, Brain> snakes = new HashMap<String, Brain>();
+	private Map<String, Brain> snakes = new TreeMap<String, Brain>();
+	private Map<String, Class<? extends Brain>> brains = new TreeMap<String, Class<? extends Brain>>();
 	private BotClassLoader classLoader;
 	
 	public SnakeSettingsPanel()
 	{
 		setLayout(new BorderLayout());
 				
-		snakeJList = new JList();
-		snakeJList.addListSelectionListener(new SnakeListSelectionListener());
+		snakeJList = new JList();		
+		brainJList = new JList();
 		
-		snakeManagementPanel = new SnakeManagementPanel();
+		snakeManagementPanel = new SnakeManagementPanel();		
 		
-		snakeInfoPanel = new SnakeInfoPanel();
+		JPanel centerPanel = new JPanel();
+		centerPanel.add(new JScrollPane(snakeJList));
+		centerPanel.add(new JScrollPane(brainJList));
 		
-		
-		add(new JScrollPane(snakeJList), BorderLayout.CENTER);
+		add(centerPanel, BorderLayout.CENTER);
 		add(snakeManagementPanel, BorderLayout.NORTH);
-		add(snakeInfoPanel, BorderLayout.EAST);
 		
 		
 		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
 		classLoader = new BotClassLoader(parentClassLoader);
+		
+		loadBrains();
 	}
 	
-	
-	private class SnakeListSelectionListener implements ListSelectionListener
+	private void loadBrains()
 	{
-		public void valueChanged(ListSelectionEvent e)
+		FilenameFilter filter = new ClassfileFilter();
+		File botFolder = new File("./bot");
+		File[] listOfFiles = botFolder.listFiles(filter);
+		
+		for (File file : listOfFiles)
 		{
+			if (file.isDirectory())
+				continue;
+			
+			String name = file.getName();
+			name = name.substring(0, name.lastIndexOf("."));
+			
+			Class<?> c;
+			try
+			{
+				c = classLoader.getClass(name);
+			}
+			catch (RuntimeException e)
+			{
+				JOptionPane.showMessageDialog(this, e.toString());
+				continue;
+			}
+			
+			Class<? extends Brain> brainClass;
+			try
+			{
+				brainClass = c.asSubclass(Brain.class);
+			}
+			catch (Exception e)
+			{
+				continue;
+			}
+			
+			brains.put(name, brainClass);
+		}
+		
+		brainJList.setListData(brains.keySet().toArray());
+	}
+	
+	static private class ClassfileFilter implements FilenameFilter
+	{
+		public boolean accept(File dir, String name)
+		{
+			name = name.substring(name.lastIndexOf("."), name.length());
+			return name.equalsIgnoreCase(".class");
 		}
 	}
-	
+
 	
 	private class SnakeManagementPanel extends JPanel
 	{
-		private JFileChooser fileChooser;
-		
 		private JButton addSnakeButton;
 		private JButton removeSnakeButton;
 		
 		public SnakeManagementPanel()
 		{
-			fileChooser = new JFileChooser("./bot");
-			
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("Java class files", "class");
-			fileChooser.setFileFilter(filter);
-			
 			addSnakeButton = new JButton("Add snake");
 			addSnakeButton.addActionListener(new AddSnakeListener());
 			
@@ -91,30 +129,17 @@ class SnakeSettingsPanel extends JPanel
 			
 			public void actionPerformed(ActionEvent event)
 			{
-				int returnValue = fileChooser.showOpenDialog(SnakeSettingsPanel.this);
-				
-				if (returnValue != JFileChooser.APPROVE_OPTION)
+				Object selectedObject = brainJList.getSelectedValue();
+				if (selectedObject == null)
 					return;
 				
-				URL url;
-				try
-				{
-					url = fileChooser.getSelectedFile().toURI().toURL();
-				}
-				catch (MalformedURLException e)
-				{
-					System.out.println(e);
-					return;
-				}
 				
-				String name = fileChooser.getSelectedFile().getName();
-					
-				name = name.substring(0, name.lastIndexOf("."));				
+				String name = selectedObject.toString();
 				
 				Brain brain = null;
 				try
 				{
-					brain = classLoader.getBrain(url, name);
+					brain = classLoader.getBrain(name);
 				}
 				catch (RuntimeException e)
 				{
@@ -126,18 +151,6 @@ class SnakeSettingsPanel extends JPanel
 					
 				snakeJList.setListData(snakes.keySet().toArray());
 			}
-		}
-	}
-	
-	
-	private class SnakeInfoPanel extends JPanel
-	{
-		private JLabel snakeName;
-		
-		public SnakeInfoPanel()
-		{
-			snakeName = new JLabel("SNEjK");
-			add(snakeName);
 		}
 	}
 	
