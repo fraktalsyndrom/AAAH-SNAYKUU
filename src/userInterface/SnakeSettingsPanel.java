@@ -17,8 +17,7 @@ class SnakeSettingsPanel extends JPanel
 	private JList snakeJList;
 	private SnakeManagementPanel snakeManagementPanel;
 	private SnakeInfoPanel snakeInfoPanel;
-	private Map<String, Brain> brains = new HashMap<String, Brain>();
-	private List<String> snakes = new ArrayList<String>();
+	private Map<String, Brain> snakes = new HashMap<String, Brain>();
 	private BotClassLoader classLoader;
 	
 	public SnakeSettingsPanel()
@@ -98,25 +97,32 @@ class SnakeSettingsPanel extends JPanel
 					
 				name = name.substring(0, name.lastIndexOf("."));
 				
-				Brain brain = brains.get(name);
+				String snakeName = name;
+				int numberOfSnakesWithTheSameBrain = 1;
+				System.out.println("Name: " + name);
 				
-				if (brain == null)
+				while (snakes.containsKey(snakeName))
 				{
-					try
-					{
-						brain = classLoader.getBrain(url, name);
-						
-						brains.put(name, brain);
-					}
-					catch (RuntimeException e)
-					{
-						JOptionPane.showMessageDialog(SnakeSettingsPanel.this, e.toString());
-						return;
-					}
+					++numberOfSnakesWithTheSameBrain;
+					snakeName = name + "#" + numberOfSnakesWithTheSameBrain;
 				}
 				
-				snakes.add(name);
-				snakeJList.setListData(snakes.toArray());
+				System.out.println("Snake name: " + snakeName + ", numberOfSnakesWithTheSameBrain: " + numberOfSnakesWithTheSameBrain);
+
+				try
+				{
+					Brain brain = classLoader.getBrain(url, name);
+					
+					snakes.put(snakeName, brain);
+					
+					snakeJList.setListData(snakes.keySet().toArray());
+				}
+				catch (RuntimeException e)
+				{
+					JOptionPane.showMessageDialog(SnakeSettingsPanel.this, e.toString());
+					return;
+				}
+				
 			}
 		}
 	}
@@ -136,13 +142,9 @@ class SnakeSettingsPanel extends JPanel
 	
 	
 	
-	public Map<String, Brain> getBrains()
-	{
-		return brains;
-	}
-	
-	public List<String> getSnakes()
+	public Map<String, Brain> getSnakes()
 	{
 		return snakes;
 	}
+	
 }
