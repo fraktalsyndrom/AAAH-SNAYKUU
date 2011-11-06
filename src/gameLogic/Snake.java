@@ -46,6 +46,27 @@ public class Snake extends GameObject implements Serializable
 	}
 	
 	/**
+	 * Get a list of all the squares this snake has occupied.
+	 * 
+	 * @return A list of the positions of the occupied squares.
+	 */
+	public LinkedList<Position> getSegments()
+	{
+		return new LinkedList<Position>(segments);
+	}
+	
+	/**
+	 * Get the direction of a specific segment in this snake.
+	 * 
+	 * @param position The position (in x-y coordinates) of the segment.
+	 * @return The direction of that segment, or null if this snake has no segment on the specified position.
+	 */
+	public Direction getDirection(Position position)
+	{
+		return directionLog.get(position);
+	}
+	
+	/**
 	 * Gets the current position of this snake's head.
 	 *
 	 * @return	The Position of the snake's head.
@@ -165,14 +186,8 @@ public class Snake extends GameObject implements Serializable
 		++lifespan;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public LinkedList<Position> getSegments()
+	void removeBrain()
 	{
-		return (LinkedList<Position>)(segments.clone());
-	}
-	
-	public Direction getDirection(Position pos)
-	{
-		return directionLog.get(pos);
+		brain = null;
 	}
 }
