@@ -106,6 +106,7 @@ class SnakeSettingsPanel extends JPanel
 			addSnakeButton.addActionListener(new AddSnakeListener());
 			
 			removeSnakeButton = new JButton("Remove snake");
+			removeSnakeButton.addActionListener(new RemoveSnakeListener());
 			
 			add(addSnakeButton);
 			add(removeSnakeButton);
@@ -152,6 +153,21 @@ class SnakeSettingsPanel extends JPanel
 				snakeJList.setListData(snakes.keySet().toArray());
 			}
 		}
+		
+		private class RemoveSnakeListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				Object selectedObject = snakeJList.getSelectedValue();
+				if (selectedObject == null)
+					return;
+				
+				snakes.remove(selectedObject.toString());
+				
+				snakeJList.setListData(snakes.keySet().toArray());
+			}
+		}
+
 	}
 	
 	
