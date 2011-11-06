@@ -10,7 +10,7 @@ import gameLogic.*;
 
 class GameBoard extends JComponent
 {
-	private Session session;
+	private Game game;
 	private int pixelsPerXUnit, pixelsPerYUnit;
 	private int graphicsWidth, graphicsHeight;
 	private int boardWidth, boardHeight;
@@ -18,15 +18,15 @@ class GameBoard extends JComponent
 	private Color wall = Color.BLACK;
 	private Color grid = Color.GRAY;
 	
-	public GameBoard(Session session, int pixelsPerUnit)
+	public GameBoard(Game game, int pixelsPerUnit)
 	{
-		this.session = session;
+		this.game = game;
 		this.pixelsPerXUnit = pixelsPerUnit;
 		this.pixelsPerYUnit = pixelsPerUnit;
 		this.addComponentListener(new CompLis());
 		
-		boardWidth = session.getBoard().getWidth();
-		boardHeight = session.getBoard().getHeight();
+		boardWidth  = game.getMetadata().getBoardWidth();
+		boardHeight = game.getMetadata().getBoardHeight();
 		
 		/*
 		 * The grid needs space to be in that is not inside a game square.
@@ -50,7 +50,7 @@ class GameBoard extends JComponent
 	{
 		super.paintComponent(g);
 		
-		GameState gs = session.getCurrentState();
+		GameState gs = game.getCurrentState();
 		Board board = gs.getBoard();
 		
 		//Basic preparation.

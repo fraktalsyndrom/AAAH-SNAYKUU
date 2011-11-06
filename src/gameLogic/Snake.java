@@ -19,7 +19,6 @@ public class Snake extends GameObject
 {
 	private String name;
 	private Brain brain;
-	private boolean grow = false;
 	private LinkedList<Position> segments;
 	private HashMap<Position, Direction> directionLog = new HashMap<Position, Direction>();
 	private int score = 0;
@@ -31,6 +30,18 @@ public class Snake extends GameObject
 		super(type);
 		this.name = name;
 		this.brain = brain;
+	}
+	
+	public Snake(Snake other)
+	{
+		super(other.getType());
+		this.name = other.name;
+		this.brain = other.brain;
+		this.segments = new LinkedList<Position>(other.segments);
+		this.directionLog = new HashMap<Position, Direction>(other.directionLog);
+		this.score = other.score;
+		this.lifespan = other.lifespan;
+		this.isDead = other.isDead;
 	}
 	
 	/**

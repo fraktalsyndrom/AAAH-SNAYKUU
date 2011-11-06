@@ -11,7 +11,7 @@ import java.util.*;
  * @author	Arian Jafari
  */
 
-public class Session
+public class Session implements Game
 {
 	private Board board;
 	private Set<Snake> snakes = new HashSet<Snake>();
@@ -23,7 +23,7 @@ public class Session
 
 	private Metadata metadata;
 	
-	private RecordedGame recordedGame;
+	private RecordedGame recordedGame = null;
 	
 	public Session(Metadata metadata)
 	{
@@ -32,14 +32,16 @@ public class Session
 		initGameObjects();
 		
 		board = createStandardBoard(metadata.getBoardWidth(), metadata.getBoardHeight());
-		
-		recordedGame = new RecordedGame(metadata, new Board(board));
-		
 	}
 	
 	public GameState getCurrentState()
 	{
 		return new GameState(board, snakes, metadata, ErrorState.NO_ERROR);
+	}
+	
+	public Metadata getMetadata()
+	{
+		return metadata;
 	}
 	
 	public void addSnake(Snake newSnake)
@@ -63,6 +65,8 @@ public class Session
 	public void prepareForStart()
 	{
 		placeSnakesOnBoard();
+		
+		recordedGame = new RecordedGame(metadata, board, snakes);
 	}
 	
 	/**
@@ -118,7 +122,7 @@ public class Session
 		if (perhapsSpawnFruit())
 			System.out.println("FRUIT SPAWNED");
 		
-		Frame frame = new Frame(board);
+		Frame frame = new Frame(board, snakes);
 		recordedGame.addFrame(frame);
 	}
 	

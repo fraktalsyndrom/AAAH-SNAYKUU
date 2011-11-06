@@ -13,6 +13,7 @@ public class SettingsWindow extends JFrame
 	private JTabbedPane tabbedPane;	
 	private SnakeSettingsPanel snakeSettingsPanel;
 	private GameSettingsPanel gameSettingsPanel;
+	private ReplayPanel replayPanel;
 	private DeveloperPanel developerPanel;
 	
 	
@@ -26,10 +27,12 @@ public class SettingsWindow extends JFrame
 		
 		snakeSettingsPanel = new SnakeSettingsPanel();
 		gameSettingsPanel = new GameSettingsPanel();
+		replayPanel = new ReplayPanel();
 		developerPanel = new DeveloperPanel(this);
 		
 		tabbedPane.addTab("Snayks", snakeSettingsPanel);
 		tabbedPane.addTab("Game settings", gameSettingsPanel);
+		tabbedPane.addTab("Replay", replayPanel);
 		tabbedPane.addTab("Developer", developerPanel);
 		
 		startButton = new JButton("Start");
