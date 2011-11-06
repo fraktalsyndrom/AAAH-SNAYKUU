@@ -2,8 +2,9 @@ package gameLogic;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.io.Serializable;
 
-public class Frame
+public class Frame implements Serializable
 {
 	private Board board;
 	private Set<Snake> snakes;

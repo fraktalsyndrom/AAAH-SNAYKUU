@@ -1,5 +1,7 @@
 package gameLogic;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the metadata concerning the current game session.
  * such as the size of the map, the thinking time for the snakes, the frequency
@@ -10,7 +12,7 @@ package gameLogic;
  * @author	Arian Jafari
  */
 
-public class Metadata
+public class Metadata implements Serializable
 {
 	private int boardWidth;
 	private int boardHeight;

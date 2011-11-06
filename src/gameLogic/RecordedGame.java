@@ -1,9 +1,10 @@
 package gameLogic;
 
+import java.io.*;
 import java.util.LinkedList;
 import java.util.Set;
 
-public class RecordedGame implements Game
+public class RecordedGame implements Game, Serializable
 {
 	private Metadata metadata;
 	private LinkedList<Frame> frames = new LinkedList<Frame>();
@@ -52,4 +53,20 @@ public class RecordedGame implements Game
 		currentFrameIndex = index;
 	}
 	
+	public void saveToFile(File file) throws IOException
+	{
+		FileOutputStream fileStream = new FileOutputStream(file);
+		ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
+		objectStream.writeObject(this);
+		objectStream.close();
+	}
+	
+	public static RecordedGame loadFromFile(File file) throws IOException, ClassNotFoundException
+	{
+		FileInputStream fileStream = new FileInputStream(file);;
+		ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+		RecordedGame recordedGame = (RecordedGame)objectStream.readObject();
+		objectStream.close();
+		return recordedGame;
+	}
 }

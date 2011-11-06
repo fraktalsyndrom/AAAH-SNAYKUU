@@ -1,5 +1,7 @@
 package gameLogic;
 
+import java.io.Serializable;
+
 /**
  * Represents a type of object that may be present on the board. Examples include
  * Fruit and Wall. Instances of some GameObjectTypes are lethal to collide with,
@@ -8,7 +10,7 @@ package gameLogic;
  * @author	Sixten Hilborn
  * @author	Arian Jafari
  */
-public class GameObjectType
+public class GameObjectType implements Serializable
 {
 	private String name;
 	private boolean isLethal;

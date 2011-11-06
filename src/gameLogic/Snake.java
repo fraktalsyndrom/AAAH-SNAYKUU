@@ -1,5 +1,6 @@
 package gameLogic;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ import java.util.HashMap;
  * @author	Arian Jafari
  */
 
-public class Snake extends GameObject
+public class Snake extends GameObject implements Serializable
 {
 	private String name;
 	private Brain brain;
@@ -36,7 +37,7 @@ public class Snake extends GameObject
 	{
 		super(other.getType());
 		this.name = other.name;
-		this.brain = other.brain;
+		this.brain = null;
 		this.segments = new LinkedList<Position>(other.segments);
 		this.directionLog = new HashMap<Position, Direction>(other.directionLog);
 		this.score = other.score;

@@ -1,5 +1,6 @@
 package gameLogic;
 
+import java.io.Serializable;
 import java.util.*;
 
 /** 
@@ -12,7 +13,7 @@ import java.util.*;
  * @author	Arian Jafari
  */
 
-public class Square
+public class Square implements Serializable
 {
 	private ArrayList<GameObject> objects;
 	

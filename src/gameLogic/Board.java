@@ -1,5 +1,6 @@
 package gameLogic;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -12,7 +13,7 @@ import java.util.HashSet;
  * @see		Square
  */
 
-public class Board 
+public class Board implements Serializable
 {
 	private Square[][] board;
 	
