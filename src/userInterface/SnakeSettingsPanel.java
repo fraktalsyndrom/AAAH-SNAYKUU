@@ -75,6 +75,20 @@ class SnakeSettingsPanel extends JPanel
 		
 		private class AddSnakeListener implements ActionListener
 		{
+			private String generateSnakeName(String name)
+			{
+				String snakeName = name;
+				int numberOfSnakesWithTheSameBrain = 1;
+				
+				while (snakes.containsKey(snakeName))
+				{
+					++numberOfSnakesWithTheSameBrain;
+					snakeName = name + "#" + numberOfSnakesWithTheSameBrain;
+				}
+				
+				return snakeName;
+			}
+			
 			public void actionPerformed(ActionEvent event)
 			{
 				int returnValue = fileChooser.showOpenDialog(SnakeSettingsPanel.this);
@@ -95,27 +109,12 @@ class SnakeSettingsPanel extends JPanel
 				
 				String name = fileChooser.getSelectedFile().getName();
 					
-				name = name.substring(0, name.lastIndexOf("."));
+				name = name.substring(0, name.lastIndexOf("."));				
 				
-				String snakeName = name;
-				int numberOfSnakesWithTheSameBrain = 1;
-				System.out.println("Name: " + name);
-				
-				while (snakes.containsKey(snakeName))
-				{
-					++numberOfSnakesWithTheSameBrain;
-					snakeName = name + "#" + numberOfSnakesWithTheSameBrain;
-				}
-				
-				System.out.println("Snake name: " + snakeName + ", numberOfSnakesWithTheSameBrain: " + numberOfSnakesWithTheSameBrain);
-
+				Brain brain = null;
 				try
 				{
-					Brain brain = classLoader.getBrain(url, name);
-					
-					snakes.put(snakeName, brain);
-					
-					snakeJList.setListData(snakes.keySet().toArray());
+					brain = classLoader.getBrain(url, name);
 				}
 				catch (RuntimeException e)
 				{
@@ -123,6 +122,9 @@ class SnakeSettingsPanel extends JPanel
 					return;
 				}
 				
+				snakes.put(generateSnakeName(name), brain);
+					
+				snakeJList.setListData(snakes.keySet().toArray());
 			}
 		}
 	}
