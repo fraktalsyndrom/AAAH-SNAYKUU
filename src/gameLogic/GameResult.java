@@ -8,13 +8,19 @@ import java.util.Comparator;
 public class GameResult
 {
 	private Set<Snake> snakes;
-	
 	private Metadata metadata;
+	private RecordedGame recordedGame;
 	
-	public GameResult(Set<Snake> snakes, Metadata metadata)
+	public GameResult(Set<Snake> snakes, Metadata metadata, RecordedGame recordedGame)
 	{
 		this.metadata = metadata;		
 		this.snakes = snakes;
+		this.recordedGame = recordedGame;
+	}
+	
+	public RecordedGame getRecordedGame()
+	{
+		return recordedGame;
 	}
 	
 	public List<List<Snake>> getWinners()

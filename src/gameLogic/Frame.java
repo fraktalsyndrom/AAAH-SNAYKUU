@@ -7,12 +7,12 @@ import java.io.Serializable;
 public class Frame implements Serializable
 {
 	private Board board;
-	private Set<Snake> snakes;
+	private Set<Snake> snakes = new HashSet<Snake>();
 	
 	public Frame(Board board, Set<Snake> snakes)
 	{
 		this.board = new Board(board);
-		this.snakes = new HashSet<Snake>();
+
 		for (Snake snake : snakes)
 			this.snakes.add(new Snake(snake));
 	}

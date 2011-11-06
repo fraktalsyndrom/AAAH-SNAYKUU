@@ -106,7 +106,7 @@ public class Session implements Game
 	 */
 	public GameResult getGameResult()
 	{
-		return new GameResult(snakes, metadata);
+		return new GameResult(snakes, metadata, recordedGame);
 	}
 	
 	/**
@@ -124,6 +124,12 @@ public class Session implements Game
 		
 		Frame frame = new Frame(board, snakes);
 		recordedGame.addFrame(frame);
+	}
+	
+	public void cleanup()
+	{
+		for (Snake snake : snakes)
+			snake.removeBrain();
 	}
 	
 	private boolean checkForGrowth()

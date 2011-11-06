@@ -2,10 +2,12 @@ package userInterface;
 
 import gameLogic.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
 import java.util.List;
+import java.io.File;
 
 public class PostGameWindow extends JFrame
 {
@@ -15,6 +17,7 @@ public class PostGameWindow extends JFrame
 	private JTextArea centerArea;
 	private JButton newGameButton;
 	private JButton rematchButton;
+	private JButton saveReplayButton;
 	private JButton exitButton;
 	private GameEndType gameEndType = null;
 	
@@ -32,6 +35,9 @@ public class PostGameWindow extends JFrame
 		rematchButton = new JButton("Rematch");
 		rematchButton.addActionListener(new RematchButtonListener());
 		
+		saveReplayButton = new JButton("Save replay");
+		saveReplayButton.addActionListener(new SaveReplayButtonListener());
+		
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new CloseButtonListener());
 		
@@ -45,6 +51,7 @@ public class PostGameWindow extends JFrame
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(newGameButton);
 		buttonPanel.add(rematchButton);
+		buttonPanel.add(saveReplayButton);
 		buttonPanel.add(exitButton);
 		standingsPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -112,6 +119,33 @@ public class PostGameWindow extends JFrame
 			synchronized (PostGameWindow.this)
 			{
 				gameEndType = GameEndType.REMATCH;
+			}
+		}
+	}
+	
+	private class SaveReplayButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			JFileChooser fileChooser = new JFileChooser("./replays");
+			
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Snaykuu Replay (.srp)", "srp");
+			fileChooser.setFileFilter(filter);
+			
+			int returnValue = fileChooser.showSaveDialog(PostGameWindow.this);
+				
+			if (returnValue != JFileChooser.APPROVE_OPTION)
+				return;
+			
+			File file = fileChooser.getSelectedFile();
+			try
+			{
+				finalResult.getRecordedGame().saveToFile(file);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(PostGameWindow.this, e);
 			}
 		}
 	}

@@ -77,6 +77,8 @@ class Main
 			sleep(gameSpeed);
 		}
 		
+		session.cleanup();
+		
 		PostGameWindow postGameWindow = new PostGameWindow(session.getGameResult());
 		GameEndType gameEndType = postGameWindow.getGameEndType();
 		mainWindow.dispose();

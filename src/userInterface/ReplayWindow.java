@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import gameLogic.*;
 
@@ -23,7 +24,7 @@ public class ReplayWindow extends JFrame
 		add(controlPanel, BorderLayout.SOUTH);
 		pack();
 		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
 	}
 	
@@ -35,9 +36,30 @@ public class ReplayWindow extends JFrame
 		
 		public ControlPanel()
 		{
+			backOneFrame.addActionListener(new PreviousFrameListener());
+			forwardOneFrame.addActionListener(new NextFrameListener());
+			
 			add(backOneFrame);
 			add(play);
 			add(forwardOneFrame);
+		}
+		
+		private class PreviousFrameListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				recordedGame.setCurrentReplayFrame(recordedGame.getCurrentReplayFrame() - 1);
+				ReplayWindow.this.repaint();
+			}
+		}
+		
+		private class NextFrameListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				recordedGame.setCurrentReplayFrame(recordedGame.getCurrentReplayFrame() + 1);
+				ReplayWindow.this.repaint();
+			}
 		}
 	}
 	
