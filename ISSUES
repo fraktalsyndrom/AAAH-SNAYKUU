@@ -1,44 +1,13 @@
-#### Copied from our 'Issues' page on GitHub:
+## TOP PRIORITY		//stuff that -has- to be in
 
-# Developer mode shouldn't output to terminal
+- Differentiation of snakes using colors.
 
-Also, it should run in its own thread so that it doesn't freeze the
-entire interface.
+## MEDIUM PRIORITY	//stuff we want
 
+- Live-updated score board showing how many fruits each snake has eaten.
 
-# Expand the snake placement algorithm
+## LOW PRIORITY		//stuff that would be nice, but not necessary.
 
-As of now, getting starting positions for the snakes is simple, but only
-if we want them to start at a size of 1. When snakes are placed on the
-board, we want them to be able to occupy more than one space from the 
-beginning. One possibility is to expand the snake's body somehow from the
-starting head position.
-Also, the snakes' starting directions needs to be more cleverly decided.
-Right now, they all move towards Direction.NORTH, but this won't work if
-we want snakes to be able to spawn larger than one square.
-
-
-# Two snakes using same brain
-
-Two snakes should be able to use the same brain class, but not the same
-brain instance. The class loader should also be able to reload a brain
-between two games.
-
-
-# Improve PostGameWindow
-
-- Allow starting a new game from within without having to restart the entire
-program (both rematches and be able to change settings in between).
-- Add more statistics (?)
-- De-uglify.
-
-
-# Replay
-
-Fix the replay system. We need to create a JFrame for this.
-
-
-# Kills
-
-Snakes will get one point for each kill. This does however not affect
-the game result
+- Either fix developer mode output or remove it altogether.
+- Counting snake kills.
+- De-uglify PostGameWindow.
