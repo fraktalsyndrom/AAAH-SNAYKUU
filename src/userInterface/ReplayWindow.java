@@ -10,6 +10,7 @@ public class ReplayWindow extends JFrame
 	private RecordedGame recordedGame;
 	private GameBoard gameBoard;
 	private ControlPanel controlPanel;
+	private ReplayThread replayThread = new ReplayThread();
 	
 	public ReplayWindow(RecordedGame recordedGame, int pixelsPerSquare)
 	{
@@ -24,9 +25,23 @@ public class ReplayWindow extends JFrame
 		add(controlPanel, BorderLayout.SOUTH);
 		pack();
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		addWindowListener(new WindowListener());
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setVisible(true);
+		
+		replayThread.start();
 	}
+	
+	
+	private class WindowListener extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent e)
+		{
+			replayThread.stopRunning();
+			dispose();
+		}
+	}
+	
 	
 	private class ControlPanel extends JPanel
 	{
@@ -40,6 +55,7 @@ public class ReplayWindow extends JFrame
 		{
 			beginButton.addActionListener(new BeginListener());
 			backOneFrame.addActionListener(new PreviousFrameListener());
+			play.addActionListener(new PlayListener());
 			forwardOneFrame.addActionListener(new NextFrameListener());
 			endButton.addActionListener(new EndListener());
 			
@@ -68,6 +84,14 @@ public class ReplayWindow extends JFrame
 			}
 		}
 		
+		private class PlayListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				replayThread.togglePause();
+			}
+		}
+		
 		private class NextFrameListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent event)
@@ -88,4 +112,60 @@ public class ReplayWindow extends JFrame
 	}
 	
 	
+	private class ReplayThread extends Thread
+	{
+		private boolean running = true;
+		private boolean paused = true;
+		
+		
+		public void run()
+		{
+			while (isRunning())
+			{
+				int currentFrame = recordedGame.getCurrentReplayFrame() + 1;
+				recordedGame.setCurrentReplayFrame(currentFrame);
+				repaint();
+				
+				if (currentFrame >= recordedGame.getTurnCount() && !isPaused())
+					togglePause();
+				
+				while (isPaused())
+					ReplayWindow.sleep(10);
+				
+				ReplayWindow.sleep(300);
+			}
+		}
+		
+		public synchronized void togglePause()
+		{
+			paused = !paused;
+		}
+		
+		public synchronized boolean isPaused()
+		{
+			return paused;
+		}
+		
+		public synchronized void stopRunning()
+		{
+			running = false;
+		}
+		
+		public synchronized boolean isRunning()
+		{
+			return running;
+		}
+		
+	}
+	
+	private static void sleep(long ms)
+	{
+		try
+		{
+			Thread.currentThread().sleep(ms);
+		}
+		catch (InterruptedException e)
+		{
+		}
+	}
 }
