@@ -30,18 +30,33 @@ public class ReplayWindow extends JFrame
 	
 	private class ControlPanel extends JPanel
 	{
+		private JButton beginButton = new JButton("<<");
 		private JButton backOneFrame = new JButton("<");
 		private JButton play = new JButton("P");
 		private JButton forwardOneFrame = new JButton(">");
+		private JButton endButton = new JButton(">>");
 		
 		public ControlPanel()
 		{
+			beginButton.addActionListener(new BeginListener());
 			backOneFrame.addActionListener(new PreviousFrameListener());
 			forwardOneFrame.addActionListener(new NextFrameListener());
+			endButton.addActionListener(new EndListener());
 			
+			add(beginButton);
 			add(backOneFrame);
 			add(play);
 			add(forwardOneFrame);
+			add(endButton);
+		}
+		
+		private class BeginListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				recordedGame.setCurrentReplayFrame(0);
+				ReplayWindow.this.repaint();
+			}
 		}
 		
 		private class PreviousFrameListener implements ActionListener
@@ -58,6 +73,15 @@ public class ReplayWindow extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				recordedGame.setCurrentReplayFrame(recordedGame.getCurrentReplayFrame() + 1);
+				ReplayWindow.this.repaint();
+			}
+		}
+		
+		private class EndListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				recordedGame.setCurrentReplayFrame(recordedGame.getTurnCount());
 				ReplayWindow.this.repaint();
 			}
 		}
