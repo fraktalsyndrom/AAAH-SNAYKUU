@@ -8,11 +8,26 @@ import java.io.File;
 
 class ReplayPanel extends JPanel
 {
+	private SettingsWindow settingsWindow;
 	private JButton loadAndPlay = new JButton("Load an old game and play it!");
-	public ReplayPanel()
+	
+	public ReplayPanel(SettingsWindow settingsWindow)
 	{
+		this.settingsWindow = settingsWindow;
 		loadAndPlay.addActionListener(new ReplayListener());
 		add(loadAndPlay);
+	}
+	
+	private void startReplay(RecordedGame recordedGame)
+	{
+		try
+		{
+			new ReplayWindow(settingsWindow, recordedGame);
+		}
+		catch (NumberFormatException e)
+		{
+			JOptionPane.showMessageDialog(getParent(), "You must enter a valid amount of pixels per square");
+		}
 	}
 	
 	private class ReplayListener implements ActionListener
@@ -32,7 +47,7 @@ class ReplayPanel extends JPanel
 			try
 			{
 				RecordedGame recordedGame = RecordedGame.loadFromFile(file);
-				new ReplayWindow(recordedGame, 12);
+				startReplay(recordedGame);
 			}
 			catch (Exception e)
 			{

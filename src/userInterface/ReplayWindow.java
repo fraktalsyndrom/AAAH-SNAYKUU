@@ -7,18 +7,20 @@ import gameLogic.*;
 
 public class ReplayWindow extends JFrame
 {
+	private SettingsWindow settingsWindow;
 	private RecordedGame recordedGame;
 	private GameBoard gameBoard;
 	private ControlPanel controlPanel;
 	private ReplayThread replayThread = new ReplayThread();
 	
-	public ReplayWindow(RecordedGame recordedGame, int pixelsPerSquare)
+	public ReplayWindow(SettingsWindow settingsWindow, RecordedGame recordedGame)
 	{
+		this.settingsWindow = settingsWindow;
 		this.recordedGame = recordedGame;
 		
 		setLayout(new BorderLayout());
 		
-		gameBoard = new GameBoard(recordedGame, pixelsPerSquare);
+		gameBoard = new GameBoard(recordedGame, settingsWindow.getPixelsPerUnit());
 		controlPanel = new ControlPanel();
 				
 		add(gameBoard, BorderLayout.CENTER);
@@ -132,7 +134,14 @@ public class ReplayWindow extends JFrame
 				while (isPaused())
 					ReplayWindow.sleep(10);
 				
-				ReplayWindow.sleep(300);
+				try
+				{
+					ReplayWindow.sleep(settingsWindow.getGameSpeed());
+				}
+				catch (Exception e)
+				{
+					ReplayWindow.sleep(300);
+				}
 			}
 		}
 		

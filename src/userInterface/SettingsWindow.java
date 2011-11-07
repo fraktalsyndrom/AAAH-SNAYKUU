@@ -27,7 +27,7 @@ public class SettingsWindow extends JFrame
 		
 		snakeSettingsPanel = new SnakeSettingsPanel();
 		gameSettingsPanel = new GameSettingsPanel();
-		replayPanel = new ReplayPanel();
+		replayPanel = new ReplayPanel(this);
 		developerPanel = new DeveloperPanel(this);
 		
 		tabbedPane.addTab("Snayks", snakeSettingsPanel);
