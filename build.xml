@@ -10,7 +10,7 @@
 
     <target name="compile" depends="clobber" description="compile the Java source code to class files">
         <mkdir dir="classes" />
-        <javac srcdir="src" destdir="classes" />
+        <javac srcdir="src" destdir="classes" encoding="utf8" />
     </target>
 
     <target name="jar" depends="compile" description="create a Jar file for the application">
@@ -35,7 +35,7 @@
     </target>
 	
     <target name="bot" description="compile every custom bots">
-		<javac srcdir="bot" classpath="class" sourcepath="src" />
+		<javac srcdir="bot" classpath="class" sourcepath="src" encoding="utf8" />
     </target>
 
 	<target name="run" description="execute the Jar file">
