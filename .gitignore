@@ -2,6 +2,9 @@
 *.class
 *.jar
 
+# Snaykuu replays
+*.srp
+
 # Don't even know what this is
 *.zargo~
 
