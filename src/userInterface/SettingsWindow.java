@@ -16,8 +16,8 @@ public class SettingsWindow extends JFrame
 	private ReplayPanel replayPanel;
 	private DeveloperPanel developerPanel;
 	
-	
 	private JButton startButton;
+	private JPanel startButtonPanel;
 	
 	public SettingsWindow()
 	{
@@ -37,9 +37,12 @@ public class SettingsWindow extends JFrame
 		
 		startButton = new JButton("Start");
 		startButton.addActionListener(new StartButtonListener());
+		startButtonPanel = new JPanel();
+		startButtonPanel.add(startButton);
 		
 		add(tabbedPane, BorderLayout.CENTER);
-		add(startButton, BorderLayout.SOUTH);
+		
+		add(startButtonPanel, BorderLayout.SOUTH);
 		
 		setSize(600, 400);
 		
