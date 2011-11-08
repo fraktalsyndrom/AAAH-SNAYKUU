@@ -70,7 +70,7 @@ public class SettingsWindow extends JFrame
 		return done;
 	}
 	
-	public Session generateSession()
+	public Session generateSession() throws Exception
 	{
 		Metadata metadata = gameSettingsPanel.generateMetadata();
 		
@@ -80,7 +80,7 @@ public class SettingsWindow extends JFrame
 		
 		for (Map.Entry<String, Brain> snakeEntry : snakeSettingsPanel.getSnakes().entrySet())
 		{
-			Snake snake = new Snake(objectType, snakeEntry.getKey(), snakeEntry.getValue()); //Här behöver brain klonas.
+			Snake snake = new Snake(objectType, snakeEntry.getKey(), snakeEntry.getValue());
 			session.addSnake(snake);
 		}
 		

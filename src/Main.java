@@ -25,10 +25,21 @@ class Main
 			int pixelsPerUnit = settingsWindow.getPixelsPerUnit();
 			gameEndType = runGame(session, gameSpeed, pixelsPerUnit);
 			
+			if (gameEndType == GameEndType.REMATCH)
+			{
+				try
+				{
+					session = settingsWindow.generateSession();
+				}
+				catch (Exception e)
+				{
+					javax.swing.JOptionPane.showMessageDialog(null, e);
+					gameEndType = GameEndType.NEW_GAME;
+				}
+			}
 			if (gameEndType == GameEndType.NEW_GAME)
 				session = prepareSession(settingsWindow);
-			else if (gameEndType == GameEndType.REMATCH)
-				session = settingsWindow.generateSession();
+			 
 		}
 		while (gameEndType != GameEndType.EXIT);
 	}

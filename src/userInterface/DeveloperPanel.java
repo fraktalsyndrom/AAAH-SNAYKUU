@@ -27,11 +27,18 @@ class DeveloperPanel extends JPanel
 		for (int currentGame = 0; currentGame < numberOfGames; ++currentGame)
 		{
 			System.out.println("Starting game #" + currentGame);
-			Session session = settingsWindow.generateSession();
-			while (!session.hasEnded())
-				session.tick();
-			
-			System.out.println(session.getGameResult());
+			try
+			{
+				Session session = settingsWindow.generateSession();
+				while (!session.hasEnded())
+					session.tick();
+				
+				System.out.println(session.getGameResult());
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error: " + e);
+			}
 		}
 		
 		System.out.println("DONE");

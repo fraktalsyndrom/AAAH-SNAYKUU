@@ -17,9 +17,8 @@ class SnakeSettingsPanel extends JPanel
 	private JList snakeJList;
 	private JList brainJList;
 	private SnakeManagementPanel snakeManagementPanel;
-	private Map<String, Brain> snakes = new TreeMap<String, Brain>();
+	private Map<String, String> snakes = new TreeMap<String, String>();
 	private Map<String, Class<? extends Brain>> brains = new TreeMap<String, Class<? extends Brain>>();
-	private BotClassLoader classLoader;
 	
 	public SnakeSettingsPanel()
 	{
@@ -38,14 +37,14 @@ class SnakeSettingsPanel extends JPanel
 		add(snakeManagementPanel, BorderLayout.NORTH);
 		
 		
-		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
-		classLoader = new BotClassLoader(parentClassLoader);
-		
 		loadBrains();
 	}
 	
 	private void loadBrains()
 	{
+		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
+		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
+		
 		FilenameFilter filter = new ClassfileFilter();
 		File botFolder = new File("./bot");
 		File[] listOfFiles = botFolder.listFiles(filter);
@@ -85,6 +84,12 @@ class SnakeSettingsPanel extends JPanel
 		brainJList.setListData(brains.keySet().toArray());
 	}
 	
+	private void reloadBrains()
+	{
+		//loadBrains();
+		
+	}
+	
 	static private class ClassfileFilter implements FilenameFilter
 	{
 		public boolean accept(File dir, String name)
@@ -107,6 +112,9 @@ class SnakeSettingsPanel extends JPanel
 			
 			removeSnakeButton = new JButton("Remove snake");
 			removeSnakeButton.addActionListener(new RemoveSnakeListener());
+			
+			snakeJList.addMouseListener(new SnakeMouseListener());
+			brainJList.addMouseListener(new BrainMouseListener());
 			
 			add(addSnakeButton);
 			add(removeSnakeButton);
@@ -137,18 +145,7 @@ class SnakeSettingsPanel extends JPanel
 				
 				String name = selectedObject.toString();
 				
-				Brain brain = null;
-				try
-				{
-					brain = classLoader.getBrain(name);
-				}
-				catch (RuntimeException e)
-				{
-					JOptionPane.showMessageDialog(SnakeSettingsPanel.this, e.toString());
-					return;
-				}
-				
-				snakes.put(generateSnakeName(name), brain);
+				snakes.put(generateSnakeName(name), name);
 					
 				snakeJList.setListData(snakes.keySet().toArray());
 			}
@@ -167,15 +164,43 @@ class SnakeSettingsPanel extends JPanel
 				snakeJList.setListData(snakes.keySet().toArray());
 			}
 		}
+		
+		private class SnakeMouseListener extends MouseAdapter
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() % 2 == 0)
+				{
+					new RemoveSnakeListener().actionPerformed(null);
+				}
+			}
+		}
+		
+		private class BrainMouseListener extends MouseAdapter
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() % 2 == 0)
+				{
+					new AddSnakeListener().actionPerformed(null);
+				}
+			}
+		}
 
 	}
 	
 	
 	
 	
-	public Map<String, Brain> getSnakes()
+	public Map<String, Brain> getSnakes() throws Exception
 	{
-		return snakes;
+		Map<String, Brain> snakeMap = new TreeMap<String, Brain>();
+		for (Map.Entry<String, String> snake : snakes.entrySet())
+		{
+			Brain brain = brains.get(snake.getValue()).newInstance();
+			snakeMap.put(snake.getKey(), brain);
+		}
+		return snakeMap;
 	}
 	
 }
