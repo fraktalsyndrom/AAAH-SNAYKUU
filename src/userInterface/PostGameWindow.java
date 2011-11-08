@@ -14,7 +14,7 @@ public class PostGameWindow extends JFrame
 	private GameResult finalResult;
 	private JPanel standingsPanel;
 	private JLabel headerLabel, standingsLabel;
-	private JTextArea centerArea;
+	private ScoreBoardPanel scoreBoardPanel;
 	private JButton newGameButton;
 	private JButton rematchButton;
 	private JButton saveReplayButton;
@@ -42,11 +42,11 @@ public class PostGameWindow extends JFrame
 		exitButton.addActionListener(new CloseButtonListener());
 		
 		headerLabel = new JLabel();
-		centerArea = new JTextArea();
-		centerArea.setEditable(false);
+		
+		scoreBoardPanel = new ScoreBoardPanel();
 		
 		standingsPanel.add(headerLabel, BorderLayout.NORTH);
-		standingsPanel.add(new JScrollPane(centerArea), BorderLayout.CENTER);
+		standingsPanel.add(scoreBoardPanel, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(newGameButton);
@@ -69,7 +69,7 @@ public class PostGameWindow extends JFrame
 	{
 		headerLabel.setText("SNAYKUU RESULTS");
 		
-		centerArea.setText("SCORES:\n" + finalResult);
+		scoreBoardPanel.updateScore(finalResult);
 	}
 	
 	static private void sleep(int ms)
