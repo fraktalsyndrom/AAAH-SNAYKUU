@@ -62,14 +62,14 @@ class GameBoard extends JComponent
 		int lineXpos = 0;
 		for(int x = 0; x < graphicsWidth; ++x) //Vertical lines
 		{
-			g.drawLine(lineXpos, 0, lineXpos, graphicsHeight);
+			g.drawLine(lineXpos, 0, lineXpos, graphicsHeight-1);
 			lineXpos += (pixelsPerXUnit+1);
 		}
 		
 		int lineYpos = 0;
 		for(int y = 0; y < graphicsHeight; ++y) //Horizontal lines
 		{
-			g.drawLine(0, lineYpos, graphicsWidth, lineYpos);
+			g.drawLine(0, lineYpos, graphicsWidth-1, lineYpos);
 			lineYpos += (pixelsPerYUnit+1);
 		}
 		
