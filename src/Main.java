@@ -83,7 +83,7 @@ class Main
 		while (!session.hasEnded())
 		{
 			session.tick();
-			mainWindow.repaint();
+			mainWindow.update();
 			
 			sleep(gameSpeed);
 		}
