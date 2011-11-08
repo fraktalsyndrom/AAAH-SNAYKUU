@@ -40,7 +40,7 @@ class SnakeSettingsPanel extends JPanel
 		loadBrains();
 	}
 	
-	private void loadBrains()
+	private String loadBrains()
 	{
 		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
 		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
@@ -49,6 +49,7 @@ class SnakeSettingsPanel extends JPanel
 		File botFolder = new File("./bot");
 		File[] listOfFiles = botFolder.listFiles(filter);
 		
+		String loadedBrains = "";
 		for (File file : listOfFiles)
 		{
 			if (file.isDirectory())
@@ -62,7 +63,7 @@ class SnakeSettingsPanel extends JPanel
 			{
 				c = classLoader.getClass(name);
 			}
-			catch (RuntimeException e)
+			catch (Throwable e)
 			{
 				JOptionPane.showMessageDialog(this, e.toString());
 				continue;
@@ -78,16 +79,13 @@ class SnakeSettingsPanel extends JPanel
 				continue;
 			}
 			
+			loadedBrains += name + '\n';
 			brains.put(name, brainClass);
 		}
 		
 		brainJList.setListData(brains.keySet().toArray());
-	}
-	
-	private void reloadBrains()
-	{
-		//loadBrains();
 		
+		return loadedBrains;
 	}
 	
 	static private class ClassfileFilter implements FilenameFilter
@@ -104,6 +102,7 @@ class SnakeSettingsPanel extends JPanel
 	{
 		private JButton addSnakeButton;
 		private JButton removeSnakeButton;
+		private JButton reloadAllBrainsButton;
 		
 		public SnakeManagementPanel()
 		{
@@ -113,11 +112,15 @@ class SnakeSettingsPanel extends JPanel
 			removeSnakeButton = new JButton("Remove snake");
 			removeSnakeButton.addActionListener(new RemoveSnakeListener());
 			
+			reloadAllBrainsButton = new JButton("Reload all brains");
+			reloadAllBrainsButton.addActionListener(new ReloadBrainsListener());
+			
 			snakeJList.addMouseListener(new SnakeMouseListener());
 			brainJList.addMouseListener(new BrainMouseListener());
 			
 			add(addSnakeButton);
 			add(removeSnakeButton);
+			add(reloadAllBrainsButton);
 		}
 		
 		private class AddSnakeListener implements ActionListener
@@ -162,6 +165,15 @@ class SnakeSettingsPanel extends JPanel
 				snakes.remove(selectedObject.toString());
 				
 				snakeJList.setListData(snakes.keySet().toArray());
+			}
+		}
+		
+		private class ReloadBrainsListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				String reloadedBrains = loadBrains();
+				JOptionPane.showMessageDialog(SnakeSettingsPanel.this, "Successfully reloaded:\n" + reloadedBrains);
 			}
 		}
 		
