@@ -119,8 +119,7 @@ public class Session implements Game
 		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
 		moveAllSnakes(moves, growth);
 		checkForCollision();
-		if (perhapsSpawnFruit())
-			System.out.println("FRUIT SPAWNED");
+		perhapsSpawnFruit();
 		
 		Frame frame = new Frame(board, snakes);
 		recordedGame.addFrame(frame);
