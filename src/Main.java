@@ -50,7 +50,8 @@ class Main
 		{
 			settingsWindow.putThisDamnWindowInMyFace();
 			
-			while (!settingsWindow.isDone());
+			while (!settingsWindow.isDone())
+				sleep(10);
 			
 			return settingsWindow.generateSession();
 		}
@@ -58,17 +59,6 @@ class Main
 		{
 			javax.swing.JOptionPane.showMessageDialog(settingsWindow, e);
 			return prepareSession(settingsWindow);
-		}
-	}
-	
-	private static void sleep(long ms)
-	{
-		try
-		{
-			Thread.currentThread().sleep(ms);
-		}
-		catch (InterruptedException e)
-		{
 		}
 	}
 
@@ -95,5 +85,17 @@ class Main
 		mainWindow.dispose();
 		
 		return gameEndType;
+	}
+	
+	
+	private static void sleep(long ms)
+	{
+		try
+		{
+			Thread.currentThread().sleep(ms);
+		}
+		catch (InterruptedException e)
+		{
+		}
 	}
 }
