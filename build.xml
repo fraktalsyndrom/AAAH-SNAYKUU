@@ -22,6 +22,17 @@
             </manifest>
         </jar>
     </target>
+    
+    <target name="sjar" depends="compile" description="create a Jar file for the application, including source">
+        <jar destfile="snaykuu.jar">
+            <fileset dir="classes" includes="**/*.class" />
+            <fileset dir="." includes="img/*" />
+            <fileset dir="." includes="src/**/*.class" />
+            <manifest>
+                <attribute name="Main-Class" value="Main" />
+            </manifest>
+        </jar>
+    </target>
 	
     <target name="bot" description="compile every custom bots">
 		<javac srcdir="bot" classpath="class" sourcepath="src" />
@@ -39,6 +50,10 @@
 		<java jar="snaykuu.jar" fork="true"/>
 	</target>
 	
-	<target name="all" depends="doc,bot,crun" description="all of the above">
+	<target name="scrun" depends="sjar" description="compile, jar with source and run">
+		<java jar="snaykuu.jar" fork="true"/>
+	</target>
+	
+	<target name="all" depends="doc,bot,crun" description="recompile everything (javadoc, bots and app) and run">
 	</target>
 </project>
