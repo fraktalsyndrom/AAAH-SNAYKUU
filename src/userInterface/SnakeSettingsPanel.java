@@ -31,66 +31,105 @@ class SnakeSettingsPanel extends JPanel
 		
 		GridBagConstraints constraint = new GridBagConstraints();
 		
-		
-		constraint.fill = BOTH;
-		constraint.gridwidth = 2;
-		constraint.gridheight = 8;
-		constraint.weightx = 1.0;
-		
+		constraint.fill = HORIZONTAL;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 0;
 		constraint.gridy = 0;
 		
-			constraint.gridx = 0;
-			constraint.anchor = WEST;
+			JLabel selected = new JLabel("Snakes in game:");
+			selected.setHorizontalAlignment(JLabel.CENTER);
+			gridbag.setConstraints(selected, constraint);
+			add(selected);
+		
+		constraint.fill = HORIZONTAL;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 2;
+		constraint.gridy = 0;
+		
+			JLabel available = new JLabel("Available snakes:");
+			available.setHorizontalAlignment(JLabel.CENTER);
+			gridbag.setConstraints(available, constraint);
+			add(available);
+		
+		constraint.fill = BOTH;
+		constraint.gridwidth = 1;
+		constraint.gridheight = 8;
+		constraint.weightx = 0.5;
+		constraint.weighty = 0.5;
+		constraint.gridx = 0;
+		constraint.gridy = 1;
+		
+			snakeJList = new JList();
+			snakeJList.addMouseListener(new SnakeMouseListener());
 			
-				snakeJList = new JList();
-				snakeJList.addMouseListener(new SnakeMouseListener());
-				
-				JScrollPane jsp1 = new JScrollPane(snakeJList);
-				gridbag.setConstraints(jsp1, constraint);
-				add(jsp1);
-				
-				
-			constraint.gridx = 3;
-			constraint.anchor = EAST;
-				
-				brainJList = new JList();
-				brainJList.addMouseListener(new BrainMouseListener());
-				
-				JScrollPane jsp2 = new JScrollPane(brainJList);
-				gridbag.setConstraints(jsp2, constraint);
-				add(jsp2);
+			JScrollPane jsp1 = new JScrollPane(snakeJList);
+			jsp1.setPreferredSize(jsp1.getPreferredSize());
+			gridbag.setConstraints(jsp1, constraint);
+			add(jsp1);
+		
+		constraint.fill = BOTH;
+		constraint.gridwidth = 1;
+		constraint.gridheight = 8;
+		constraint.weightx = 0.5;
+		constraint.weighty = 0.5;
+		constraint.gridx = 2;
+		constraint.gridy = 1;
+		
+			brainJList = new JList();
+			brainJList.addMouseListener(new BrainMouseListener());
+			
+			JScrollPane jsp2 = new JScrollPane(brainJList);
+			jsp2.setPreferredSize(jsp2.getPreferredSize());
+			gridbag.setConstraints(jsp2, constraint);
+			add(jsp2);
 		
 		constraint.fill = NONE;
-		constraint.gridheight = 1;
-		constraint.weightx = 0.0;
+		constraint.weightx = 0.1;
+		constraint.weighty = 0.1;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridheight = 4;
+		constraint.gridx = 1;
+		constraint.anchor = SOUTH;
+		constraint.gridy = 0;
 		
-			constraint.anchor = CENTER;
-			constraint.gridx = 2;
-			constraint.gridwidth = 1;
-			
-				constraint.gridy = 3;
-				
-					addSnakeButton = new JButton("←");
-					addSnakeButton.addActionListener(new AddSnakeListener());
-					gridbag.setConstraints(addSnakeButton, constraint);
-					add(addSnakeButton);
-				
-				constraint.gridy = 4;
-				
-					removeSnakeButton = new JButton("→");
-					removeSnakeButton.addActionListener(new RemoveSnakeListener());
-					gridbag.setConstraints(removeSnakeButton, constraint);
-					add(removeSnakeButton);
-			
-			constraint.anchor = SOUTH;
-			constraint.gridx = 0;
-			constraint.gridy = 9;
-			constraint.gridwidth = 5;
-			
-				reloadAllBrainsButton = new JButton("Reload all brains");
-				reloadAllBrainsButton.addActionListener(new ReloadBrainsListener());
-				gridbag.setConstraints(reloadAllBrainsButton, constraint);
-				add(reloadAllBrainsButton);
+			addSnakeButton = new JButton("<=");
+			addSnakeButton.addActionListener(new AddSnakeListener());
+			gridbag.setConstraints(addSnakeButton, constraint);
+			add(addSnakeButton);
+		
+		constraint.fill = NONE;
+		constraint.weightx = 0.1;
+		constraint.weighty = 0.1;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridheight = 4;
+		constraint.gridx = 1;
+		constraint.anchor = NORTH;
+		constraint.gridy = 4;
+		
+			removeSnakeButton = new JButton("=>");
+			removeSnakeButton.addActionListener(new RemoveSnakeListener());
+			gridbag.setConstraints(removeSnakeButton, constraint);
+			add(removeSnakeButton);
+		
+		constraint.fill = NONE;
+		constraint.weightx = 0.1;
+		constraint.weighty = 0.1;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.anchor = SOUTH;
+		constraint.gridx = 0;
+		constraint.gridy = 9;
+		constraint.gridwidth = 3;
+		constraint.gridheight = 1;
+		constraint.weighty = 0.0;
+		
+			reloadAllBrainsButton = new JButton("Reload all brains");
+			reloadAllBrainsButton.addActionListener(new ReloadBrainsListener());
+			gridbag.setConstraints(reloadAllBrainsButton, constraint);
+			add(reloadAllBrainsButton);
 		
 		
 		/* //~Vanilla version - ugly but works always.
@@ -120,6 +159,7 @@ class SnakeSettingsPanel extends JPanel
 		removeSnakeButton.addActionListener(new RemoveSnakeListener());
 		center.add(removeSnakeButton, BorderLayout.SOUTH);
 		*/
+		
 		loadBrains();
 	}
 	
