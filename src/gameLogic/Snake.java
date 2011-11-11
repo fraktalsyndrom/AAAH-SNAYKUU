@@ -200,4 +200,9 @@ public class Snake extends GameObject implements Serializable
 		return color;
 		
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
 }
