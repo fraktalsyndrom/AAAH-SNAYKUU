@@ -86,6 +86,11 @@ public class Cancer implements Brain
 		return nextDir;
 	}
 	
+	private boolean isLethal(Position next, Board board)
+	{
+		return board.hasGameObject(next) && !board.hasFruit(next);
+	}
+	
 	private boolean isTrap(Snake me, Position pos, GameState gameState)
 	{
 		for(Snake s : gameState.getSnakes())
@@ -94,7 +99,12 @@ public class Cancer implements Brain
 			(
 				s != me 
 				&& !s.isDead()
-				&& GameState.calculateNextPosition(s.getCurrentDirection(), s.getHeadPosition()).equals(pos)
+				&& 
+				(
+					GameState.calculateNextPosition(s.getCurrentDirection(), s.getHeadPosition()).equals(pos)
+					|| GameState.calculateNextPosition(s.getCurrentDirection().turnLeft(), s.getHeadPosition()).equals(pos)
+					|| GameState.calculateNextPosition(s.getCurrentDirection().turnRight(), s.getHeadPosition()).equals(pos)
+				)
 			)
 			{
 				return true;
