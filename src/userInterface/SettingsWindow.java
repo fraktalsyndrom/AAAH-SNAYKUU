@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import gameLogic.*;
 import java.util.Map;
+import java.util.Random;
 
 public class SettingsWindow extends JFrame
 {
@@ -21,6 +22,7 @@ public class SettingsWindow extends JFrame
 	
 	public SettingsWindow()
 	{
+		super("SNAYKUU - settings");
 		setLayout(new BorderLayout());
 		
 		tabbedPane = new JTabbedPane();
@@ -47,7 +49,6 @@ public class SettingsWindow extends JFrame
 		setSize(600, 400);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//setResizable(false);
 	}
 	
 	public void putThisDamnWindowInMyFace()
@@ -81,9 +82,14 @@ public class SettingsWindow extends JFrame
 		
 		GameObjectType objectType = new GameObjectType("Snake", true);
 		
+		Random r = new Random(1L);
+		int numSnakes = snakeSettingsPanel.getSnakes().size();
+		float stepSize = 1.0f/numSnakes;
+		int currentSnake = 0;
+		
 		for (Map.Entry<String, Brain> snakeEntry : snakeSettingsPanel.getSnakes().entrySet())
 		{
-			Snake snake = new Snake(objectType, snakeEntry.getKey(), snakeEntry.getValue());
+			Snake snake = new Snake(objectType, snakeEntry.getKey(), snakeEntry.getValue(), Color.getHSBColor(stepSize*currentSnake++, r.nextFloat()/2+0.5f, r.nextFloat()/2+0.5f));
 			session.addSnake(snake);
 		}
 		

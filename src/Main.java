@@ -80,7 +80,7 @@ class Main
 		
 		session.cleanup();
 		
-		PostGameWindow postGameWindow = new PostGameWindow(session.getGameResult());
+		PostGameWindow postGameWindow = new PostGameWindow(session);
 		GameEndType gameEndType = postGameWindow.getGameEndType();
 		mainWindow.dispose();
 		

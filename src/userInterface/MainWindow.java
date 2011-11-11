@@ -12,10 +12,12 @@ public class MainWindow extends JFrame
 	
 	public MainWindow(Session session, int pixelsPerSquare)
 	{
+		super("SNAYKUU - game");
 		this.session = session;
 		
 		gameBoard = new GameBoard(session, pixelsPerSquare);
-		scoreBoardPanel = new ScoreBoardPanel();
+		scoreBoardPanel = new ScoreBoardPanel(session);
+		scoreBoardPanel.setPreferredSize(scoreBoardPanel.getPreferredSize());
 		
 		setLayout(new BorderLayout());
 		

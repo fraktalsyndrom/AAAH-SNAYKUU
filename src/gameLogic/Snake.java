@@ -3,6 +3,7 @@ package gameLogic;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.awt.Color;
 
 /**
  * The Snake class is a representation of each snake currently in the game,
@@ -25,12 +26,14 @@ public class Snake extends GameObject implements Serializable
 	private int score = 0;
 	private int lifespan = 0;
 	private boolean isDead = false;
+	private Color color;
 	
-	public Snake(GameObjectType type, String name, Brain brain)
+	public Snake(GameObjectType type, String name, Brain brain, Color color)
 	{
 		super(type);
 		this.name = name;
 		this.brain = brain;
+		this.color = color;
 	}
 	
 	public Snake(Snake other)
@@ -43,6 +46,7 @@ public class Snake extends GameObject implements Serializable
 		this.score = other.score;
 		this.lifespan = other.lifespan;
 		this.isDead = other.isDead;
+		this.color = other.color;
 	}
 	
 	/**
@@ -189,5 +193,11 @@ public class Snake extends GameObject implements Serializable
 	void removeBrain()
 	{
 		brain = null;
+	}
+	
+	public Color getColor() {
+		
+		return color;
+		
 	}
 }

@@ -3,6 +3,9 @@ package userInterface;
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.net.URL;
 import gameLogic.Direction;
 import gameLogic.Position;
@@ -19,8 +22,8 @@ enum GraphicsTile
 	WALL("wall.png");
 	
 	private Image image;
-	private float imgHeight;
-	private float imgWidth;
+	private int imgHeight;
+	private int imgWidth;
 	
 	GraphicsTile(String s)
 	{
@@ -30,19 +33,42 @@ enum GraphicsTile
 			image = ImageIO.read(temp);
 			imgHeight = image.getHeight(null);
 			imgWidth = image.getWidth(null);
-			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			
 		}
+	}
+	
+	Image getImage(Color c)
+	{
+		BufferedImage outImage = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics2D g = outImage.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		
+		int mask = outImage.getRGB(imgWidth/2, imgHeight/2);
+		int replacement = c.getRGB();
+		
+		for (int i = 0; i < outImage.getWidth(); ++i)
+		{
+			for (int j = 0; j < outImage.getHeight(); ++j)
+			{
+				if (outImage.getRGB(i, j) == mask)
+				{
+					outImage.setRGB(i, j, replacement);
+				}
+			}
+		}
+		
+		return outImage;
+		
 	}
 	
 	Image getImage()
 	{
 		return image;
-		
 	}
 	
 	AffineTransform getTransformation(Direction dir, Position pos, int pixelsPerXUnit, int pixelsPerYUnit)
@@ -113,11 +139,11 @@ enum GraphicsTile
 		{
 			if(i%2 == 0)
 			{
-				flatmatrix[i] = flatmatrix[i]*((pixelsPerXUnit+scaleAdjuster[0])/imgWidth);
+				flatmatrix[i] = flatmatrix[i]*((pixelsPerXUnit+scaleAdjuster[0])/((float)imgWidth));
 			}
 			else
 			{
-				flatmatrix[i] = flatmatrix[i]*((pixelsPerYUnit+scaleAdjuster[1])/imgHeight);
+				flatmatrix[i] = flatmatrix[i]*((pixelsPerYUnit+scaleAdjuster[1])/((float)imgHeight));
 			}
 		}
 		

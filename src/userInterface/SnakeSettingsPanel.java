@@ -298,9 +298,6 @@ class SnakeSettingsPanel extends JPanel
 		}
 	}
 	
-	
-	
-	
 	public Map<String, Brain> getSnakes() throws Exception
 	{
 		Map<String, Brain> snakeMap = new TreeMap<String, Brain>();

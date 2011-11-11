@@ -12,7 +12,6 @@ import java.io.File;
 public class PostGameWindow extends JFrame
 {
 	private GameResult finalResult;
-	private JPanel standingsPanel;
 	private JLabel headerLabel, standingsLabel;
 	private ScoreBoardPanel scoreBoardPanel;
 	private JButton newGameButton;
@@ -21,13 +20,10 @@ public class PostGameWindow extends JFrame
 	private JButton exitButton;
 	private GameEndType gameEndType = null;
 	
-	public PostGameWindow(GameResult finalResult)
+	public PostGameWindow(Session session)
 	{
-		this.finalResult = finalResult;
-		
-		standingsPanel = new JPanel();
-		standingsPanel.setLayout(new BorderLayout());
-		add(standingsPanel);
+		super("SNAYKUU - results");
+		this.finalResult = session.getGameResult();
 		
 		newGameButton = new JButton("New game");
 		newGameButton.addActionListener(new NewGameButtonListener());
@@ -41,21 +37,19 @@ public class PostGameWindow extends JFrame
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new CloseButtonListener());
 		
-		headerLabel = new JLabel();
-		
-		scoreBoardPanel = new ScoreBoardPanel();
-		
-		standingsPanel.add(headerLabel, BorderLayout.NORTH);
-		standingsPanel.add(scoreBoardPanel, BorderLayout.CENTER);
+		scoreBoardPanel = new ScoreBoardPanel(session);
+		scoreBoardPanel.setPreferredSize(scoreBoardPanel.getPreferredSize());
+		add(scoreBoardPanel, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(newGameButton);
 		buttonPanel.add(rematchButton);
 		buttonPanel.add(saveReplayButton);
 		buttonPanel.add(exitButton);
-		standingsPanel.add(buttonPanel, BorderLayout.SOUTH);
+		buttonPanel.setPreferredSize(buttonPanel.getPreferredSize());
+		add(buttonPanel, BorderLayout.SOUTH);
 		
-		setSize(400, 400);
+		pack();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -67,8 +61,6 @@ public class PostGameWindow extends JFrame
 	
 	private void printStandings()
 	{
-		headerLabel.setText("SNAYKUU RESULTS");
-		
 		scoreBoardPanel.updateScore(finalResult);
 	}
 	
@@ -138,6 +130,12 @@ public class PostGameWindow extends JFrame
 				return;
 			
 			File file = fileChooser.getSelectedFile();
+			
+			if(!file.getName().endsWith(".srp"))
+			{
+				file = new File(file.getParent(), file.getName()+".srp");
+			}
+			
 			try
 			{
 				finalResult.getRecordedGame().saveToFile(file);

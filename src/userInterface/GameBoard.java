@@ -126,7 +126,7 @@ class GameBoard extends JComponent
 				
 				AffineTransform transform = segment.getTransformation(useDir, pos, pixelsPerXUnit, pixelsPerYUnit);
 				
-				g2d.drawImage(segment.getImage(), transform, null);
+				g2d.drawImage(segment.getImage(s.getColor()), transform, null);
 				
 				prevDir = dir;
 			}
@@ -161,11 +161,14 @@ class GameBoard extends JComponent
 		@Override
 		public void componentResized(ComponentEvent ce)
 		{
-			pixelsPerXUnit = (getWidth()-1-boardWidth)/boardWidth;
+			int size = Math.min(getWidth(), getHeight());
+			pixelsPerXUnit = (size-1-boardWidth)/boardWidth;
 			graphicsWidth = 1+boardWidth+boardWidth*pixelsPerXUnit;
 			
-			pixelsPerYUnit = (getHeight()-1-boardHeight)/boardHeight;
+			pixelsPerYUnit = (size-1-boardHeight)/boardHeight;
 			graphicsHeight = 1+boardHeight+boardHeight*pixelsPerYUnit;
+			
+			setSize(new Dimension(graphicsWidth, graphicsHeight));
 		}
 	}
 }
