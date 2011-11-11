@@ -73,6 +73,19 @@ public class Position implements Serializable
 		return neighbours;
 	}
 	
+	/**
+	 * Calculates the manhattan distance (the number of squares that must be traversed) between this Position and another Position.
+	 * 
+	 * @param	other The Position to measure distance to.
+	 * 
+	 * @return The manhattan distance between this and other.
+	 */
+	
+	public int getDistanceTo(Position other)
+	{
+		return Math.abs(this.x-other.x) + Math.abs(this.y-other.y);
+	}
+	
 	public boolean equals(Object other)
 	{
 		if (!(other instanceof Position))
