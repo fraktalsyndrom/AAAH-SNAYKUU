@@ -73,7 +73,13 @@ public class ScoreBoardPanel extends JPanel
 		
 		c.gridx = 2;
 		c.weightx = 10.0;
-		JLabel snake = new JLabel(s.toString());
+		JLabel snake = new JLabel(s.getName());
+		
+		if(s.isDead())
+		{
+			snake.setForeground(new Color(0xD00000));
+		}
+		
 		snake.setPreferredSize(snake.getPreferredSize());
 		gbl.setConstraints(snake, c);
 		add(snake);
