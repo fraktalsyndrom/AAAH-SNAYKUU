@@ -33,7 +33,7 @@ class GameSettingsPanel extends JPanel
 	{
 		boardWidth = new JTextField("15");
 		boardHeight = new JTextField("15");
-		pixelsPerUnit = new JTextField("12");
+		pixelsPerUnit = new JTextField("25");
 		fruitGoal = new JTextField("5");
 		fruitFrequency = new JTextField("10");
 		growthFrequency = new JTextField("3");
