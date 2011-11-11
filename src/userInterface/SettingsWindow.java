@@ -82,9 +82,9 @@ public class SettingsWindow extends JFrame
 		
 		GameObjectType objectType = new GameObjectType("Snake", true);
 		
-		Random r = new Random(1L);
+		Random r = new Random(4L);
 		int numSnakes = snakeSettingsPanel.getSnakes().size();
-		float stepSize = 1.0f/numSnakes;
+		float stepSize = 0.8f/numSnakes;
 		int currentSnake = 0;
 		
 		for (Map.Entry<String, Brain> snakeEntry : snakeSettingsPanel.getSnakes().entrySet())
