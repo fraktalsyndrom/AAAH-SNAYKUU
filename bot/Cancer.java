@@ -66,7 +66,7 @@ public class Cancer implements Brain
 		{
 			tempDir = nextDir;
 			
-			if(board.hasGameObject(nextPos) && !board.hasFruit(nextPos))
+			if(isLethal(nextPos, board))
 			{
 				nextDir = nextDir.turnRight();
 				nextPos = nextDir.calculateNextPosition(curPos);
