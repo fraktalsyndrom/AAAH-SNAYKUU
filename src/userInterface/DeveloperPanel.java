@@ -24,7 +24,7 @@ class DeveloperPanel extends JPanel
 		
 		add(new JLabel("Number of runs:"));
 		
-		numberOfRuns = new JTextField("2");
+		numberOfRuns = new JTextField("50");
 		numberOfRuns.setPreferredSize(new Dimension(200, 50));
 		JPanel jp = new JPanel();
 		jp.add(numberOfRuns);
