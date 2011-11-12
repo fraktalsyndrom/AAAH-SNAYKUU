@@ -10,6 +10,7 @@ public class ReplayWindow extends JFrame
 	private SettingsWindow settingsWindow;
 	private RecordedGame recordedGame;
 	private GameBoard gameBoard;
+	private ScoreBoardPanel scoreBoardPanel;
 	private ControlPanel controlPanel;
 	private ReplayThread replayThread = new ReplayThread();
 	
@@ -22,9 +23,11 @@ public class ReplayWindow extends JFrame
 		
 		gameBoard = new GameBoard(recordedGame, settingsWindow.getPixelsPerUnit());
 		controlPanel = new ControlPanel();
+		scoreBoardPanel = new ScoreBoardPanel(recordedGame);
 				
 		add(gameBoard, BorderLayout.CENTER);
 		add(controlPanel, BorderLayout.SOUTH);
+		add(scoreBoardPanel, BorderLayout.EAST);
 		pack();
 		
 		addWindowListener(new WindowListener());
@@ -32,6 +35,12 @@ public class ReplayWindow extends JFrame
 		setVisible(true);
 		
 		replayThread.start();
+	}
+	
+	private void updateGame()
+	{
+		scoreBoardPanel.updateScore(recordedGame.getGameResult());
+		repaint();
 	}
 	
 	
@@ -73,7 +82,7 @@ public class ReplayWindow extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				recordedGame.setCurrentReplayFrame(0);
-				ReplayWindow.this.repaint();
+				updateGame();
 			}
 		}
 		
@@ -82,7 +91,7 @@ public class ReplayWindow extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				recordedGame.setCurrentReplayFrame(recordedGame.getCurrentReplayFrame() - 1);
-				ReplayWindow.this.repaint();
+				updateGame();
 			}
 		}
 		
@@ -99,7 +108,7 @@ public class ReplayWindow extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				recordedGame.setCurrentReplayFrame(recordedGame.getCurrentReplayFrame() + 1);
-				ReplayWindow.this.repaint();
+				updateGame();
 			}
 		}
 		
@@ -108,7 +117,7 @@ public class ReplayWindow extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				recordedGame.setCurrentReplayFrame(recordedGame.getTurnCount());
-				ReplayWindow.this.repaint();
+				updateGame();
 			}
 		}
 	}
@@ -126,7 +135,7 @@ public class ReplayWindow extends JFrame
 			{
 				int currentFrame = recordedGame.getCurrentReplayFrame() + 1;
 				recordedGame.setCurrentReplayFrame(currentFrame);
-				repaint();
+				updateGame();
 				
 				if (currentFrame >= recordedGame.getTurnCount() && !isPaused())
 					togglePause();

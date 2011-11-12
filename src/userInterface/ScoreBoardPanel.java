@@ -18,10 +18,10 @@ public class ScoreBoardPanel extends JPanel
 	private GridBagConstraints c = new GridBagConstraints();
 	private Insets insets = new Insets(2,4,2,4);
 	
-	public ScoreBoardPanel(Session session)
+	public ScoreBoardPanel(Game game)
 	{
 		setLayout(gbl);
-		updateScore(session.getGameResult());
+		updateScore(game.getGameResult());
 	}
 	
 	public void updateScore(GameResult gameResult)
