@@ -83,6 +83,11 @@ public class Position implements Serializable
 		return Math.abs(this.x-other.x) + Math.abs(this.y-other.y);
 	}
 	
+	public int hashCode()
+	{
+		return new Integer(x * 13337).hashCode() + new Integer(y * 13337).hashCode();
+	}
+	
 	public boolean equals(Object other)
 	{
 		if (!(other instanceof Position))
