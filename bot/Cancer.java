@@ -2,9 +2,11 @@ package bot;
 
 import gameLogic.*;
 import java.util.List;
+import java.util.Random;
 
 public class Cancer implements Brain
 {
+	
 	public Direction getNextMove(Snake snake, GameState gameState)
 	{
 		Board board = gameState.getBoard();
