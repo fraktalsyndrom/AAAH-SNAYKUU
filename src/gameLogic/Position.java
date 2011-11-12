@@ -28,12 +28,6 @@ public class Position implements Serializable
 		this.y = y;
 	}
 	
-	public Position() 
-	{
-		x = 0;
-		y = 0;
-	}
-	
 	public Position(Position position)
 	{
 		x = position.x;
