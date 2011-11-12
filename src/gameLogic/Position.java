@@ -54,12 +54,16 @@ public class Position implements Serializable
 		return y;
 	}
 	
-	public static List<Position> getNeighbours(Position position)
-	{
+	/**
+	 * Get a list of all neighbours to this position. One position may
+	 * have up to four neighbours (up, down, left and right).
+	 * 
+	 * @return A list of neighbour positions.
+	 */
+	public List<Position> getNeighbours()
+	{	
 		ArrayList<Position> neighbours = new ArrayList<Position>();
-		int x = position.getX();
-		int y = position.getY();
-
+		
 		neighbours.add(new Position(x, y+1));
 		neighbours.add(new Position(x+1, y));
 		if (y-1 > -1) neighbours.add(new Position(x, y-1));
@@ -74,7 +78,6 @@ public class Position implements Serializable
 	 * 
 	 * @return The manhattan distance between this and other.
 	 */
-	
 	public int getDistanceTo(Position other)
 	{
 		return Math.abs(this.x-other.x) + Math.abs(this.y-other.y);

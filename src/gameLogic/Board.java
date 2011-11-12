@@ -129,17 +129,21 @@ public class Board implements Serializable
 	public boolean hasLethalObjectWithinRange(Position pos, int range)
 	{
 		Set<Position> visited = new HashSet<Position>();
-		breadthFirstSearch(pos, visited, range);
+		depthFirstSearch(pos, visited, range);
 		return (containsLethalObject(visited));
 	}
 	
-	private void breadthFirstSearch(Position from, Set<Position> visited, int range)
+	private void depthFirstSearch(Position from, Set<Position> visited, int range)
 	{
-		if (range < 0)
+		if (range-- < 0)
 			return;
-		for (Position neighbour : Position.getNeighbours(from))
+			
+		visited.add(from);
+		
+		for (Position neighbour : from.getNeighbours())
 		{
-			breadthFirstSearch(neighbour, visited, --range);
+			if (!visited.contains(neighbour))
+				depthFirstSearch(neighbour, visited, range);
 		}
 	}
 	
