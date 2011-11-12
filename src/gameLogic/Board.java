@@ -105,6 +105,19 @@ public class Board implements Serializable
 	}
 	
 	/**
+	 * Returns whether or not the board contains a lethal game object at the given position.
+	 * 
+	 * @param	p	The position we want to check for lethal objects.
+	 * @return	Whether or not the board contains a lethal game object at the given position.
+	 * @see		Square
+	 */
+	public boolean isLethal(Position p)
+	{
+		Square square = getSquare(p);
+		return !square.isEmpty() && square.getGameObject().getType().isLethal();
+	}
+	
+	/**
 	 * Gets a Square at 
 	 * 
 	 * @param	p	The position in the board where we want to get the Square from.
