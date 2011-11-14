@@ -204,6 +204,8 @@ public class Session implements Game
 				Direction nextMove = decision.demandNextMove();
 				if (isValidMove(currentSnake, nextMove))
 					actualMove = nextMove;
+				else
+					snakeErrors.put(currentSnake, ErrorState.INVALID_MOVE);
 			}
 			catch (java.util.concurrent.TimeoutException t)
 			{
