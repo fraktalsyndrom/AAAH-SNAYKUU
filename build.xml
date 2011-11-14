@@ -43,7 +43,16 @@
 	</target>
 	
 	<target name="doc" description="run the javadoc tool">
-		<javadoc packagenames="gameLogic.*" sourcepath="src" destdir="doc" />
+		<javadoc destdir="doc" access="public" author="true" version="true" use="true" windowtitle="SNAYKUU API">
+		<fileset dir="src/gameLogic" defaultexcludes="no">
+			<include name="*.java" />
+			<exclude name="RecordedGame.java" />
+			<exclude name="GameResult.java" />
+			<exclude name="Session.java" />
+			<exclude name="Game.java" />
+			<exclude name="Frame.java" />
+		</fileset>
+		</javadoc>
 	</target>
 	
 	<target name="crun" depends="jar" description="compile, jar and run">
