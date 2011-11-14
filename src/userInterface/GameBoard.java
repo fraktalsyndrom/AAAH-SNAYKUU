@@ -102,6 +102,9 @@ class GameBoard extends JComponent
 				else if(prevDir == null) //första elementet
 				{
 					segment = GraphicsTile.SNAKEHEAD;
+
+					if (s.isDead())
+						segment = GraphicsTile.SNAKEBLOOD;
 				}
 				else if(!iter.hasNext()) //sista elementet
 				{

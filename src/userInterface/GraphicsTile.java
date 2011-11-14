@@ -18,6 +18,7 @@ enum GraphicsTile
 	SNAKELEFT("snake_left.png"),
 	SNAKERIGHT("snake_right.png"),
 	SNAKEMONAD("snake_monad.png"),
+	SNAKEBLOOD("snake_blood.png"),
 	FRUIT("fruit.png"),
 	WALL("wall.png");
 	
