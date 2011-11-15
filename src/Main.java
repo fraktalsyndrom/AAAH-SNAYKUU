@@ -4,13 +4,20 @@ import userInterface.SettingsWindow;
 import userInterface.MainWindow;
 import userInterface.PostGameWindow;
 import userInterface.GameEndType;
+import javax.swing.UIManager;
 
 class Main
 {
 	
 	public static void main(String[] args)
 	{
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch(Exception e)
+		{
+		}
 		SettingsWindow settingsWindow = new SettingsWindow();
 		
 		Session session = prepareSession(settingsWindow);
