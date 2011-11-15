@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Insets;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import static java.awt.GridBagConstraints.*;
 
 import gameLogic.*;
 
@@ -15,40 +19,119 @@ class DeveloperPanel extends JPanel
 	private SettingsWindow settingsWindow;
 	private JButton statsButton;
 	private JTextField numberOfRuns;
+	private JTextArea output;
 	
 	DeveloperPanel(SettingsWindow settingsWindow)
 	{
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		GridBagLayout gridbag = new GridBagLayout();
+		setLayout(gridbag);
+		
+		GridBagConstraints constraint = new GridBagConstraints();
 		
 		this.settingsWindow = settingsWindow;
 		
-		add(new JLabel("Number of runs:"));
+		constraint.fill = NONE;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 0;
+		constraint.gridy = 0;
+		constraint.weightx = 0.0;
+		constraint.weighty = 0.0;
 		
-		numberOfRuns = new JTextField("50");
-		numberOfRuns.setPreferredSize(new Dimension(200, 50));
-		JPanel jp = new JPanel();
-		jp.add(numberOfRuns);
-		add(jp);
+			JLabel runLabel = new JLabel("Number of runs:");
+			gridbag.setConstraints(runLabel, constraint);
+			add(runLabel);
 		
-		statsButton = new JButton("Run test games");
-		statsButton.addActionListener
-		(
-			new ActionListener()
-			{ 
-				public void actionPerformed(ActionEvent ae) 
+		constraint.fill = HORIZONTAL;
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 1;
+		constraint.gridy = 0;
+		constraint.weightx = 1.0;
+		constraint.weighty = 0.0;
+		
+			numberOfRuns = new JTextField("50");
+			numberOfRuns.setPreferredSize(numberOfRuns.getPreferredSize());
+			gridbag.setConstraints(numberOfRuns, constraint);
+			add(numberOfRuns);
+		
+		constraint.fill = NONE;
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 2;
+		constraint.gridy = 0;
+		constraint.weightx = 0.0;
+		constraint.weighty = 0.0;
+		
+			statsButton = new JButton("Run test games");
+			statsButton.addActionListener
+			(
+				new ActionListener()
 				{ 
-					playOverNineThousandGames(); 
+					public void actionPerformed(ActionEvent ae) 
+					{ 
+						playOverNineThousandGames(); 
+					} 
 				} 
-			} 
-		);
+			);
 		
-		add(statsButton);
+			add(statsButton);
+			statsButton.setPreferredSize(statsButton.getPreferredSize());
+			gridbag.setConstraints(statsButton, constraint);
+			add(statsButton);
+		
+		constraint.fill = NONE;
+		constraint.insets = new Insets(4, 4, 4, 4);
+		constraint.gridwidth = 1;
+		constraint.gridheight = 1;
+		constraint.gridx = 0;
+		constraint.gridy = 1;
+		constraint.weightx = 0.0;
+		constraint.weighty = 0.0;
+		
+			JLabel outputLabel = new JLabel("Output:");
+			outputLabel.setHorizontalAlignment(JLabel.LEFT);
+			gridbag.setConstraints(outputLabel, constraint);
+			add(outputLabel);
+		
+		constraint.fill = BOTH;
+		constraint.gridwidth = 3;
+		constraint.gridheight = 1;
+		constraint.gridx = 0;
+		constraint.gridy = 2;
+		constraint.weightx = 1.0;
+		constraint.weighty = 1.0;
+		
+			output = new JTextArea();
+			output.setEditable(false);
+			JScrollPane jsp1 = new JScrollPane(output);
+			jsp1.setPreferredSize(jsp1.getPreferredSize());
+			gridbag.setConstraints(jsp1, constraint);
+			add(jsp1);
+	}
+	
+	private void println(String s)
+	{
+		output.append(s+"\n");
+	}
+	
+	private void print(String s)
+	{
+		output.append(s);
+	}
+	
+	private void clear()
+	{
+		output.setText("");
 	}
 	
 	private void playOverNineThousandGames()
 	{
 		try
 		{
+			statsButton.setEnabled(false);
+			clear();
 			Session session = settingsWindow.generateSession();
 			
 			HashMap<String, Results> scores = new HashMap<String, Results>();
@@ -62,7 +145,7 @@ class DeveloperPanel extends JPanel
 			final int numberOfGames = Integer.parseInt(numberOfRuns.getText());
 			for (int currentGame = 0; currentGame < numberOfGames; ++currentGame)
 			{
-				System.out.println("Starting game #" + currentGame);
+				println("Starting game #" + currentGame);
 				try
 				{
 					session = settingsWindow.generateSession();
@@ -81,26 +164,30 @@ class DeveloperPanel extends JPanel
 				}
 				catch (Exception e)
 				{
-					System.out.println("Error: " + e);
+					println("Error: " + e);
 				}
 			}
 			
 			for(Map.Entry<String, Results> me : scores.entrySet())
 			{
-				System.out.println(me.getKey()+" (place: frequency)");
+				println(me.getKey()+" (place: frequency)");
 				Results r = me.getValue();
 				
 				for(int i = 0; i < numSnakes; ++i)
 				{
-					System.out.println("\t"+(i+1)+": "+r.getFreq(i)+" times");
+					println("\t"+(i+1)+": "+r.getFreq(i)+" times");
 				}
 			}
 			
-			System.out.println("DONE");
+			println("DONE");
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error: " + e);
+			println("Error: " + e);
+		}
+		finally
+		{
+			statsButton.setEnabled(true);
 		}
 	}
 	
