@@ -10,6 +10,7 @@ class Main
 	
 	public static void main(String[] args)
 	{
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		SettingsWindow settingsWindow = new SettingsWindow();
 		
 		Session session = prepareSession(settingsWindow);
