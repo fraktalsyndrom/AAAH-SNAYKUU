@@ -95,18 +95,18 @@ class GameBoard extends JComponent
 				
 				GraphicsTile segment;
 				
-				if(prevDir == null && !iter.hasNext()) //första elementet
+				if(prevDir == null && !iter.hasNext()) // first element
 				{
 					segment = GraphicsTile.SNAKEMONAD;
 				}
-				else if(prevDir == null) //första elementet
+				else if(prevDir == null) //first element
 				{
 					segment = GraphicsTile.SNAKEHEAD;
 
 					if (s.isDead())
-						segment = GraphicsTile.SNAKEBLOOD;
+						segment = GraphicsTile.SNAKEDEAD;
 				}
-				else if(!iter.hasNext()) //sista elementet
+				else if(!iter.hasNext()) // last element
 				{
 					segment = GraphicsTile.SNAKETAIL;
 					useDir = prevDir;
@@ -115,7 +115,7 @@ class GameBoard extends JComponent
 				{
 					if(prevDir.turnLeft() == dir) 
 					{
-						segment = GraphicsTile.SNAKERIGHT; // Oklart varför det här är rätt, men det är det.
+						segment = GraphicsTile.SNAKERIGHT; // Unclear why this works, but it does
 					}
 					else
 					{
