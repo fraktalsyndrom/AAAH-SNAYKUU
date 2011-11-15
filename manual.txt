@@ -75,7 +75,7 @@
 		Fruit freq.
 				 The frequency with which new fruits appear on
 				 the game board. '5' means that a new fruit
-				 spawns every five seconds.
+				 spawns every five ticks.
 		Growth freq.
 				 The frequency with which snakes grow. '5' means
 				 that snakes grow every five ticks.
