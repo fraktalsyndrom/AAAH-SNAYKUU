@@ -38,9 +38,9 @@
 
 	[1.2] Compiling your bots
 	If you don't have ant installed:
-		Navigate to the 'src/bot' with your terminal, and then
-		run this command:
-		  > javac -cp ../src
+		Navigate to the directory where your snaykuu.jar is located, and then run 
+		this command:
+		  > javac bot/*.java -cp snaykuu.jar
 
 	If you have ant installed:
 		Using your terminal, navigate to the 'snaykuu' folder
