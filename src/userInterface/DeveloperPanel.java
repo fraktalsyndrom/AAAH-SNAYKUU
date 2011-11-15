@@ -75,8 +75,7 @@ class DeveloperPanel extends JPanel
 					} 
 				} 
 			);
-		
-			add(statsButton);
+			
 			statsButton.setPreferredSize(statsButton.getPreferredSize());
 			gridbag.setConstraints(statsButton, constraint);
 			add(statsButton);
