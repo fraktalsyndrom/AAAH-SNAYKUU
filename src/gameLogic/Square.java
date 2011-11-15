@@ -95,21 +95,22 @@ public class Square implements Serializable
 	}
 	
 	/**
-	 * Returns the game object this square contains. Technically returns the first object in the 
-	 * objects ArrayList. Could theoretically throw an IllegalStateException, but that will never 
-	 * be encountered by a brain programmer.
-	 * Returns null if the square is empty.
+	 * Generates a list of all snakes in this square. Usually there is zero or one
+	 * snake in the same square, but there can be more than one snake in the
+	 * same square if one snake collides with another. It is therefore guaranteed
+	 * that there cannot be more than one living snake in the same square.
 	 * 
-	 * @return	The GameObject in this square. null if the square is empty.
+	 * @return	An ArrayList containing the snakes in this square, might be empty.
 	 */
-	public GameObject getGameObject()
+	public ArrayList<Snake> getSnakes()
 	{
-		if (objects.size() > 1)
-			throw new IllegalStateException("Trying to getGameObject from a Square with more than one object.");
-		if (objects.isEmpty())
-			return null;
-		return objects.get(0);
+		ArrayList<Snake> snakes = new ArrayList<Snake>();
+		for (GameObject object : objects)
+			if (object instanceof Snake)
+				snakes.add((Snake)object);
+		return snakes;
 	}
+	
 	
 	// Remove a fruit from the square, returning its value.
 	int eatFruit()
@@ -136,21 +137,12 @@ public class Square implements Serializable
 		objects.remove(object);
 	}
 	
-	ArrayList<Snake> getSnakes()
-	{
-		ArrayList<Snake> snakes = new ArrayList<Snake>();
-		for (GameObject object : objects)
-			if (object instanceof Snake)
-				snakes.add((Snake)object);
-		return snakes;
-	}
-	
 	void removeFruit()
 	{
-		Iterator objectIterator = objects.iterator();
+		Iterator<GameObject> objectIterator = objects.iterator();
 		while (objectIterator.hasNext())
 		{
-			GameObject currentGameObject = (GameObject)objectIterator.next();
+			GameObject currentGameObject = objectIterator.next();
 			if (currentGameObject.getType().equals("Fruit"))
 				objects.remove(currentGameObject);
 		}
