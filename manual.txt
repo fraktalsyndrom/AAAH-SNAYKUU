@@ -69,16 +69,22 @@
 		Board height 	The height of the game board, in squares.
 		Pixels per square 
 				The size of each square, in pixels.
-		Fruit goal	The number of fruits each snake has to eat in
+		Fruit goal
+				 The number of fruits each snake has to eat in
 				 order to win the game.
-		Fruit freq.	The frequency with which new fruits appear on
+		Fruit freq.
+				 The frequency with which new fruits appear on
 				 the game board. '5' means that a new fruit
 				 spawns every five seconds.
-		Growth freq.	The frequency with which snakes grow. '5' means
+		Growth freq.
+				 The frequency with which snakes grow. '5' means
 				 that snakes grow every five ticks.
-		Thinking time	The amount of time (in ms) each brain has to
+		Thinking time
+				 The amount of time (in ms) each brain has to
 				 decide on its next move.
-		Game speed	The amount of time (in ms) that will elapse  					 between each 'tick'. Decrease to make the game
+		Game speed
+				 The amount of time (in ms) that will elapse
+				 between each 'tick'. Decrease to make the game
 				 appear to move faster, and vice versa.
 				 NOTE: It is recommended that this is set to at least 
 				 thrice the value of 'Thinking time'.
@@ -130,7 +136,7 @@
 	
 	Sixten Hilborn		Project co-manager, Lead coder, Whiteboard wizard.
 	Arian Jafari		Project co-manager, Lead coder, Documentation dork,
-				  Executive credits producer.
+							Executive credits producer.
 	Erik Thuning		Coder, Tester, Graphics guru, Affine transformer.
 	Fredrik Norberg		Tester, Master fruit devourer.
 	Esbjörn Olsson		Tester, Internet aficionado, Security ninja.
