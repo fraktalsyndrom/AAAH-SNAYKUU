@@ -6,8 +6,8 @@ import java.util.*;
 /** 
  * Objects of this class represent a single square of the game board. Each square has a List<GameObject>
  * of all the GameObjects it contains, but it will usually only contain 0 or 1 GameObjects. The only time
- * it can contain more than one is in between turns; a special case that doesn't need any attention from a
- * brain programmer. 
+ * it can contain more than one game object is when a snake collides, with either a wall or another
+ * snake.
  *
  * @author	Sixten Hilborn
  * @author	Arian Jafari
