@@ -28,6 +28,7 @@
             <fileset dir="classes" includes="**/*.class" />
             <fileset dir="." includes="img/*" />
             <fileset dir="." includes="src/**/*.java" />
+            <fileset dir="." includes="manual.txt" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
