@@ -7,6 +7,13 @@
 	anstränga sig för att fixa kompileringsfel.
 - Bot-klassen MÅSTE ha EXAKT samma namn som lagets namn.
 
+#SCHEMA
+12:00		Startskott
+15:00		Första heatet (se till att ha laddat upp botten)
+15:00-17:00	Fortsätt snake:a
+17:00		Andra och sista heatet
+18:00		Prisutdelning
+
 #FORMAT
 Bataljerna kommer att spelas med de insttällningar som är förinställda
 i programmet, det vill säga:
