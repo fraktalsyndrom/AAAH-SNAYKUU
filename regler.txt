@@ -3,6 +3,8 @@
 #ALLMÄNNA REGLER
 - Botten ska vara skriven i Java
 - Det som ska lämnas in är KÄLLKODEN.
+- Koden MÅSTE gå att kompilera. Tävlingsledningen kommer inte att
+	anstränga sig för att fixa kompileringsfel.
 - Bot-klassen MÅSTE ha EXAKT samma namn som lagets namn.
 
 #FORMAT
