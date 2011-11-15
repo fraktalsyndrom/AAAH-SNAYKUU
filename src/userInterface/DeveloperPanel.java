@@ -114,80 +114,91 @@ class DeveloperPanel extends JPanel
 	private void println(String s)
 	{
 		output.append(s+"\n");
+		output.setCaretPosition(output.getText().length() - 1);
 	}
 	
 	private void print(String s)
 	{
 		output.append(s);
+		output.setCaretPosition(output.getText().length() - 1);
 	}
 	
 	private void clear()
 	{
 		output.setText("");
+		output.setCaretPosition(0);
 	}
 	
 	private void playOverNineThousandGames()
 	{
-		try
+		statsButton.setEnabled(false);
+		GameRunner gr = new GameRunner();
+		gr.start();
+		statsButton.setEnabled(true);
+	}
+	
+	private class GameRunner extends Thread
+	{
+		@Override
+		public void run()
 		{
-			statsButton.setEnabled(false);
-			clear();
-			Session session = settingsWindow.generateSession();
-			
-			HashMap<String, Results> scores = new HashMap<String, Results>();
-			int numSnakes = session.getSnakes().size();
-			
-			for(Snake s : session.getSnakes())
+			try
 			{
-				scores.put(s.getName(), new Results(numSnakes));
-			}
-			
-			final int numberOfGames = Integer.parseInt(numberOfRuns.getText());
-			for (int currentGame = 0; currentGame < numberOfGames; ++currentGame)
-			{
-				println("Starting game #" + currentGame);
-				try
+				clear();
+				Session session = settingsWindow.generateSession();
+				
+				HashMap<String, Results> scores = new HashMap<String, Results>();
+				int numSnakes = session.getSnakes().size();
+				
+				for(Snake s : session.getSnakes())
 				{
-					session = settingsWindow.generateSession();
-					while (!session.hasEnded())
-						session.tick();
-					
-					List<List<Snake>> result = session.getGameResult().getWinners();
-					
-					for(int i = 0; i < result.size(); ++i)
+					scores.put(s.getName(), new Results(numSnakes));
+				}
+				
+				final int numberOfGames = Integer.parseInt(numberOfRuns.getText());
+				for (int currentGame = 0; currentGame < numberOfGames; ++currentGame)
+				{
+					println("Starting game #" + currentGame);
+					repaint();
+					try
 					{
-						for(Snake s : result.get(i))
+						session = settingsWindow.generateSession();
+						while (!session.hasEnded())
+							session.tick();
+						
+						List<List<Snake>> result = session.getGameResult().getWinners();
+						
+						for(int i = 0; i < result.size(); ++i)
 						{
-							scores.get(s.getName()).addResult(i);
+							for(Snake s : result.get(i))
+							{
+								scores.get(s.getName()).addResult(i);
+							}
 						}
 					}
+					catch (Exception e)
+					{
+						println("Error: " + e);
+					}
 				}
-				catch (Exception e)
-				{
-					println("Error: " + e);
-				}
-			}
-			
-			for(Map.Entry<String, Results> me : scores.entrySet())
-			{
-				println(me.getKey()+" (place: frequency)");
-				Results r = me.getValue();
 				
-				for(int i = 0; i < numSnakes; ++i)
+				for(Map.Entry<String, Results> me : scores.entrySet())
 				{
-					println("\t"+(i+1)+": "+r.getFreq(i)+" times");
+					println(me.getKey()+" (place: frequency)");
+					Results r = me.getValue();
+					
+					for(int i = 0; i < numSnakes; ++i)
+					{
+						println("\t"+(i+1)+": "+r.getFreq(i)+" times");
+					}
 				}
+				
+				println("DONE");
 			}
-			
-			println("DONE");
-		}
-		catch(Exception e)
-		{
-			println("Error: " + e);
-		}
-		finally
-		{
-			statsButton.setEnabled(true);
+			catch(Exception e)
+			{
+				println("Error: " + e);
+			}
 		}
 	}
 	
