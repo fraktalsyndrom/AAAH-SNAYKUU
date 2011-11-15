@@ -36,7 +36,7 @@ class GameSettingsPanel extends JPanel
 		pixelsPerUnit = new JTextField("25");
 		fruitGoal = new JTextField("5");
 		fruitFrequency = new JTextField("10");
-		growthFrequency = new JTextField("3");
+		growthFrequency = new JTextField("5");
 		thinkingTime = new JTextField("100");
 		gameSpeed = new JTextField("300");
 		
