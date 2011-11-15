@@ -67,7 +67,7 @@ public class Board implements Serializable
 	 */
 	public boolean hasGameObject(Position p)
 	{
-		return (!board[p.getX()][p.getY()].isEmpty());
+		return (!getSquare(p).isEmpty());
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class Board implements Serializable
 	 */
 	public boolean hasFruit(Position p)
 	{
-		return (board[p.getX()][p.getY()].hasFruit());
+		return (getSquare(p).hasFruit());
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class Board implements Serializable
 	 */
 	public boolean hasWall(Position p)
 	{
-		return (board[p.getX()][p.getY()].hasWall());
+		return (getSquare(p).hasWall());
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class Board implements Serializable
 	 */
 	public boolean hasSnake(Position p)
 	{
-		return (board[p.getX()][p.getY()].hasSnake());
+		return (getSquare(p).hasSnake());
 	}
 	
 	/**
@@ -113,8 +113,7 @@ public class Board implements Serializable
 	 */
 	public boolean isLethal(Position p)
 	{
-		Square square = getSquare(p);
-		return !square.isEmpty() && square.getGameObject().getType().isLethal();
+		return (getSquare(p).isLethal());
 	}
 	
 	/**
