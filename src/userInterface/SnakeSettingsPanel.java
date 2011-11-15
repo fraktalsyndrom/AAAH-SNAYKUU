@@ -25,7 +25,6 @@ class SnakeSettingsPanel extends JPanel
 	
 	public SnakeSettingsPanel()
 	{
-		 //~Cool version - looks better but is buggy atm
 		GridBagLayout gridbag = new GridBagLayout();
 		setLayout(gridbag);
 		
@@ -38,7 +37,7 @@ class SnakeSettingsPanel extends JPanel
 		constraint.gridx = 0;
 		constraint.gridy = 0;
 		
-			JLabel selected = new JLabel("Snakes in game:");
+			JLabel selected = new JLabel("Available snakes:");
 			selected.setHorizontalAlignment(JLabel.CENTER);
 			gridbag.setConstraints(selected, constraint);
 			add(selected);
@@ -50,7 +49,7 @@ class SnakeSettingsPanel extends JPanel
 		constraint.gridx = 2;
 		constraint.gridy = 0;
 		
-			JLabel available = new JLabel("Available snakes:");
+			JLabel available = new JLabel("Snakes in game:");
 			available.setHorizontalAlignment(JLabel.CENTER);
 			gridbag.setConstraints(available, constraint);
 			add(available);
@@ -63,13 +62,13 @@ class SnakeSettingsPanel extends JPanel
 		constraint.gridx = 0;
 		constraint.gridy = 1;
 		
-			snakeJList = new JList();
-			snakeJList.addMouseListener(new SnakeMouseListener());
+			brainJList = new JList();
+			brainJList.addMouseListener(new BrainMouseListener());
 			
-			JScrollPane jsp1 = new JScrollPane(snakeJList);
-			jsp1.setPreferredSize(jsp1.getPreferredSize());
-			gridbag.setConstraints(jsp1, constraint);
-			add(jsp1);
+			JScrollPane jsp2 = new JScrollPane(brainJList);
+			jsp2.setPreferredSize(jsp2.getPreferredSize());
+			gridbag.setConstraints(jsp2, constraint);
+			add(jsp2);
 		
 		constraint.fill = BOTH;
 		constraint.gridwidth = 1;
@@ -79,13 +78,13 @@ class SnakeSettingsPanel extends JPanel
 		constraint.gridx = 2;
 		constraint.gridy = 1;
 		
-			brainJList = new JList();
-			brainJList.addMouseListener(new BrainMouseListener());
+			snakeJList = new JList();
+			snakeJList.addMouseListener(new SnakeMouseListener());
 			
-			JScrollPane jsp2 = new JScrollPane(brainJList);
-			jsp2.setPreferredSize(jsp2.getPreferredSize());
-			gridbag.setConstraints(jsp2, constraint);
-			add(jsp2);
+			JScrollPane jsp1 = new JScrollPane(snakeJList);
+			jsp1.setPreferredSize(jsp1.getPreferredSize());
+			gridbag.setConstraints(jsp1, constraint);
+			add(jsp1);
 		
 		constraint.fill = NONE;
 		constraint.weightx = 0.1;
@@ -96,7 +95,7 @@ class SnakeSettingsPanel extends JPanel
 		constraint.anchor = SOUTH;
 		constraint.gridy = 0;
 		
-			addSnakeButton = new JButton("<=");
+			addSnakeButton = new JButton("=>");
 			addSnakeButton.addActionListener(new AddSnakeListener());
 			gridbag.setConstraints(addSnakeButton, constraint);
 			add(addSnakeButton);
@@ -110,7 +109,7 @@ class SnakeSettingsPanel extends JPanel
 		constraint.anchor = NORTH;
 		constraint.gridy = 4;
 		
-			removeSnakeButton = new JButton("=>");
+			removeSnakeButton = new JButton("<=");
 			removeSnakeButton.addActionListener(new RemoveSnakeListener());
 			gridbag.setConstraints(removeSnakeButton, constraint);
 			add(removeSnakeButton);
@@ -130,35 +129,6 @@ class SnakeSettingsPanel extends JPanel
 			reloadAllBrainsButton.addActionListener(new ReloadBrainsListener());
 			gridbag.setConstraints(reloadAllBrainsButton, constraint);
 			add(reloadAllBrainsButton);
-		
-		
-		/* //~Vanilla version - ugly but works always.
-		super(new BorderLayout());
-		
-		JPanel west = new JPanel(new BorderLayout());
-		JPanel east = new JPanel(new BorderLayout());
-		JPanel center = new JPanel(new BorderLayout());
-		
-		add(west, BorderLayout.WEST);
-		add(east, BorderLayout.EAST);
-		add(center, BorderLayout.CENTER);
-		
-		snakeJList = new JList();
-		snakeJList.addMouseListener(new SnakeMouseListener());
-		west.add(new JScrollPane(snakeJList));
-		
-		brainJList = new JList();
-		brainJList.addMouseListener(new BrainMouseListener());
-		east.add(new JScrollPane(brainJList));
-		
-		addSnakeButton = new JButton("←");
-		addSnakeButton.addActionListener(new AddSnakeListener());
-		center.add(addSnakeButton, BorderLayout.NORTH);
-		
-		removeSnakeButton = new JButton("→");
-		removeSnakeButton.addActionListener(new RemoveSnakeListener());
-		center.add(removeSnakeButton, BorderLayout.SOUTH);
-		*/
 		
 		loadBrains();
 	}
