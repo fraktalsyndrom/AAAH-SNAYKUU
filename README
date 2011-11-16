@@ -1,25 +1,142 @@
-Generella tankar:
+## SNAYKUU THE MANUAL: THIS TIME IT'S PERSONAL
+# Version 0.1
 
-- ORMBATALJER, 1v1 (alt. stöd för fler om så skulle krävas; 4p FFA?)
-- En vinner. Frukter dyker upp pseudoslumpmässigt. Deltagare
-  elimineras vid kollision med väggar/andra ormar. Vinstvillkor är således:
-	DÖDA ALLA.
-	ÄT ALLT.
-  (Vidare specificering nödvändig så småningom)
-- Ormar består utav en ruta huvud och x rutor kropp.
-- Ormar växer på något sätt med tiden. Antingen genom att äta frukt, med 
-  jämna mellanrum, eller genom HELA SKITEN.
-- Simpelt interface "Brain" e.dyl. för att implementera i egna klasser.
-- Någon maxgräns för betänketid hos deltagare. Om för lång tid går,
-  antingen forcera drag (rakt fram?) eller AVLIVA ORM. Det 
-  förstnämnda förmodligen rimligast. Det sistnämnda roligast. TÖRMINATE.
-- Möjlighet för deltagare att kunna tweaka sin ormhjärna mellan ronder.
+# TABLE OF CONTENTS 
 
-- Asynkron turbasering (1 turn per frame)
-- Variabla inställningar för växt- och fruktfrekvens
-- Startplaceringar? Helt random?
-- Lagtävling
-- Möjlighet att ge folk färdiga hjälpmetoder, t ex
-	shortestPath(Coord c)
-	willCollide(Direction d)
-- DÖD ÅT TENGIL.
+[1.0] COMPILING
+	[1.1] Compiling the source
+	[1.2] Compiling your bots
+[2.0] USING THE APPLICATION
+	[2.1] Starting SNAYKUU
+	[2.2] The main menu
+	[2.3] The 'Game settings' tab
+	[2.4] Replays
+	[2.5] Developer mode
+[3.0] IN- AND POST-GAME
+	[3.1] The game board
+	[3.2] The score board
+	[3.3] The post-game window
+[4.0] CREDITS
+
+
+---------------------------------------------------------------------------
+
+
+[1.0] COMPILING:
+
+	[1.1] Compiling the source
+	(NOTE - This step is only for those who are interested in modifying 
+	the source code. The program can be run by simply double-clicking
+	the 'snaykuu.jar' file)
+
+	If you have ant installed:
+		Using your terminal, navigate to the 'snaykuu' folder
+		and run the command 'ant jar'. This compiles the code
+		be executed either by double-clicking it or running
+		and creates an executable jar file, which can then
+		'ant run'.
+
+	[1.2] Compiling your bots
+	If you don't have ant installed:
+		Navigate to the directory where your snaykuu.jar is located, and then run 
+		this command:
+		  > javac bot/*.java -cp snaykuu.jar
+
+	If you have ant installed:
+		Using your terminal, navigate to the 'snaykuu' folder
+		and type 'ant bot'. Your bots are now compiled.
+
+
+[2.0] USING THE APPLICATION:
+
+	[2.1] Starting SNAYKUU
+	Start the program by either double-clicking 'snaykuu.jar', navigating
+	to the snaykuu directory and running 'java -jar snaykuu.jar' in a 
+	terminal, or by running the 'ant run' command if you have ant installed.
+
+	[2.2] The main menu
+	When you first start SNAYKUU, you will see two lists in the middle of 
+	the screen; 'Snakes in game' and 'Available snakes'. 'Available snakes'
+	contains a list of all the compiled classes implementing the 'Brain'
+	interface. By double clicking the name of a bot in the 'Available snakes'
+	list, you can add/remove it to the game. When you want to start the game,
+	press the 'Start' button.
+
+	[2.3] The 'Game settings' tab
+	In the 'Game settings' tab you can manually select which settings you want
+	to play with. These are your options:
+		Board width 	The width of the game board, in squares.
+		Board height 	The height of the game board, in squares.
+		Pixels per square 
+				The size of each square, in pixels.
+		Fruit goal
+				 The number of fruits each snake has to eat in
+				 order to win the game.
+		Fruit freq.
+				 The frequency with which new fruits appear on
+				 the game board. '5' means that a new fruit
+				 spawns every five ticks.
+		Growth freq.
+				 The frequency with which snakes grow. '5' means
+				 that snakes grow every five ticks.
+		Thinking time
+				 The amount of time (in ms) each brain has to
+				 decide on its next move.
+		Game speed
+				 The amount of time (in ms) that will elapse
+				 between each 'tick'. Decrease to make the game
+				 appear to move faster, and vice versa.
+				 NOTE: It is recommended that this is set to at least 
+				 thrice the value of 'Thinking time'.
+	
+	[2.4] Replays
+	After a game has been played, you are given the option to save a replay
+	of the game at hand to be able to view later. If you want to view a saved
+	replay, simply click Replay tab, click the "Load an old replay and play it!"
+	button, and use the built in file browser to find your .srp replay file.
+	Note that replays saved in older versions may not be compatible wth your
+	current version.
+
+	[2.5] Developer mode
+	In the developer mode, you can run any number of 'simulated' games much faster
+	than running them individually with graphics. To use dev mode, begin by
+	selecting the participating snakes in the snake selection screen. Then,
+	navigate to the 'developer' tab, select the number of games you want to be
+	simulated, and then click 'Run test games'. The program will freeze for a while
+	while the simulations are running. When it is done, a menu will pop up containing
+	statistics and data from the simulations.
+
+
+[3.0] IN- AND POST-GAME:
+
+	[3.1] The game board
+	This screen is fairly straight-forward. The snakes show up on the screen, ready
+	to rumble! Fruit objects will occasionally show up on the board, and it is up
+	to the snakes to reach them and devour them.
+
+	[3.2] The score board
+	On the right hand side of the game board is a live-updated score board of the
+	current round. Snakes are shown, identified by name and color, together with
+	the number of fruits they have eaten and the number of turns they have survived.
+
+	[3.3] The post-game window
+	After a game has finished, a new window displaying the results of the game will
+	pop up, together with some options. The score board will be nearly identical
+	to the one that is shown during the game, showing the scores of all the snakes
+	as well as their placement in the round. Together with this, four buttons
+	will appear; 'New game', 'Rematch', 'Save replay' and 'Exit'. This is what they
+	do:
+		New game	Brings you to the original snake selection menu.
+		Rematch		Immediately starts a new round using the same snakes
+				and game settings.
+		Save replay	Allows you to save a replay of this game. See [2.4].
+		Exit		Exits the application.
+
+[4.0] CREDITS:
+	
+	Sixten Hilborn		Project co-manager, Lead coder, Whiteboard wizard.
+	Arian Jafari		Project co-manager, Lead coder, Documentation dork,
+							Executive credits producer.
+	Erik Thuning		Coder, Tester, Graphics guru, Affine transformer.
+	Fredrik Norberg		Tester, Master fruit devourer.
+	Esbjörn Olsson		Tester, Internet aficionado, Security ninja.
