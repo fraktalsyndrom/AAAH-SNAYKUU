@@ -315,7 +315,7 @@ public class Session implements Game
 			if (square.hasWall() || (square.hasSnake() && (square.getSnakes().size() > 1)))
 			{
 				snake.kill();
-				//System.out.println(snake + " HAS BEEN TERMINATED.");
+				continue;
 			}
 			else
 				snake.increaseLifespan();
