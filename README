@@ -1,11 +1,30 @@
+    <SNAYKUU - An engine/API for programming Snake bots and pitting them against each other>
+    Copyright (C) <2011>  <Arian Jafari, Sixten Hilborn, Erik Thuning>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    To view a copy of the GNU General Public License, see 
+	<http://www.gnu.org/licenses/>.
+	
+---------------------------------------------------------------------------
+
 ## SNAYKUU THE MANUAL: THIS TIME IT'S PERSONAL
 # Version 0.1
 
 # TABLE OF CONTENTS 
 
-[1.0] COMPILING
+[1.0] GETTING STARTED
 	[1.1] Compiling the source
 	[1.2] Compiling your bots
+	[1.3] Programming your bot
 [2.0] USING THE APPLICATION
 	[2.1] Starting SNAYKUU
 	[2.2] The main menu
@@ -22,7 +41,7 @@
 ---------------------------------------------------------------------------
 
 
-[1.0] COMPILING:
+[1.0] GETTING STARTED:
 
 	[1.1] Compiling the source
 	(NOTE - This step is only for those who are interested in modifying 
@@ -45,6 +64,17 @@
 	If you have ant installed:
 		Using your terminal, navigate to the 'snaykuu' folder
 		and type 'ant bot'. Your bots are now compiled.
+		
+	[1.3] Programming your bot
+	The essence of writing a SNAYKUU bot is simple. Your bot is a java class implementing
+	the interface Brain, requiring a single method called getNextMove. This method will
+	be called once each tick of the game, and is basically where you calculate in which
+	direction you want your snake to move next. Each tick you are given a GameState
+	object, which is a detailed representation of the current state of the game, also
+	containing several useful methods to assist you in the coding process. 
+	
+		Much more detailed information can be found in the API (either in the doc/ subfolder
+		or at <http://svinto.dsv.su.se/doc>)
 
 
 [2.0] USING THE APPLICATION:
