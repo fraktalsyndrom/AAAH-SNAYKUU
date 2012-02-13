@@ -1,67 +1,71 @@
 <?xml version="1.0"?>
 <project name="Snaykuu" default="compile">
+	
+	<property name="jar" value="snaykuu.jar" />
+	<property name="bin" value="classes" />
+	<property name="src" value="src" />
+	<property name="bot" value="bot" />
+	<property name="img" value="img" />
+	<property name="doc" value="doc" />
+	<property name="encoding" value="utf-8" />
+	
     <target name="clean" description="remove intermediate files">
-        <delete dir="classes" />
+        <delete dir="${bin}" />
     </target>
 
     <target name="clobber" depends="clean" description="remove all artifact files">
-        <delete file="snaykuu.jar" />
+        <delete file="${jar}" />
     </target>
 
     <target name="compile" depends="clobber" description="compile the Java source code to class files">
-        <mkdir dir="classes" />
-        <javac srcdir="src" destdir="classes" encoding="utf8" />
+        <mkdir dir="${bin}" />
+        <javac srcdir="${src}" destdir="${bin}" encoding="${encoding}" />
     </target>
 
     <target name="jar" depends="compile" description="create a Jar file for the application">
-        <jar destfile="snaykuu.jar">
-            <fileset dir="classes" includes="**/*.class" />
-            <fileset dir="." includes="img/*" />
+        <jar destfile="${jar}">
+            <fileset dir="${bin}" includes="**/*.class" />
+            <fileset dir="." includes="${img}/*" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
         </jar>
     </target>
     
-    <target name="sjar" depends="compile" description="create a Jar file for the application, including source">
-        <jar destfile="snaykuu.jar">
-            <fileset dir="classes" includes="**/*.class" />
-            <fileset dir="." includes="img/*" />
-            <fileset dir="." includes="src/**/*.java" />
+    <target name="sjar" depends="jar" description="create a Jar file for the application, including source">
+        <jar destfile="${jar}" update="true">
+            <fileset dir="." includes="${src}/**/*.java" />
             <fileset dir="." includes="manual.txt" />
-            <manifest>
-                <attribute name="Main-Class" value="Main" />
-            </manifest>
         </jar>
     </target>
 	
     <target name="bot" description="compile every custom bots">
-		<javac srcdir="bot" classpath="class" sourcepath="src" encoding="utf8" />
+		<javac srcdir="${bot}" classpath="${bin}" sourcepath="${src}" encoding="${encoding}" />
     </target>
 
 	<target name="run" description="execute the Jar file">
-		<java jar="snaykuu.jar" fork="true"/>
+		<java jar="${jar}" fork="true"/>
 	</target>
 	
 	<target name="doc" description="run the javadoc tool">
-		<javadoc destdir="doc" access="public" author="true" version="true" use="true" windowtitle="SNAYKUU API">
-		<fileset dir="src/gameLogic" defaultexcludes="no">
-			<include name="*.java" />
-			<exclude name="RecordedGame.java" />
-			<exclude name="GameResult.java" />
-			<exclude name="Session.java" />
-			<exclude name="Game.java" />
-			<exclude name="Frame.java" />
-		</fileset>
+		<javadoc destdir="${doc}" access="public" author="true" version="true" use="true" windowtitle="SNAYKUU API">
+			<fileset dir="${src}/gameLogic" defaultexcludes="no">
+				<include name="*.java" />
+				<exclude name="RecordedGame.java" />
+				<exclude name="GameResult.java" />
+				<exclude name="Session.java" />
+				<exclude name="Game.java" />
+				<exclude name="Frame.java" />
+			</fileset>
 		</javadoc>
 	</target>
 	
 	<target name="crun" depends="jar" description="compile, jar and run">
-		<java jar="snaykuu.jar" fork="true"/>
+		<java jar="${jar}" fork="true"/>
 	</target>
 	
 	<target name="scrun" depends="sjar" description="compile, jar with source and run">
-		<java jar="snaykuu.jar" fork="true"/>
+		<java jar="${sjar}" fork="true"/>
 	</target>
 	
 	<target name="all" depends="doc,bot,crun" description="recompile everything (javadoc, bots and app) and run">
