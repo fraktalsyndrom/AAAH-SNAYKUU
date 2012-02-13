@@ -68,6 +68,5 @@
 		<java jar="${sjar}" fork="true"/>
 	</target>
 	
-	<target name="all" depends="doc,bot,crun" description="recompile everything (javadoc, bots and app) and run">
-	</target>
+	<target name="all" depends="doc,bot,crun" description="recompile everything (javadoc, bots and app) and run"/>
 </project>
