@@ -19,7 +19,7 @@
 
     <target name="compile" depends="clobber" description="compile the Java source code to class files">
         <mkdir dir="${bin}" />
-        <javac srcdir="${src}" destdir="${bin}" encoding="${encoding}" />
+        <javac srcdir="${src}" destdir="${bin}" encoding="${encoding}" includeantruntime="false"/>
     </target>
 
     <target name="jar" depends="compile" description="create a Jar file for the application">
