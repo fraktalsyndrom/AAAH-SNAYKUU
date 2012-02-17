@@ -87,15 +87,16 @@ class GameBoard extends JComponent
 		for(Snake s : gs.getSnakes())
 		{
 			Direction prevDir = null;
-			for(Iterator<Position> iter = s.getSegments().iterator(); iter.hasNext(); ) 
+			for(Iterator<SnakeSegment> iter = s.getDrawData().iterator(); iter.hasNext(); ) 
 			{
-				Position pos = iter.next();
-				Direction dir = s.getDirection(pos);
+				SnakeSegment ss = iter.next();
+				Position pos = ss.getPos();
+				Direction dir = ss.getDir();
 				Direction useDir = dir;
 				
 				GraphicsTile segment;
 				
-				if(prevDir == null && !iter.hasNext()) // first element
+				if(prevDir == null && !iter.hasNext()) // only element
 				{
 					segment = GraphicsTile.SNAKEMONAD;
 				}
