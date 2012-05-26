@@ -6,10 +6,13 @@ import java.awt.*;
 import java.awt.event.*;
 import gameLogic.*;
 
+import java.awt.Insets;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import static java.awt.GridBagConstraints.*;
 
 class GameSettingsPanel extends JPanel
 {
-	private JLabel lolText;
 	private JTextField boardWidth;
 	private JTextField boardHeight;
 	private JTextField pixelsPerUnit;
@@ -19,80 +22,68 @@ class GameSettingsPanel extends JPanel
 	private JTextField thinkingTime;
 	private JTextField gameSpeed;
 	
+	private GridBagLayout gridbag;
+	private GridBagConstraints fieldC;
+	private GridBagConstraints labelC;
+	
 	public GameSettingsPanel()
 	{
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		lolText = new JLabel("GAME SETTINGS");
-				
-		add(lolText);
+		gridbag = new GridBagLayout();
+		setLayout(gridbag);
 		
-		initializeBoardSizeSettings();
+		
+		labelC = new GridBagConstraints();
+		
+		labelC.fill = HORIZONTAL;
+		labelC.insets = new Insets(4, 4, 4, 4);
+		labelC.gridwidth = 1;
+		labelC.gridheight = 1;
+		labelC.gridx = 0;
+		labelC.gridy = 0;
+		labelC.weightx = 0.0;
+		labelC.weighty = 0.0;
+		
+		
+		fieldC = new GridBagConstraints();
+		
+		fieldC.fill = NONE;
+		fieldC.insets = new Insets(4, 4, 4, 4);
+		fieldC.gridwidth = 1;
+		fieldC.gridheight = 1;
+		fieldC.gridx = 1;
+		fieldC.gridy = 0;
+		fieldC.weightx = 0.0;
+		fieldC.weighty = 0.0;
+		
+		
+		boardWidth = addRow("Board width", "15");
+		boardHeight = addRow("Board height", "15");
+		pixelsPerUnit = addRow("Pixels per square", "25");
+		fruitGoal = addRow("Fruits to win", "5");
+		fruitFrequency = addRow("Ticks between fruits", "10");
+		growthFrequency = addRow("Ticks per unit of snayk growth", "5");
+		thinkingTime = addRow("Thinking time (ms/frame)", "100");
+		gameSpeed = addRow("Game speed (ms/frame)", "300");
 	}
 	
-	private void initializeBoardSizeSettings()
+	private JTextField addRow(String text, String init) 
 	{
-		boardWidth = new JTextField("15");
-		boardHeight = new JTextField("15");
-		pixelsPerUnit = new JTextField("25");
-		fruitGoal = new JTextField("5");
-		fruitFrequency = new JTextField("10");
-		growthFrequency = new JTextField("5");
-		thinkingTime = new JTextField("100");
-		gameSpeed = new JTextField("300");
+		JLabel label = new JLabel(text);
+		label.setHorizontalAlignment(SwingConstants.RIGHT);
 		
+		gridbag.setConstraints(label, labelC);
+		add(label);
 		
-		boardWidth.setColumns(4);
-		boardHeight.setColumns(4);
-		pixelsPerUnit.setColumns(4);
-		fruitGoal.setColumns(4);
-		fruitFrequency.setColumns(4);
-		growthFrequency.setColumns(4);
-		thinkingTime.setColumns(4);
-		gameSpeed.setColumns(4);
+		JTextField field = new JTextField(init);
+		field.setColumns(4);
 		
-		JPanel widthPanel = new JPanel();
-		JPanel heightPanel = new JPanel();
-		JPanel pixelsPerUnitPanel = new JPanel();
+		gridbag.setConstraints(field, fieldC);
+		add(field);
 		
-		JPanel goalPanel = new JPanel();
-		JPanel freqPanel = new JPanel();
-		JPanel growthPanel = new JPanel();
-		JPanel thinkingPanel = new JPanel();
-		JPanel gameSpeedPanel = new JPanel();
+		labelC.gridy++;
+		fieldC.gridy++;
 		
-		widthPanel.add(new JLabel("Board width:"));
-		widthPanel.add(boardWidth);
-		
-		heightPanel.add(new JLabel("Board height:"));
-		heightPanel.add(boardHeight);
-		
-		pixelsPerUnitPanel.add(new JLabel("Pixels per square:"));
-		pixelsPerUnitPanel.add(pixelsPerUnit);
-		
-		goalPanel.add(new JLabel("Fruit goal"));
-		goalPanel.add(fruitGoal);
-		
-		freqPanel.add(new JLabel("Fruit freq."));
-		freqPanel.add(fruitFrequency);
-		
-		growthPanel.add(new JLabel("Growth freq."));
-		growthPanel.add(growthFrequency);
-		
-		thinkingPanel.add(new JLabel("Thinking time (ms/frame):"));
-		thinkingPanel.add(thinkingTime);
-		
-		gameSpeedPanel.add(new JLabel("Game speed (ms/frame):"));
-		gameSpeedPanel.add(gameSpeed);
-		
-		
-		add(widthPanel);
-		add(heightPanel);
-		add(pixelsPerUnitPanel);
-		add(goalPanel);
-		add(freqPanel);
-		add(growthPanel);
-		add(thinkingPanel);
-		add(gameSpeedPanel);
+		return field;
 	}
 	
 	
