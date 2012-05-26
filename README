@@ -82,17 +82,17 @@
 [2.0] USING THE APPLICATION:
 
     [2.1] Starting SNAYKUU
-    Start the program by either double-clicking 'snaykuu.jar', navigating
-    to the snaykuu directory and running 'java -jar snaykuu.jar' in a 
-    terminal, or by running the 'ant run' command if you have ant installed.
+    Start the program by either double-clicking 'snaykuu.jar', navigating to the 
+    snaykuu directory and running 'java -jar snaykuu.jar' in a terminal, or by 
+    running the 'ant run' command if you have ant installed.
 
     [2.2] The main menu
-    When you first start SNAYKUU, you will see two lists in the middle of 
-    the screen; 'Snakes in game' and 'Available snakes'. 'Available snakes'
-    contains a list of all the compiled classes implementing the 'Brain'
-    interface. By double clicking the name of a bot in the 'Available snakes'
-    list, you can add/remove it to the game. When you want to start the game,
-    press the 'Start' button.
+    When you first start SNAYKUU, you will see two lists in the middle of the 
+    screen; 'Snakes in game' and 'Available snakes'. 'Available snakes' contains 
+    a list of all the compiled classes implementing the 'Brain' interface. By 
+    double clicking the name of a bot in the 'Available snakes' list, you can 
+    add/remove it to the game. When you want to start the game, press the 
+    'Start' button.
 
     [2.3] The 'Game settings' tab
     In the 'Game settings' tab you can manually select which settings you want
@@ -102,24 +102,22 @@
         Pixels per square 
                 The size of each square, in pixels.
         Fruit goal
-                The number of fruits each snake has to eat in
-                order to win the game.
+                The number of fruits each snake has to eat in order to win 
+                the game.
         Fruit freq.
-                The frequency with which new fruits appear on
-                the game board. '5' means that a new fruit
-                spawns every five ticks.
+                The frequency with which new fruits appear on the game board. 
+                '5' means that a new fruit spawns every five ticks.
         Growth freq.
-                The frequency with which snakes grow. '5' means
-                that snakes grow every five ticks.
+                The frequency with which snakes grow. '5' means that snakes grow 
+                every five ticks.
         Thinking time
-                The amount of time (in ms) each brain has to
-                decide on its next move.
+                The amount of time (in ms) each brain has to decide on its 
+                next move.
         Game speed
-                The amount of time (in ms) that will elapse
-                between each 'tick'. Decrease to make the game
-                appear to move faster, and vice versa.
-                NOTE: It is recommended that this is set to at least 
-                thrice the value of 'Thinking time'.
+                The amount of time (in ms) that will elapse between each 'tick'. 
+                Decrease to make the game appear to move faster, and vice versa.
+                NOTE: It is recommended that this is set to at least thrice the 
+                value of 'Thinking time'.
     
     [2.4] Replays
     After a game has been played, you are given the option to save a replay
@@ -130,9 +128,9 @@
     current version.
 
     [2.5] Developer mode
-    In the developer mode, you can run any number of 'simulated' games much faster
-    than running them individually with graphics. To use dev mode, begin by
-    selecting the participating snakes in the snake selection screen. Then,
+    In the developer mode, you can run any number of 'simulated' games much 
+    faster than running them individually with graphics. To use dev mode, begin 
+    by selecting the participating snakes in the snake selection screen. Then,
     navigate to the 'developer' tab, select the number of games you want to be
     simulated, and then click 'Run test games'. The program will freeze for a 
     while while the simulations are running. When it is done, a menu will pop up 
