@@ -32,6 +32,7 @@ public class ReplayWindow extends JFrame
 		
 		addWindowListener(new WindowListener());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setVisible(true);
 		
 		replayThread.start();

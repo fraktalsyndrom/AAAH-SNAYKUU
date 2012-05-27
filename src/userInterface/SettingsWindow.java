@@ -54,6 +54,7 @@ public class SettingsWindow extends JFrame
 	public void putThisDamnWindowInMyFace()
 	{
 		done = false;
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	

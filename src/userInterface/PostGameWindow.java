@@ -50,6 +50,7 @@ public class PostGameWindow extends JFrame
 		add(buttonPanel, BorderLayout.SOUTH);
 		
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
