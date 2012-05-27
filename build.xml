@@ -40,7 +40,7 @@
     </target>
 	
     <target name="bot" description="compile every custom bots">
-		<javac srcdir="${bot}" classpath="${bin}" sourcepath="${src}" encoding="${encoding}" />
+		<javac srcdir="${bot}" classpath="${bin}" sourcepath="${src}" encoding="${encoding}"  includeantruntime="false"/>
     </target>
 
 	<target name="run" description="execute the Jar file">
