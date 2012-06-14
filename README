@@ -18,7 +18,7 @@
 ---------------------------------------------------------------------------
 
 ## SNAYKUU THE MANUAL: THIS TIME IT'S PERSONAL
-# Version 0.1
+# Version 0.2
 
 # TABLE OF CONTENTS 
 
@@ -101,19 +101,19 @@
         Board height     The height of the game board, in squares.
         Pixels per square 
                 The size of each square, in pixels.
-        Fruit goal
+        Fruit to win
                 The number of fruits each snake has to eat in order to win 
                 the game.
-        Fruit freq.
+        Ticks between fruits
                 The frequency with which new fruits appear on the game board. 
                 '5' means that a new fruit spawns every five ticks.
-        Growth freq.
+        Ticks per unit of snayk growth
                 The frequency with which snakes grow. '5' means that snakes grow 
                 every five ticks.
-        Thinking time
+        Thinking time (ms/frame)
                 The amount of time (in ms) each brain has to decide on its 
                 next move.
-        Game speed
+        Game speed (ms/frame)
                 The amount of time (in ms) that will elapse between each 'tick'. 
                 Decrease to make the game appear to move faster, and vice versa.
                 NOTE: It is recommended that this is set to at least thrice the 
