@@ -1,6 +1,8 @@
 package gameLogic;
 
-public class SnakeSegment 
+import java.io.Serializable;
+
+public class SnakeSegment implements Serializable
 {
 	private Position pos;
 	private Direction dir;
