@@ -75,8 +75,8 @@
     representation of the current state of the game, also containing several 
     useful methods to assist you in the coding process. 
     
-        Much more detailed information can be found in the API (either in 
-        the doc/ subfolder or at <http://svinto.dsv.su.se/doc>)
+        Much more detailed information can be found in the API 
+        in the doc/ subfolder.
 
 
 [2.0] USING THE APPLICATION:
