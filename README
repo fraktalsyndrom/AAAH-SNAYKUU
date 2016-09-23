@@ -52,8 +52,8 @@
     If you have ant installed:
         Using your terminal, navigate to the 'snaykuu' folder
         and run the command 'ant jar'. This compiles the code
-        be executed either by double-clicking it or running
         and creates an executable jar file, which can then
+        be executed either by double-clicking it or running
         'ant run'.
 
     [1.2] Compiling your bots
