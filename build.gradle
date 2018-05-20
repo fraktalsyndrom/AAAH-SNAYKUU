@@ -19,13 +19,13 @@ repositories {
 project.ext {
     jvm_version = "1.8"
     encoding = "utf-8"
-    jarName = "snaykuu"
-    img = "img/"
+    jarName = "snaykuu.jar"
 }
 
 dependencies {
     runtime "org.jetbrains.kotlin:kotlin-stdlib"
     runtime "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'org.reflections:reflections:0.9.11'
 }
 
 compileJava {
@@ -35,26 +35,12 @@ compileJava {
     options.encoding = project.encoding
 }
 
-sourceSets {
-    main {
-        java{
-            srcDirs = ["src/", "bot/"]
-        }
-        kotlin {
-            srcDirs = ["kotlin"]
-        }
-        resources {
-            srcDirs "img/"
-        }
-    }
-    main.resources.srcDirs += 'resources'
-}
-
 jar {
     archiveName project.jarName
     destinationDir = file('.')
-    from(img) {
-        into(img)
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest {
         attributes 'Main-Class': 'Main'

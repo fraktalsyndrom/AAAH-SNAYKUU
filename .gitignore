@@ -2,6 +2,7 @@
 *.class
 *.jar
 build/
+lib/
 
 # Snaykuu replays
 *.srp

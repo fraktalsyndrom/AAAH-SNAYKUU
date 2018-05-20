@@ -6,17 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import gameLogic.Brain;
+import org.reflections.Reflections;
 import static java.awt.GridBagConstraints.*;
 
 class SnakeSettingsPanel extends JPanel
@@ -137,125 +133,19 @@ class SnakeSettingsPanel extends JPanel
 			add(reloadAllBrainsButton);
 
 		loadBrains();
-		gradleLoad();
-	}
-
-	private String gradleLoad()
-	{
-		String loadedBrains = "";
-		try {
-
-			ClassLoader classLoader = MainWindow.class.getClassLoader();
-			Enumeration<URL> bots = classLoader.getResources("bot");
-			List<File> dirs = new ArrayList();
-			while (bots.hasMoreElements()) {
-				URL resource = bots.nextElement();
-				dirs.add(new File(resource.getFile()));
-			}
-			List<Class> classes = new ArrayList<>();
-
-			for (File directory : dirs) {
-				classes.addAll(findClasses(directory, "bot"));
-			}
-			List<Class<? extends Brain>> brainClasses = new ArrayList<>();
-			for (Class c: classes) {
-				try {
-					brainClasses.add(c.asSubclass(Brain.class));
-					loadedBrains += c.getSimpleName() + '\n';
-					brains.put(c.getSimpleName(),c.asSubclass(Brain.class) );
-				} catch (Exception e) {
-					continue;
-				}
-			}
-			brainJList.setListData(brains.keySet().toArray());
-			System.out.println(brainClasses.size());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return loadedBrains;
-	}
-
-	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException
-	{
-		List<Class> classes = new ArrayList<>();
-		if (!directory.exists())
-		{
-			return classes;
-		}
-		File[] files = directory.listFiles();
-		for (File file : files)
-		{
-			if (file.isDirectory())
-			{
-				assert !file.getName().contains(".");
-				classes.addAll(findClasses(file, packageName + "." + file.getName()));
-			} else if (file.getName().endsWith(".class"))
-			{
-				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
-			}
-		}
-		return classes;
 	}
 
 	private String loadBrains()
 	{
-		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
-		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
-
-		FilenameFilter filter = new ClassfileFilter();
-		File botFolder = new File("./bot");
-		File[] listOfFiles = botFolder.listFiles(filter);
-
-		String loadedBrains = "";
-		for (File file : listOfFiles)
-		{
-			if (file.isDirectory())
-				continue;
-
-			String name = file.getName();
-			name = name.substring(0, name.lastIndexOf("."));
-
-			Class<?> c;
-			try
-			{
-				c = classLoader.getClass(name);
-			}
-			catch (Throwable e)
-			{
-				JOptionPane.showMessageDialog(this, e.toString());
-				continue;
-			}
-
-			Class<? extends Brain> brainClass;
-			try
-			{
-				brainClass = c.asSubclass(Brain.class);
-			}
-			catch (Exception e)
-			{
-				continue;
-			}
-
-			loadedBrains += name + '\n';
-			brains.put(name, brainClass);
-		}
-
+		Reflections reflections = new Reflections("bot");
+		Set<Class<? extends Brain>> classes = reflections.getSubTypesOf(Brain.class);
+		String loadedBrains = classes.stream()
+				.map(Class::getSimpleName)
+				.collect(Collectors.joining(", "));
+		brains.putAll(classes.stream().collect(Collectors.toMap(Class::getSimpleName, it -> it)));
 		brainJList.setListData(brains.keySet().toArray());
-
 		return loadedBrains;
 	}
-
-	static private class ClassfileFilter implements FilenameFilter
-	{
-		public boolean accept(File dir, String name)
-		{
-			name = name.substring(name.lastIndexOf("."), name.length());
-			return name.equalsIgnoreCase(".class");
-		}
-	}
-
 
 
 	private class AddSnakeListener implements ActionListener

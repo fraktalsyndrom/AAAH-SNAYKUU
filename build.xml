@@ -1,14 +1,25 @@
 <?xml version="1.0"?>
-<project name="Snaykuu" default="compile">
-	
+<project name="Snaykuu" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
 	<property name="jar" value="snaykuu.jar" />
 	<property name="bin" value="classes" />
-	<property name="src" value="src" />
-	<property name="bot" value="bot" />
-	<property name="img" value="img" />
+	<property name="src" value="src/main/java" />
+	<property name="bot" value="src/main/java/bot" />
+	<property name="img" value="src/main/resources" />
 	<property name="doc" value="doc" />
 	<property name="encoding" value="utf-8" />
-	
+	<property name="ivy.home" value="${user.home}/.ant" />
+	<property name="ivy.jar.dir" value="${ivy.home}/lib" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	<property name="ivy.install.version" value="2.4.0" />
+	<property name="lib.dir" value="lib" />
+	<!-- external libraries classpath, we don't need sources and javadoc -->
+	<path id="classpath">
+		<fileset dir="${basedir}/">
+			<include name="${lib.dir}/*" />
+		</fileset>
+	</path>
+
     <target name="clean" description="remove intermediate files">
         <delete dir="${bin}" />
     </target>
@@ -17,18 +28,47 @@
         <delete file="${jar}" />
     </target>
 
-    <target name="compile" depends="clobber" description="compile the Java source code to class files">
+	<target name="init-ivy" depends="install-ivy">
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+				 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+	</target>
+	<target name="resolve" depends="init-ivy" description="--> retrieve dependencies with ivy">
+		<ivy:retrieve />
+	</target>
+
+	<target name="install-ivy" depends="clobber" description="Install ivy" unless="ivy.installed">
+		<mkdir dir="${ivy.jar.dir}"/>
+		<get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			 dest="${ivy.jar.file}" usetimestamp="true"/>
+	</target>
+
+	<target name="copy-dependencies">
+		<mkdir dir="${lib.dir}" />
+
+		<jar jarfile="${lib.dir}/dependencies-all.jar">
+			<zipgroupfileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+			</zipgroupfileset>
+		</jar>
+	</target>
+
+    <target name="compile" depends="resolve" description="compile the Java source code to class files">
         <mkdir dir="${bin}" />
-        <javac srcdir="${src}" destdir="${bin}" encoding="${encoding}" includeantruntime="false"/>
+		<javac includeantruntime="false" srcdir="${src}" destdir="${bin}" classpathref="classpath" />
     </target>
 
-    <target name="jar" depends="compile" description="create a Jar file for the application">
+    <target name="jar" depends="compile, copy-dependencies" description="create a Jar file for the application">
         <jar destfile="${jar}">
             <fileset dir="${bin}" includes="**/*.class" />
             <fileset dir="${img}" includes="**/*" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
+			<zipfileset src="${lib.dir}/dependencies-all.jar"
+						excludes="META-INF/*.SF" />
         </jar>
     </target>
     
@@ -40,7 +80,7 @@
     </target>
 	
     <target name="bot" description="compile every custom bots">
-		<javac srcdir="${bot}" classpath="${bin}" sourcepath="${src}" encoding="${encoding}"  includeantruntime="false"/>
+		<javac srcdir="${bot}" classpath="${bin}" destdir="${bin}" sourcepath="${src}" encoding="${encoding}"  includeantruntime="false"/>
     </target>
 
 	<target name="run" description="execute the Jar file">
