@@ -1,1 +1,1 @@
-settings.gradle
+rootProject.name = 'snaykuu-bots'
