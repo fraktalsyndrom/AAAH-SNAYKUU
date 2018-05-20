@@ -1,0 +1,84 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.41"
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+
+group = 'xanindorf'
+version = '1.0'
+description = 'Snaykuu'
+
+defaultTasks 'run'
+
+repositories {
+    maven { url "http://jcenter.bintray.com" }
+}
+
+project.ext {
+    jvm_version = "1.8"
+    encoding = "utf-8"
+    jarName = "snaykuu"
+    img = "img/"
+}
+
+dependencies {
+    runtime "org.jetbrains.kotlin:kotlin-stdlib"
+    runtime "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+compileJava {
+    sourceCompatibility = project.jvm_version
+    targetCompatibility = project.jvm_version
+    options.incremental = true
+    options.encoding = project.encoding
+}
+
+sourceSets {
+    main {
+        java{
+            srcDirs = ["src/", "bot/"]
+        }
+        kotlin {
+            srcDirs = ["kotlin"]
+        }
+        resources {
+            srcDirs "img/"
+        }
+    }
+    main.resources.srcDirs += 'resources'
+}
+
+jar {
+    archiveName project.jarName
+    destinationDir = file('.')
+    from(img) {
+        into(img)
+    }
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+
+task run(type: JavaExec, dependsOn: build) {
+    main = 'Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    description 'Create a Jar file for the application, including source'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    javadoc.failOnError = false
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}

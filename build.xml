@@ -25,7 +25,7 @@
     <target name="jar" depends="compile" description="create a Jar file for the application">
         <jar destfile="${jar}">
             <fileset dir="${bin}" includes="**/*.class" />
-            <fileset dir="." includes="${img}/*" />
+            <fileset dir="${img}" includes="**/*" />
             <manifest>
                 <attribute name="Main-Class" value="Main" />
             </manifest>
