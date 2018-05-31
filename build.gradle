@@ -3,7 +3,7 @@ plugins {
 }
 
 apply plugin: 'java'
-apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'maven'
 
 group = 'xanindorf'
@@ -14,6 +14,7 @@ defaultTasks 'run'
 
 repositories {
     maven { url "http://jcenter.bintray.com" }
+    mavenCentral()
 }
 
 project.ext {
@@ -23,8 +24,8 @@ project.ext {
 }
 
 dependencies {
-    runtime "org.jetbrains.kotlin:kotlin-stdlib"
-    runtime "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-stdlib"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.reflections:reflections:0.9.11'
 }
 
@@ -67,4 +68,15 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        javaParameters = true
+    }
 }
