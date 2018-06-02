@@ -1,0 +1,6 @@
+<ivy-module version="2.0">
+    <info organisation="se.su.disk" module="snaykuu"/>
+    <dependencies>
+        <dependency org="org.reflections" name="reflections" rev="0.9.11" />
+    </dependencies>
+</ivy-module>

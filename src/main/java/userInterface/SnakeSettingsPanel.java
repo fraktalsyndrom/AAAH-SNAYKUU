@@ -1,16 +1,18 @@
 package userInterface;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
-import gameLogic.*;
-import javax.swing.filechooser.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.io.*;
+import java.util.stream.Collectors;
+
+import gameLogic.Brain;
+import org.reflections.Reflections;
 import static java.awt.GridBagConstraints.*;
 
 class SnakeSettingsPanel extends JPanel
@@ -135,63 +137,17 @@ class SnakeSettingsPanel extends JPanel
 	
 	private String loadBrains()
 	{
-		ClassLoader parentClassLoader = MainWindow.class.getClassLoader();
-		BotClassLoader classLoader = new BotClassLoader(parentClassLoader);
-		
-		FilenameFilter filter = new ClassfileFilter();
-		File botFolder = new File("./bot");
-		File[] listOfFiles = botFolder.listFiles(filter);
-		
-		String loadedBrains = "";
-		for (File file : listOfFiles)
-		{
-			if (file.isDirectory())
-				continue;
-			
-			String name = file.getName();
-			name = name.substring(0, name.lastIndexOf("."));
-			
-			Class<?> c;
-			try
-			{
-				c = classLoader.getClass(name);
-			}
-			catch (Throwable e)
-			{
-				JOptionPane.showMessageDialog(this, e.toString());
-				continue;
-			}
-			
-			Class<? extends Brain> brainClass;
-			try
-			{
-				brainClass = c.asSubclass(Brain.class);
-			}
-			catch (Exception e)
-			{
-				continue;
-			}
-			
-			loadedBrains += name + '\n';
-			brains.put(name, brainClass);
-		}
-		
+		Reflections reflections = new Reflections("bot");
+		Set<Class<? extends Brain>> classes = reflections.getSubTypesOf(Brain.class);
+		String loadedBrains = classes.stream()
+				.map(Class::getSimpleName)
+				.collect(Collectors.joining(", "));
+		brains.putAll(classes.stream().collect(Collectors.toMap(Class::getSimpleName, it -> it)));
 		brainJList.setListData(brains.keySet().toArray());
-		
 		return loadedBrains;
 	}
 	
-	static private class ClassfileFilter implements FilenameFilter
-	{
-		public boolean accept(File dir, String name)
-		{
-			name = name.substring(name.lastIndexOf("."), name.length());
-			return name.equalsIgnoreCase(".class");
-		}
-	}
-
 	
-		
 	private class AddSnakeListener implements ActionListener
 	{
 		private String generateSnakeName(String name)
@@ -218,7 +174,7 @@ class SnakeSettingsPanel extends JPanel
 			String name = selectedObject.toString();
 			
 			snakes.put(generateSnakeName(name), name);
-				
+			
 			snakeJList.setListData(snakes.keySet().toArray());
 		}
 	}

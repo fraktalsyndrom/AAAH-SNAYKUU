@@ -1,6 +1,8 @@
 # Compiled code
 *.class
 *.jar
+build/
+lib/
 
 # Snaykuu replays
 *.srp
@@ -10,3 +12,7 @@
 
 # SNAYKUU Project file
 snaykuu
+
+# Intellij project files
+*.iml
+.idea/
