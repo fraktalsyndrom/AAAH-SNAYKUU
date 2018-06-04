@@ -1,4 +1,9 @@
 language: java
+
+cache:
+  directories:
+  - $HOME/.gradle
+
 script:
 - ant jar
 - gradle jar
