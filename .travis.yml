@@ -1,5 +1,9 @@
 language: java
 
+cache:
+  directories:
+  - $HOME/.gradle
+
 before_script:
 - chmod a+x gradle/wrapper/gradle-wrapper.jar
 - chmod a+x gradlew
