@@ -1,6 +1,8 @@
 # Compiled code
 *.class
 *.jar
+build/
+lib/
 
 # Snaykuu replays
 *.srp
@@ -13,3 +15,7 @@ snaykuu
 
 # NetBeans Project folder
 nbproject/
+
+# Intellij project files
+*.iml
+.idea/
