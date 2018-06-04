@@ -1,0 +1,82 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.41"
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'maven'
+
+group = 'xanindorf'
+version = '1.0'
+description = 'Snaykuu'
+
+defaultTasks 'run'
+
+repositories {
+    maven { url "http://jcenter.bintray.com" }
+    mavenCentral()
+}
+
+project.ext {
+    jvm_version = "1.8"
+    encoding = "utf-8"
+    jarName = "snaykuu.jar"
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'org.reflections:reflections:0.9.11'
+}
+
+compileJava {
+    sourceCompatibility = project.jvm_version
+    targetCompatibility = project.jvm_version
+    options.incremental = true
+    options.encoding = project.encoding
+}
+
+jar {
+    archiveName project.jarName
+    destinationDir = file('.')
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+
+task run(type: JavaExec, dependsOn: build) {
+    main = 'Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    description 'Create a Jar file for the application, including source'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    javadoc.failOnError = false
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        javaParameters = true
+    }
+}

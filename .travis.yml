@@ -1,2 +1,13 @@
 language: java
-script: ant jar
+
+cache:
+  directories:
+  - $HOME/.gradle
+
+before_script:
+- chmod a+x gradle/wrapper/gradle-wrapper.jar
+- chmod a+x gradlew
+
+script:
+- ant jar
+- gradle jar

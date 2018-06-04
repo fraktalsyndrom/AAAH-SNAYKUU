@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.net.URL;
+
 import gameLogic.Direction;
 import gameLogic.Position;
 
@@ -30,7 +31,7 @@ enum GraphicsTile
 	{
 		try
 		{
-			URL temp = getClass().getResource("/img/"+s);
+			URL temp = GraphicsTile.class.getClassLoader().getResource(s);
 			image = ImageIO.read(temp);
 			imgHeight = image.getHeight(null);
 			imgWidth = image.getWidth(null);
