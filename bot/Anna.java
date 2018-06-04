@@ -187,7 +187,7 @@ public class Anna implements Brain {
 	 * @param fruits 	all visible fruits on the game board
 	 * @param headPos 	the bot's head position
 	 */
-	public void sortFruitsByDistance(List<Position> fruits, Position headPos) {
+	public void sortFruitsByDistance(List<Position> fruits, final Position headPos) {
 		Collections.sort(fruits, new Comparator<Position>() {
 			
 			@Override
