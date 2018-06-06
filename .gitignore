@@ -10,3 +10,6 @@
 
 # SNAYKUU Project file
 snaykuu
+
+#Intellij project files
+.idea/
