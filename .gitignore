@@ -11,5 +11,9 @@
 # SNAYKUU Project file
 snaykuu
 
-#Intellij project files
+# Intellij project files
 .idea/
+
+# Gradle folders
+.gradle/
+build/
