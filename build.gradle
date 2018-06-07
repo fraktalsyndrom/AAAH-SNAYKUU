@@ -7,11 +7,6 @@ description = 'Snaykuu'
 
 defaultTasks 'run'
 
-task run(type: JavaExec) {
-	main = 'Main'
-	classpath = sourceSets.main.runtimeClasspath
-}
-
 project.ext {
 	jvm_version = '1.8'
 	jarName = 'snaykuu.jar'
@@ -76,6 +71,11 @@ task bot(type: Copy, dependsOn: classes) {
 	from 'build/classes/java/main/bot'
 	include "*.class"
 	into bot
+}
+
+task run(type: JavaExec, dependsOn: bot) {
+	main = 'Main'
+	classpath = sourceSets.main.runtimeClasspath
 }
 
 artifacts {
