@@ -1,2 +1,10 @@
 language: java
 script: ant jar
+
+cache:
+  directories:
+  - $HOME/.gradle
+
+script:
+- ant jar
+- gradle jar
