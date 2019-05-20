@@ -56,6 +56,9 @@
         be executed either by double-clicking it or running
         'ant run'.
 
+    If you have gradle installed:
+        The similar command in gradle is 'gradle jar'
+
     [1.2] Compiling your bots
     If you don't have ant installed:
         Navigate to the directory where your snaykuu.jar is located, 
@@ -65,7 +68,10 @@
     If you have ant installed:
         Using your terminal, navigate to the 'snaykuu' folder
         and type 'ant bot'. Your bots are now compiled.
-        
+
+    If you have gradle installed:
+        The similar command in gradle is 'gradle bot'.
+
     [1.3] Programming your bot
     The essence of writing a SNAYKUU bot is simple. Your bot is a java class 
     implementing the interface Brain, requiring a single method called 
@@ -85,6 +91,9 @@
     Start the program by either double-clicking 'snaykuu.jar', navigating to the 
     snaykuu directory and running 'java -jar snaykuu.jar' in a terminal, or by 
     running the 'ant run' command if you have ant installed.
+
+    If you have gradle installed:
+        Running 'gradle run' will compile the source and the bots and start the application.
 
     [2.2] The main menu
     When you first start SNAYKUU, you will see two lists in the middle of the 
