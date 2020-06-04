@@ -291,12 +291,19 @@ public class Session implements Game
 	{
 		Position newHeadPosition = snake.moveHead(dir);
 		board.addGameObject(snake, newHeadPosition);
+
+		//Ersätter det utkommenterade nedan för att ormen bara ska växa när den äter /bubblan
 		Position head = snake.getHeadPosition();
 		Square square = board.getSquare(head);
 		if (!square.hasFruit())
 		{
 			board.removeGameObject(snake, snake.removeTail());
-		}
+		};
+
+		// if (!grow)
+		// {
+		// 	board.removeGameObject(snake, snake.removeTail());
+		// }
 	}
 
 	/**
@@ -337,9 +344,14 @@ public class Session implements Game
 	 */
 	private boolean perhapsSpawnFruit()
 	{
-		int timeTillFruitSpawn = recordedGame.getTurnCount() % metadata.getFruitFrequency();
+		// int timeTillFruitSpawn = recordedGame.getTurnCount() % metadata.getFruitFrequency();
 		
-		if (timeTillFruitSpawn != 0)
+		// if (timeTillFruitSpawn != 0)
+		// 	return false;
+
+		//Ersätter det utkommenterade ovan så att det bara finns en frukt på plawn och det spawnar
+		//en ny direkt efter att en frukt blir uppäten /bubblan
+		if (board.hasAnyFruit())
 			return false;
 		
 		boolean spawned = false;

@@ -16,12 +16,15 @@ import java.util.HashSet;
 public class Board implements Serializable
 {
 	private Square[][] board;
+	private int cols, rows;
 	
 	Board(int width, int height)
 	{
 		if (width < 1 || height < 1)
 			throw new IllegalArgumentException("Board size must be greater than 0");
 		board = new Square[width][height];
+		cols = width;
+		rows = height;
 		for (int x = 0; x < width; ++x)
 			for (int y = 0; y < height; ++y)
 				board[x][y] = new Square();
@@ -196,9 +199,8 @@ public class Board implements Serializable
 		board[p.getX()][p.getY()].removeFruit();
 	}
 
+	//Roterar 90 grader medsols /bubblan
 	Square[][] Rotate90DegreesRight(){
-		int cols = board.length;
-		int rows = board[0].length;
 		Square[][] rotatedBoard = new Square[rows][cols];
 		for (int row = 0; row < rows; row++){
             for (int col = 0; col < cols; col++){
@@ -208,9 +210,8 @@ public class Board implements Serializable
 		return rotatedBoard;
 	}
 
+	//Roterar 180 grader /bubblan
 	Square[][] Rotate180Degrees(){
-		int cols = board.length;
-		int rows = board[0].length;
 		Square[][] rotatedBoard = new Square[cols][rows];
         for (int col = 0; col < cols; col++){
             for (int row = 0; row < rows; row++){
@@ -220,9 +221,8 @@ public class Board implements Serializable
 		return rotatedBoard;
 	}
 
+	//Roterar 90 grader motsols /bubblan
 	Square[][] Rotate90DegreesLeft(){
-		int cols = board.length;
-		int rows = board[0].length;
 		Square[][] rotatedBoard = new Square[rows][cols];
         for (int row = 0; row < rows; row++){
             for (int col = 0; col < cols; col++){
@@ -230,5 +230,16 @@ public class Board implements Serializable
             }
         }
 		return rotatedBoard;
+	}
+
+	//Används om spawnande frukt ska bete sig som old school Snake /bubblan
+	boolean hasAnyFruit(){
+		for (int col = 0; col < cols; col++){
+			for (int row = 0; row < rows; row++){
+				if (board[col][row].hasFruit())
+					return true;
+			}
+		}
+		return false;
 	}
 }
