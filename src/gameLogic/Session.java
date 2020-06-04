@@ -116,7 +116,7 @@ public class Session implements Game
 	public void tick()
 	{
 		boolean growth = checkForGrowth();
-		Map<Snake, Direction> moves = getDecisionsFromSnakes();	
+		Map<Snake, Direction> moves = getDecisionsFromSnakes();
 		moveAllSnakes(moves, growth);
 		checkForCollision();
 		perhapsSpawnFruit();
@@ -291,7 +291,9 @@ public class Session implements Game
 	{
 		Position newHeadPosition = snake.moveHead(dir);
 		board.addGameObject(snake, newHeadPosition);
-		if (!grow)
+		Position head = snake.getHeadPosition();
+		Square square = board.getSquare(head);
+		if (!square.hasFruit())
 		{
 			board.removeGameObject(snake, snake.removeTail());
 		}
