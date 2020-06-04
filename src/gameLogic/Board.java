@@ -195,4 +195,40 @@ public class Board implements Serializable
 	{
 		board[p.getX()][p.getY()].removeFruit();
 	}
+
+	Square[][] Rotate90DegreesRight(){
+		int cols = board.length;
+		int rows = board[0].length;
+		Square[][] rotatedBoard = new Square[rows][cols];
+		for (int row = 0; row < rows; row++){
+            for (int col = 0; col < cols; col++){
+                rotatedBoard[rows - 1 - row][col] = board[col][row];
+            }
+		}
+		return rotatedBoard;
+	}
+
+	Square[][] Rotate180Degrees(){
+		int cols = board.length;
+		int rows = board[0].length;
+		Square[][] rotatedBoard = new Square[cols][rows];
+        for (int col = 0; col < cols; col++){
+            for (int row = 0; row < rows; row++){
+                rotatedBoard[cols - 1 - col][rows - 1 - row] = board[col][row];
+            }
+        }
+		return rotatedBoard;
+	}
+
+	Square[][] Rotate90DegreesLeft(){
+		int cols = board.length;
+		int rows = board[0].length;
+		Square[][] rotatedBoard = new Square[rows][cols];
+        for (int row = 0; row < rows; row++){
+            for (int col = 0; col < cols; col++){
+                rotatedBoard[row][cols - 1 - col] = board[col][row];
+            }
+        }
+		return rotatedBoard;
+	}
 }
