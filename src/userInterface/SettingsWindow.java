@@ -82,13 +82,15 @@ public class SettingsWindow extends JFrame
 		Session session = new Session(metadata);
 		
 		GameObjectType objectType = new GameObjectType("Snake", true);
+
+		Map<String, Brain> brainMap = snakeSettingsPanel.getSnakes();
 		
 		Random r = new Random(4L);
-		int numSnakes = snakeSettingsPanel.getSnakes().size();
+		int numSnakes = brainMap.size();
 		float stepSize = 0.8f/numSnakes;
 		int currentSnake = 0;
 		
-		for (Map.Entry<String, Brain> snakeEntry : snakeSettingsPanel.getSnakes().entrySet())
+		for (Map.Entry<String, Brain> snakeEntry : brainMap.entrySet())
 		{
 			Snake snake = new Snake(objectType, snakeEntry.getKey(), snakeEntry.getValue(), Color.getHSBColor(stepSize*currentSnake++, r.nextFloat()/2+0.5f, r.nextFloat()/2+0.5f));
 			session.addSnake(snake);
